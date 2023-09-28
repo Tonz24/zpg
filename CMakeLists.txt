@@ -30,11 +30,6 @@ SET(SRC ${CMAKE_SOURCE_DIR}/src)
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
-file(GLOB_RECURSE imguiSRC
-        "${CMAKE_SOURCE_DIR}/include/imgui/*.h"
-        "${CMAKE_SOURCE_DIR}/include/imgui/*.cpp"
-        )
-
 file(GLOB_RECURSE tinyEXR
         "${CMAKE_SOURCE_DIR}/include/tinyexr/*.h"
         "${CMAKE_SOURCE_DIR}/include/tinyexr/*.cpp"
@@ -55,6 +50,6 @@ file (GLOB_RECURSE glmSRC
         "${CMAKE_SOURCE_DIR}/include/glm*.cpp"
         )
 
-add_executable(proj  ${imguiSRC} ${fileSRC})
+add_executable(proj ${fileSRC})
 target_link_libraries(proj OpenGL::GL glew32 glfw3 assimp-vc143-mt)
 
