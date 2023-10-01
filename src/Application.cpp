@@ -19,7 +19,7 @@ void Application::initialize() {
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    this->window = glfwCreateWindow(1000, 1000, "ZPG", NULL, NULL);
+    this->window = glfwCreateWindow(1000, 1000, "ZPG MELČÁK", NULL, NULL);
     if (!this->window){
         glfwTerminate();
         exit(EXIT_FAILURE);
