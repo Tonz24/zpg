@@ -65,6 +65,9 @@ int main(){
         auto* quad = new Quad({uni(gen),uni(gen),uni(gen)},uniColor(gen) > 0.5f ? *colorMat : *lerpMat);
         auto* triangle = new Triangle({uni(gen),uni(gen),uni(gen)},uni(gen) > 0.0f ? *lerpMat : *colorMat);
 
+        quad->getTransform().setPosition({uni(gen),uni(gen),0});
+        triangle->getTransform().setPosition({uni(gen),uni(gen),0});
+
         Application::getInstance().getScene().addModel(*quad);
         Application::getInstance().getScene().addModel(*triangle);
     }

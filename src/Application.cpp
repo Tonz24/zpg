@@ -19,14 +19,14 @@ void Application::initialize() {
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    this->window = glfwCreateWindow(1000, 1000, "ZPG MELČÁK", NULL, NULL);
+    this->window = glfwCreateWindow(1920, 1080, "ZPG MELČÁK", glfwGetPrimaryMonitor(), NULL);
     if (!this->window){
         glfwTerminate();
         exit(EXIT_FAILURE);
     }
 
     glfwMakeContextCurrent(window);
-    glfwSwapInterval(1);
+    glfwSwapInterval(0);
 
     // start GLEW extension handler
     glewExperimental = GL_TRUE;

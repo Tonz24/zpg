@@ -2,6 +2,7 @@
 // Created by Tonz on 30.09.2023.
 //
 
+#include <GL/glew.h>
 #include "Transform.h"
 #include "ext/matrix_transform.hpp"
 
@@ -61,6 +62,31 @@ void Transform::applyTransform() {
 
 const glm::mat4x4 &Transform::getModelMat() const {
     return this->modelMat;
+}
+
+void Transform::uploadToGpu() {
+    uploadToGpuInternal(*this);
+}
+
+void Transform::uploadToGpuInternal(const Transform& transform) {
+    if (!uboInitialized)
+        initUBO();
+
+    TransformShaderFormat format = transform.getShaderFormat();
+    glBindBuffer(GL_UNIFORM_BUFFER, uboId);
+    glBindBufferBase(GL_UNIFORM_BUFFER, BINDING_POINT, uboId);
+    glBufferSubData(GL_UNIFORM_BUFFER, 0, 112, &format);
+}
+
+void Transform::initUBO() {
+    glGenBuffers(1, &uboId);
+    glBindBuffer(GL_UNIFORM_BUFFER, uboId);
+    glBufferData(GL_UNIFORM_BUFFER, 112, NULL, GL_STATIC_DRAW); //TODO: test whether GL_DYNAMIC_DRAW is faster
+    uboInitialized = true;
+}
+
+TransformShaderFormat Transform::getShaderFormat() const {
+    return TransformShaderFormat{.translation = this->translation, .rotation = this->rotation, .scale = this->scale, .modelMat =this->getModelMat()};
 }
 
 

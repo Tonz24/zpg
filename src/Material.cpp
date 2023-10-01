@@ -7,8 +7,3 @@
 void Material::uploadVariables() {
     this->shader->use();
 }
-
-void Material::uploadTranslation(const glm::vec3& translation) {
-    this->shader->use();
-    this->shader->setVec3f("translation",translation);
-}
