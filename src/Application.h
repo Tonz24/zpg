@@ -28,6 +28,8 @@ public:
         return *this->scene;
     }
 
+    static float getTime();
+
 private:
      inline static Application* appInstance{nullptr};
 

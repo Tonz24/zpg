@@ -3,27 +3,19 @@
 #include <GLFW/glfw3.h>
 
 //Include GLM
-#include <glm/vec3.hpp> // glm::vec3
-#include <glm/vec4.hpp> // glm::vec4
-#include <glm/mat4x4.hpp> // glm::mat4
 #include <glm/gtc/matrix_transform.hpp> // glm::translate, glm::rotate, glm::scale, glm::perspective
-#include <glm/gtc/type_ptr.hpp> // glm::value_ptr
 
-//Include the standard C++ headers  
-#include <stdlib.h>
-#include <stdio.h>
+#include <cstdio>
 #include <random>
 
-#include <iostream>
-
-#include "Shader.h"
 #include "Application.h"
 #include "Quad.h"
 #include "Triangle.h"
-#include "ColorMaterial.h"
-#include "LerpMaterial.h"
+
 #include "Texture.h"
+#include "LerpMaterial.h"
 #include "TextureMaterial.h"
+#include "ColorMaterial.h"
 
 static void error_callback(int error, const char* description){ fputs(description, stderr); }
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)

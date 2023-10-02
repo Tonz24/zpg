@@ -83,3 +83,7 @@ void Application::terminate() {
     glfwTerminate();
     exit(EXIT_SUCCESS);
 }
+
+float Application::getTime() {
+    return glfwGetTime();
+}

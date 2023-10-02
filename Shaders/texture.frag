@@ -5,11 +5,9 @@ in vec2 uv;
 
 out vec4 frag_color;
 
-uniform vec3 color1;
-uniform vec3 color2;
-
+uniform float time;
 uniform sampler2D tex;
 
 void main () {
-     frag_color = texture(tex, uv);
+     frag_color = texture(tex, vec2(uv.x + cos(time),uv.y + sin(time)));
 }
