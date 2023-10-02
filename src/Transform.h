@@ -11,9 +11,7 @@ enum Rotation_Axis{
     AXIS_Z
 };
 
-
 struct TransformShaderFormat{
-
 
     const glm::vec3 translation;
     float padding{0};
@@ -32,7 +30,9 @@ public:
 
     void rotate(const float& angle,const Rotation_Axis& axis);
     void rotate(const glm::vec3& rotation);
+
     void setRotation(const glm::vec3& rotation);
+    void setRotation(const float& angle,const Rotation_Axis& axis);
 
     void setScale(const glm::vec3& scale);
 

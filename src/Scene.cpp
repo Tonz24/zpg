@@ -1,7 +1,6 @@
 //
 // Created by Tonz on 26.09.2023.
 //
-
 #include "Scene.h"
 
 void Scene::addModel(Model &model) {

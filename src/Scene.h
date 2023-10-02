@@ -7,7 +7,9 @@
 #include<vector>
 #include <memory>
 
+
 #include "Model.h"
+#include <GLFW/glfw3.h>
 class Scene {
 public:
     void addModel(Model& model);

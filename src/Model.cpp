@@ -32,9 +32,9 @@ void Model::init() {
     //init model VAO
     glGenVertexArrays(1, &this->vao); //generate the VAO
     glBindVertexArray(this->vao); //bind the VAO
-    glEnableVertexAttribArray(0); //enable vertex attributes
-    glEnableVertexAttribArray(1); //enable vertex attributes
-    glEnableVertexAttribArray(2); //enable vertex attributes
+    glEnableVertexAttribArray(0); //enable vertex position
+    glEnableVertexAttribArray(1); //enable vertex color
+    glEnableVertexAttribArray(2); //enable vertex uv
 
     glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),  (void*)0);

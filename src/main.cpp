@@ -22,7 +22,8 @@
 #include "Triangle.h"
 #include "ColorMaterial.h"
 #include "LerpMaterial.h"
-
+#include "Texture.h"
+#include "TextureMaterial.h"
 
 static void error_callback(int error, const char* description){ fputs(description, stderr); }
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -57,12 +58,15 @@ int main(){
     std::uniform_real_distribution<float> uni(-1, 1);
     std::uniform_real_distribution<float> uniColor(0, 1);
 
+    Texture tex("tonda.png");
+    TextureMaterial material(tex);
+
     //generate shapes with random positions and materials
     for (int i = 0; i < 15; ++i) {
         Material* colorMat = new ColorMaterial({uniColor(gen),uniColor(gen),uniColor(gen)});
         Material* lerpMat = new LerpMaterial({uniColor(gen),uniColor(gen),uniColor(gen)},{uniColor(gen),uniColor(gen),uniColor(gen)});
 
-        auto* quad = new Quad({uni(gen),uni(gen),uni(gen)},uniColor(gen) > 0.5f ? *colorMat : *lerpMat);
+        auto* quad = new Quad({uni(gen),uni(gen),uni(gen)},material);
         auto* triangle = new Triangle({uni(gen),uni(gen),uni(gen)},uni(gen) > 0.0f ? *lerpMat : *colorMat);
 
         quad->getTransform().setPosition({uni(gen),uni(gen),0});

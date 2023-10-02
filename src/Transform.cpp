@@ -41,6 +41,21 @@ void Transform::setRotation(const glm::vec3 &rotation) {
     applyTransform();
 }
 
+void Transform::setRotation(const float &angle, const Rotation_Axis &axis) {
+    switch (axis) {
+        case AXIS_X:
+            this->rotation.x = angle;
+            break;
+        case AXIS_Y:
+            this->rotation.y = angle;
+            break;
+        case AXIS_Z:
+            this->rotation.z = angle;
+            break;
+    }
+    applyTransform();
+}
+
 void Transform::setScale(const glm::vec3 &scale) {
     this->scale = scale;
     applyTransform();
@@ -88,5 +103,3 @@ void Transform::initUBO() {
 TransformShaderFormat Transform::getShaderFormat() const {
     return TransformShaderFormat{.translation = this->translation, .rotation = this->rotation, .scale = this->scale, .modelMat =this->getModelMat()};
 }
-
-

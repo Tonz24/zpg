@@ -124,6 +124,7 @@ void Shader::compileShaders() {
     shaderCache["shader_default"] = std::make_unique<Shader>(R"(..\Shaders\default.vert)",R"(..\Shaders\default.frag)");
     shaderCache["shader_color"] = std::make_unique<Shader>(R"(..\Shaders\default.vert)",R"(..\Shaders\color.frag)");
     shaderCache["shader_lerp_color"] = std::make_unique<Shader>(R"(..\Shaders\default.vert)",R"(..\Shaders\uvInterp.frag)");
+    shaderCache["shader_texture"] = std::make_unique<Shader>(R"(..\Shaders\default.vert)",R"(..\Shaders\texture.frag)");
 }
 
 const Shader* Shader::getShaderProgram(const std::string& name) {
