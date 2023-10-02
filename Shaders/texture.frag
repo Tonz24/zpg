@@ -9,5 +9,5 @@ uniform float time;
 uniform sampler2D tex;
 
 void main () {
-     frag_color = texture(tex, vec2(uv.x + cos(time),uv.y + sin(time)));
+     frag_color = texture(tex,uv);
 }

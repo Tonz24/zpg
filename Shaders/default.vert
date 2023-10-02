@@ -16,11 +16,6 @@ layout (std140, binding = 5) uniform Transform{
     mat4x4 modelMat;
 };
 
-vec3 rotate(vec3 vector, float angle){
-    vec2 result = mat2(cos(angle),-sin(angle), sin(angle),cos(angle)) * vector.xy;
-    return vec3(result.xy,0);
-}
-
 void main () {
     col = colIn;
     uv = uvIn;

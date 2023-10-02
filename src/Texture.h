@@ -15,6 +15,8 @@ public:
 
     void bind(const uint32_t& textureUnit) const;
 
+    ~Texture();
+
 private:
     uint32_t id;
 
@@ -23,4 +25,6 @@ private:
     glm::vec<2,int> dimensions{0};
     int components{0};
     std::string name{};
+
+    uint8_t* rawData{nullptr};
 };

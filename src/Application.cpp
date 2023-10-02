@@ -2,8 +2,11 @@
 // Created by Tonz on 26.09.2023.
 //
 
+#include <functional>
+
 #include "Application.h"
 #include "Shader.h"
+#include "InputManager.h"
 
 
 void Application::initialize() {
@@ -32,10 +35,10 @@ void Application::initialize() {
     glewExperimental = GL_TRUE;
     glewInit();
 
-    /*glfwSetKeyCallback(window, key_callback);
-    glfwSetCursorPosCallback(window, cursor_callback);
-    glfwSetMouseButtonCallback(window, button_callback);
-    glfwSetWindowFocusCallback(window, window_focus_callback);
+    glfwSetKeyCallback(window,&InputManager::keyCallback);
+    glfwSetCursorPosCallback(window, &InputManager::cursorCallback);
+    glfwSetMouseButtonCallback(window, &InputManager::mouseButtonCallback);
+    /*glfwSetWindowFocusCallback(window, window_focus_callback);
     glfwSetWindowIconifyCallback(window, window_iconify_callback);
     glfwSetWindowSizeCallback(window, window_size_callback);
     */

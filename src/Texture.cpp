@@ -8,7 +8,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-Texture::Texture(const std::string& name) {
+Texture::Texture(const std::string& name) : id(0) {
 
     std::string fullName{R"(..\Assets\Textures\)" + name};
 
@@ -19,7 +19,8 @@ Texture::Texture(const std::string& name) {
         std::cerr << "File \"" << fullName << "\\\" not found." << std::endl;
         return;
     }
-    uint8_t * rawData = stbi_load(fullName.c_str(),&size.x,&size.y,&comp,4);
+    stbi_set_flip_vertically_on_load(true);
+    this->rawData = stbi_load(fullName.c_str(),&size.x,&size.y,&comp,4);
 
     this->data = std::vector<std::reference_wrapper<uint8_t>>(rawData, rawData + (size.x * size.y * 3));
     this->dimensions = size;
@@ -45,4 +46,9 @@ const bool &Texture::isValid() const {
 void Texture::bind(const uint32_t &textureUnit) const {
     glActiveTexture(GL_TEXTURE0 + textureUnit);
     glBindTexture(GL_TEXTURE_2D, this->id);
+}
+
+Texture::~Texture() {
+    stbi_image_free(this->rawData);
+    glDeleteTextures(1,&this->id);
 }

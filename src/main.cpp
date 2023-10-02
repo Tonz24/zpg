@@ -18,12 +18,6 @@
 #include "ColorMaterial.h"
 
 static void error_callback(int error, const char* description){ fputs(description, stderr); }
-static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
-	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, GL_TRUE);
-	printf("key_callback [%d,%d,%d,%d] \n", key, scancode, action, mods);
-}
 
 static void window_focus_callback(GLFWwindow* window, int focused){ printf("window_focus_callback \n"); }
 
@@ -34,14 +28,6 @@ static void window_size_callback(GLFWwindow* window, int width, int height){
 	glViewport(0, 0, width, height);
 }
 
-static void cursor_callback(GLFWwindow *window, double x, double y){
-    printf("cursor_callback \n");
-}
-
-static void button_callback(GLFWwindow* window, int button, int action, int mode){
-	if (action == GLFW_PRESS) printf("button_callback [%d,%d,%d]\n", button, action, mode);
-}
-
 int main(){
     Application::getInstance().initialize();
 
@@ -50,7 +36,7 @@ int main(){
     std::uniform_real_distribution<float> uni(-1, 1);
     std::uniform_real_distribution<float> uniColor(0, 1);
 
-    Texture tex("tonda.png");
+    Texture tex("cock.png");
     TextureMaterial material(tex);
 
     //generate shapes with random positions and materials
