@@ -8,12 +8,10 @@
 
 void Transform::setPosition(const glm::vec3 &position) {
     this->translation = position;
-    applyTransform();
 }
 
 void Transform::translate(const glm::vec3 &translation) {
     this->translation += translation;
-    applyTransform();
 }
 
 void Transform::rotate(const float &angle, const Rotation_Axis &axis) {
@@ -28,17 +26,14 @@ void Transform::rotate(const float &angle, const Rotation_Axis &axis) {
             this->rotation.z += angle;
             break;
     }
-    applyTransform();
 }
 
 void Transform::rotate(const glm::vec3& rotation) {
     this->rotation += rotation;
-    applyTransform();
 }
 
 void Transform::setRotation(const glm::vec3 &rotation) {
     this->rotation = rotation;
-    applyTransform();
 }
 
 void Transform::setRotation(const float &angle, const Rotation_Axis &axis) {
@@ -53,12 +48,10 @@ void Transform::setRotation(const float &angle, const Rotation_Axis &axis) {
             this->rotation.z = angle;
             break;
     }
-    applyTransform();
 }
 
 void Transform::setScale(const glm::vec3 &scale) {
     this->scale = scale;
-    applyTransform();
 }
 
 void Transform::applyTransform() {
@@ -75,7 +68,8 @@ void Transform::applyTransform() {
     this->modelMat = newModelMat;
 }
 
-const glm::mat4x4 &Transform::getModelMat() const {
+const glm::mat4x4 &Transform::getModelMat(){
+    this->applyTransform();
     return this->modelMat;
 }
 
@@ -83,7 +77,7 @@ void Transform::uploadToGpu() {
     uploadToGpuInternal(*this);
 }
 
-void Transform::uploadToGpuInternal(const Transform& transform) {
+void Transform::uploadToGpuInternal(Transform& transform) {
     if (!uboInitialized)
         initUBO();
 
@@ -100,6 +94,6 @@ void Transform::initUBO() {
     uboInitialized = true;
 }
 
-TransformShaderFormat Transform::getShaderFormat() const {
+TransformShaderFormat Transform::getShaderFormat(){
     return TransformShaderFormat{.translation = this->translation, .rotation = this->rotation, .scale = this->scale, .modelMat =this->getModelMat()};
 }

@@ -16,6 +16,7 @@
 #include "LerpMaterial.h"
 #include "TextureMaterial.h"
 #include "ColorMaterial.h"
+#include "Camera.h"
 
 static void error_callback(int error, const char* description){ fputs(description, stderr); }
 
@@ -53,6 +54,7 @@ int main(){
         Application::getInstance().getScene().addModel(*quad);
         Application::getInstance().getScene().addModel(*triangle);
     }
+    Camera camera{};
     Application::getInstance().run();
 }
 //RADEK MELČÁK MEL0094

@@ -34,6 +34,8 @@ void Application::initialize() {
     // start GLEW extension handler
     glewExperimental = GL_TRUE;
     glewInit();
+    std::function<void(int key)> tonda([](int key){std::cout << "franta" << std::endl;}) ;
+    InputManager::getInstance().getInputMap().addPairing('H',tonda);
 
     glfwSetKeyCallback(window,&InputManager::keyCallback);
     glfwSetCursorPosCallback(window, &InputManager::cursorCallback);

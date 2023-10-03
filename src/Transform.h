@@ -37,9 +37,10 @@ public:
     void setScale(const glm::vec3& scale);
 
     [[nodiscard]] const glm::mat4x4& getModelMat() const;
+    [[nodiscard]] const glm::mat4x4& getModelMat();
 
     void uploadToGpu();
-    [[nodiscard]] TransformShaderFormat getShaderFormat() const;
+    [[nodiscard]] TransformShaderFormat getShaderFormat();
 
 private:
     glm::vec3 translation{0};
@@ -54,7 +55,7 @@ private:
     inline static bool uboInitialized{false};
 
     static void initUBO();
-    static void uploadToGpuInternal(const Transform& transform);
+    static void uploadToGpuInternal(Transform& transform);
 
     constexpr inline static uint32_t BINDING_POINT{5};
 };
