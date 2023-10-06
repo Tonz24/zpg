@@ -11,17 +11,6 @@ enum Rotation_Axis{
     AXIS_Z
 };
 
-struct TransformShaderFormat{
-
-    const glm::vec3 translation;
-    float padding{0};
-    const glm::vec3 rotation;
-    float padding2{0};
-    const glm::vec3 scale;
-    float padding3{0};
-    const glm::mat4x4 modelMat;
-};
-
 class Transform {
 public:
 
@@ -40,7 +29,6 @@ public:
     [[nodiscard]] const glm::mat4x4& getModelMat();
 
     void uploadToGpu();
-    [[nodiscard]] TransformShaderFormat getShaderFormat();
 
 private:
     glm::vec3 translation{0};
@@ -48,6 +36,8 @@ private:
     glm::vec3 scale{1};
 
     glm::mat4x4 modelMat{1};
+
+    bool changed{false};
 
     void applyTransform();
 

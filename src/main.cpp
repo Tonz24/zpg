@@ -9,14 +9,15 @@
 #include <random>
 
 #include "Application.h"
-#include "Quad.h"
-#include "Triangle.h"
+//#include "Quad.h"
+//#include "Triangle.h"
 
 #include "Texture.h"
 #include "LerpMaterial.h"
 #include "TextureMaterial.h"
 #include "ColorMaterial.h"
 #include "Camera.h"
+#include "Renderable.h"
 
 static void error_callback(int error, const char* description){ fputs(description, stderr); }
 
@@ -38,21 +39,20 @@ int main(){
     std::uniform_real_distribution<float> uniColor(0, 1);
 
     Texture tex("cock.png");
-    TextureMaterial material(tex);
+    Material* material = new TextureMaterial(tex);
+
+    Model* model = new Model(VertexType(VertexType::VertexTypeEnum::POS | VertexType::VertexTypeEnum::NORMAL));
 
     //generate shapes with random positions and materials
-    for (int i = 0; i < 15; ++i) {
+    for (int i = 0; i < 1; ++i) {
         Material* colorMat = new ColorMaterial({uniColor(gen),uniColor(gen),uniColor(gen)});
+        Material* mat = new Material();
         Material* lerpMat = new LerpMaterial({uniColor(gen),uniColor(gen),uniColor(gen)},{uniColor(gen),uniColor(gen),uniColor(gen)});
 
-        auto* quad = new Quad({uni(gen),uni(gen),uni(gen)},material);
-        auto* triangle = new Triangle({uni(gen),uni(gen),uni(gen)},uni(gen) > 0.0f ? *lerpMat : *colorMat);
+        Renderable* renderable = new Renderable(model,mat);
+        renderable->getTransform().setScale({0.5,0.5,0.5});
 
-        quad->getTransform().setPosition({uni(gen),uni(gen),0});
-        triangle->getTransform().setPosition({uni(gen),uni(gen),0});
-
-        Application::getInstance().getScene().addModel(*quad);
-        Application::getInstance().getScene().addModel(*triangle);
+        Application::getInstance().getScene().addModel(*renderable);
     }
     Camera camera{};
     Application::getInstance().run();

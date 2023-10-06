@@ -22,7 +22,7 @@ void Application::initialize() {
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    this->window = glfwCreateWindow(1000, 1000, "ZPG MELČÁK", NULL, NULL);
+    this->window = glfwCreateWindow(1920, 1080, "ZPG MELČÁK", glfwGetPrimaryMonitor(), NULL);
     if (!this->window){
         glfwTerminate();
         exit(EXIT_FAILURE);
@@ -63,6 +63,7 @@ void Application::initialize() {
     Shader::compileShaders();
 
     this->initialized = true;
+
 }
 
 Application::Application() {
@@ -72,11 +73,12 @@ Application::Application() {
 void Application::run() {
     if(!this->initialized) this->initialize();
 
+    glEnable(GL_DEPTH_TEST);
+
     while (!glfwWindowShouldClose(window)){
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         scene->draw();
-
         glfwPollEvents();
         glfwSwapBuffers(window);
     }

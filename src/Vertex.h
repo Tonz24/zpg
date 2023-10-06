@@ -6,9 +6,11 @@
 
 #include <glm/glm.hpp>
 
-class Vertex{
-public:
-    glm::vec3 pos;
-    glm::vec3 color;
-    glm::vec2 uv;
+struct Vertex{
+    Vertex(glm::vec3 pos = glm::vec3{0,0,0}, glm::vec3 color = glm::vec3{0,0,0}, glm::vec3 normal = glm::vec3{0,0,0}, glm::vec2 uv = glm::vec2{0,0})
+        : pos(pos),color(color),normal(normal),uv(uv){}
+    glm::vec3 pos{0};
+    glm::vec3 normal{0};
+    glm::vec3 color{1};
+    glm::vec2 uv{0};
 };

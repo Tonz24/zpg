@@ -8,16 +8,16 @@
 #include <memory>
 
 
-#include "Model.h"
+#include "Renderable.h"
 #include <GLFW/glfw3.h>
 class Scene {
 public:
-    void addModel(Model& model);
+    void addModel(Renderable& model);
 
     void draw();
 
 private:
-    std::vector<std::unique_ptr<Model>> models;
+    std::vector<std::unique_ptr<Renderable>> models;
 };
 
 

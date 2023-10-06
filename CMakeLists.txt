@@ -18,8 +18,8 @@ link_directories($ENV{GLFW_LIBRARY})
 link_directories($ENV{ASSIMP_LIBRARY})
 
 #fastnoise
-set(FASTNOISE2_NOISETOOL OFF CACHE BOOL "Build Noise Tool" FORCE)
-add_subdirectory( ${CMAKE_SOURCE_DIR}/include/fastnoise )
+#set(FASTNOISE2_NOISETOOL OFF CACHE BOOL "Build Noise Tool" FORCE)
+#add_subdirectory( ${CMAKE_SOURCE_DIR}/include/fastnoise )
 
 #glm
 include_directories("${CMAKE_SOURCE_DIR}/include/glm")
@@ -52,4 +52,3 @@ file (GLOB_RECURSE glmSRC
 
 add_executable(proj ${fileSRC})
 target_link_libraries(proj OpenGL::GL glew32 glfw3 assimp-vc143-mt)
-

@@ -38,9 +38,6 @@ public:
     static const Shader* getShaderProgram(const std::string& name);
 
 private:
-
     inline static std::unordered_map<std::string,std::unique_ptr<Shader>> shaderCache{};
-
     void checkCompileErrors(unsigned int shader, std::string type);
 };
-

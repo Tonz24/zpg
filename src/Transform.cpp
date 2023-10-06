@@ -8,10 +8,12 @@
 
 void Transform::setPosition(const glm::vec3 &position) {
     this->translation = position;
+    changed = true;
 }
 
 void Transform::translate(const glm::vec3 &translation) {
     this->translation += translation;
+    changed = true;
 }
 
 void Transform::rotate(const float &angle, const Rotation_Axis &axis) {
@@ -26,14 +28,17 @@ void Transform::rotate(const float &angle, const Rotation_Axis &axis) {
             this->rotation.z += angle;
             break;
     }
+    changed = true;
 }
 
 void Transform::rotate(const glm::vec3& rotation) {
     this->rotation += rotation;
+    changed = true;
 }
 
 void Transform::setRotation(const glm::vec3 &rotation) {
     this->rotation = rotation;
+    changed = true;
 }
 
 void Transform::setRotation(const float &angle, const Rotation_Axis &axis) {
@@ -48,10 +53,12 @@ void Transform::setRotation(const float &angle, const Rotation_Axis &axis) {
             this->rotation.z = angle;
             break;
     }
+    changed = true;
 }
 
 void Transform::setScale(const glm::vec3 &scale) {
     this->scale = scale;
+    changed = true;
 }
 
 void Transform::applyTransform() {
@@ -69,7 +76,9 @@ void Transform::applyTransform() {
 }
 
 const glm::mat4x4 &Transform::getModelMat(){
-    this->applyTransform();
+    if (this->changed)
+        this->applyTransform();
+    this->changed = false;
     return this->modelMat;
 }
 
@@ -81,19 +90,14 @@ void Transform::uploadToGpuInternal(Transform& transform) {
     if (!uboInitialized)
         initUBO();
 
-    TransformShaderFormat format = transform.getShaderFormat();
     glBindBuffer(GL_UNIFORM_BUFFER, uboId);
     glBindBufferBase(GL_UNIFORM_BUFFER, BINDING_POINT, uboId);
-    glBufferSubData(GL_UNIFORM_BUFFER, 0, 112, &format);
+    glBufferSubData(GL_UNIFORM_BUFFER, 0, 4*4*4, &transform.getModelMat());
 }
 
 void Transform::initUBO() {
     glGenBuffers(1, &uboId);
     glBindBuffer(GL_UNIFORM_BUFFER, uboId);
-    glBufferData(GL_UNIFORM_BUFFER, 112, NULL, GL_STATIC_DRAW); //TODO: test whether GL_DYNAMIC_DRAW is faster
+    glBufferData(GL_UNIFORM_BUFFER, 4*4*4, NULL, GL_STATIC_DRAW); //TODO: test whether GL_DYNAMIC_DRAW is faster
     uboInitialized = true;
-}
-
-TransformShaderFormat Transform::getShaderFormat(){
-    return TransformShaderFormat{.translation = this->translation, .rotation = this->rotation, .scale = this->scale, .modelMat =this->getModelMat()};
 }
