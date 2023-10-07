@@ -32,13 +32,13 @@ private:
 
 class Rotation : public Transformation{
 public:
-    Rotation(const float& angle = 0,const glm::vec3& axis = {0,1,0}) : angle(angle), axis(glm::normalize(axis)){}
+    explicit Rotation(const float& angle = 0,const glm::vec3& axis = {0,1,0}) : angle(angle), axis(glm::normalize(axis)){}
     void apply(glm::mat4 &matrix) const override;
 
     void setRotation(const float& angle,const glm::vec3& axis);
     void rotate(const float& angle);
 
-    const float& getAngle() const;
+    [[nodiscard]] const float& getAngle() const;
 
 private:
     float angle{0};

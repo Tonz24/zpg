@@ -33,7 +33,7 @@ int main(){
 
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_real_distribution<float> uniColor(0, 1);
+    std::uniform_real_distribution<float> rng(0, 1);
 
     Texture tex("cock.png");
     Material* material = new TextureMaterial(tex);
@@ -46,14 +46,14 @@ int main(){
 
     //generate shapes with random positions and materials
     for (int i = 0; i < 10; ++i) {
-        Material* colorMat = new ColorMaterial({uniColor(gen),uniColor(gen),uniColor(gen)});
+        Material* colorMat = new ColorMaterial({rng(gen), rng(gen), rng(gen)});
         Material* mat = new Material();
-        Material* lerpMat = new LerpMaterial({uniColor(gen),uniColor(gen),uniColor(gen)},{uniColor(gen),uniColor(gen),uniColor(gen)});
+        Material* lerpMat = new LerpMaterial({rng(gen), rng(gen), rng(gen)}, {rng(gen), rng(gen), rng(gen)});
 
         TransformationComposite* t = new TransformationComposite();
-        t->addTransformation({new Translation({uniColor(gen),uniColor(gen),0}),new Rotation(uniColor(gen)*360,{uniColor(gen),uniColor(gen),uniColor(gen)}),new Scale(glm::vec3{uniColor(gen)/5})});
+        t->addTransformation({new Translation({rng(gen), rng(gen), 0}), new Rotation(rng(gen) * 360, {rng(gen), rng(gen), rng(gen)}), new Scale(glm::vec3{rng(gen) / 5})});
 
-        Renderable* renderable = new Renderable(cube,mat,t,c);
+        Renderable* renderable = new Renderable(rng(gen) < 0.3f ? cube : (rng(gen) < 0.6f ? monkey : sphere), rng(gen) > 0.5f ? mat : material, t, c);
         Application::getInstance().getScene().addModel(*renderable);
     }
 
