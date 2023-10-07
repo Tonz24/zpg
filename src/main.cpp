@@ -13,6 +13,9 @@
 #include "Camera.h"
 #include "Renderable.h"
 #include "Transformation.h"
+#include "Sphere.h"
+#include "Monkey.h"
+#include "Cube.h"
 
 static void error_callback(int error, const char* description){ fputs(description, stderr); }
 
@@ -35,15 +38,14 @@ int main(){
     Texture tex("cock.png");
     Material* material = new TextureMaterial(tex);
 
-    std::vector<VertexElement*> tonda{};
-    tonda.push_back(new PosElement());
-    tonda.push_back(new NorElement());
-    Model* model = new Model(std::move(tonda));
+    Model* sphere = new Sphere();
+    Model* monkey = new Monkey();
+    Model* cube = new Cube();
 
     Controller* c = new Controller(100,2000);
 
     //generate shapes with random positions and materials
-    for (int i = 0; i < 1; ++i) {
+    for (int i = 0; i < 10; ++i) {
         Material* colorMat = new ColorMaterial({uniColor(gen),uniColor(gen),uniColor(gen)});
         Material* mat = new Material();
         Material* lerpMat = new LerpMaterial({uniColor(gen),uniColor(gen),uniColor(gen)},{uniColor(gen),uniColor(gen),uniColor(gen)});
@@ -51,7 +53,7 @@ int main(){
         TransformationComposite* t = new TransformationComposite();
         t->addTransformation({new Translation({uniColor(gen),uniColor(gen),0}),new Rotation(uniColor(gen)*360,{uniColor(gen),uniColor(gen),uniColor(gen)}),new Scale(glm::vec3{uniColor(gen)/5})});
 
-        Renderable* renderable = new Renderable(model,uniColor(gen) > 0.5f ? material : mat,t,c);
+        Renderable* renderable = new Renderable(cube,mat,t,c);
         Application::getInstance().getScene().addModel(*renderable);
     }
 

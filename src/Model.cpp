@@ -47,9 +47,11 @@ void Model::init() {
 }
 
 Model::Model(std::vector<VertexElement*> types) : vertexDescription(std::move(types)){
-    for(int i = 0; i < 17280; i+= 6){
-        Vertex v{{sphere[i],sphere[i+1],sphere[i+2],sphere[i+3],sphere[i+4],sphere[i+5]},this->vertexDescription};
-        this->vertices.push_back(v);
-    }
-    this->init();
+}
+
+Model::Model() {
+    std::vector<VertexElement*> desc{};
+    desc.push_back(new PosElement());
+    desc.push_back(new NorElement());
+    this->vertexDescription = std::move(desc);
 }
