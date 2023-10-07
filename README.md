@@ -7,5 +7,5 @@ intro to computer graphics project
 * Make the camera class upload its matrices
 * Implement resource caches for meshes and textures (trying to load the same resource for the second time should result in getting a reference)
 * Assimp for model loading
-* Light material with
+* Light material
 * UBO for light data
