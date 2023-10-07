@@ -51,7 +51,7 @@ int main(){
         Material* lerpMat = new LerpMaterial({rng(gen), rng(gen), rng(gen)}, {rng(gen), rng(gen), rng(gen)});
 
         TransformationComposite* t = new TransformationComposite();
-        t->addTransformation({new Translation({rng(gen), rng(gen), 0}), new Rotation(rng(gen) * 360, {rng(gen), rng(gen), rng(gen)}), new Scale(glm::vec3{rng(gen) / 5})});
+        t->addTransformation({new Translation({i * 0.2f, rng(gen), 0}), new Rotation(rng(gen) * 360, {rng(gen), rng(gen), rng(gen)}), new Scale(glm::vec3{rng(gen) / 5})});
 
         Renderable* renderable = new Renderable(rng(gen) < 0.3f ? cube : (rng(gen) < 0.6f ? monkey : sphere), rng(gen) > 0.5f ? mat : material, t, c);
         Application::getInstance().getScene().addModel(*renderable);
