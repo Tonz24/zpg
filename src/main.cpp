@@ -1,16 +1,10 @@
-//Include GLFW  
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-
-//Include GLM
-#include <glm/gtc/matrix_transform.hpp> // glm::translate, glm::rotate, glm::scale, glm::perspective
 
 #include <cstdio>
 #include <random>
 
 #include "Application.h"
-//#include "Quad.h"
-//#include "Triangle.h"
 
 #include "Texture.h"
 #include "LerpMaterial.h"
@@ -41,7 +35,10 @@ int main(){
     Texture tex("cock.png");
     Material* material = new TextureMaterial(tex);
 
-    Model* model = new Model(VertexType(VertexType::VertexTypeEnum::POS | VertexType::VertexTypeEnum::NORMAL));
+    std::vector<VertexElement*> tonda{};
+    tonda.push_back(new PosElement());
+    tonda.push_back(new NorElement());
+    Model* model = new Model(std::move(tonda));
 
     Controller* c = new Controller(100,2000);
 

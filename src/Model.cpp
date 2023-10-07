@@ -4,6 +4,8 @@
 
 #include "Model.h"
 
+#include <utility>
+
 Model::~Model() {
     glDeleteVertexArrays(1,&this->vao);
     glDeleteBuffers(1,&this->vbo);
@@ -21,12 +23,6 @@ void Model::init() {
 
     glGenVertexArrays(1, &this->vao); //generate the VAO
     glBindVertexArray(this->vao); //bind the VAO
-    /*glEnableVertexAttribArray(0); //enable vertex position
-    glEnableVertexAttribArray(1); //enable vertex color
-
-    glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float)*6, (void*)0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(float)*6, (void*)(3*sizeof(float)));*/
 
     int pointersUsed{0}, offsets{0};
 
@@ -50,9 +46,9 @@ void Model::init() {
     offsets += 2;
 }
 
-Model::Model(const VertexType& type) : type(type){
-    for(int i = 0; i < 17424; i+= 6){
-        Vertex v({suziSmooth[i],suziSmooth[i+1],suziSmooth[i+2]},{1,1,1},{suziSmooth[i+3],suziSmooth[i+4],suziSmooth[i+5]},{1,1});
+Model::Model(std::vector<VertexElement*> types) : vertexDescription(std::move(types)){
+    for(int i = 0; i < 17280; i+= 6){
+        Vertex v{{sphere[i],sphere[i+1],sphere[i+2],sphere[i+3],sphere[i+4],sphere[i+5]},this->vertexDescription};
         this->vertices.push_back(v);
     }
     this->init();
