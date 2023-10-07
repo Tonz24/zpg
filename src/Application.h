@@ -28,18 +28,21 @@ public:
         return *this->scene;
     }
 
-    static float getTime();
+    float getTime();
+    float getDeltaTime();
 
 private:
-     inline static Application* appInstance{nullptr};
+    inline static Application* appInstance{nullptr};
 
-     Application();
+    Application();
 
-     GLFWwindow* window{nullptr};
+    GLFWwindow* window{nullptr};
 
-     std::unique_ptr<Scene> scene{nullptr};
+    std::unique_ptr<Scene> scene{nullptr};
 
-     bool initialized{false};
+    bool initialized{false};
 
-
+    float currentTime{0};
+    float deltaTime{0};
+    float lastTime{0};
 };

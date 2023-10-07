@@ -9,7 +9,6 @@ void Scene::addModel(Renderable &renderable) {
 
 void Scene::draw() {
     for (const auto &renderable : this->models){
-        renderable->getTransform().setRotation(glfwGetTime()*10,AXIS_X);
         renderable->draw();
     }
 }

@@ -76,11 +76,15 @@ void Application::run() {
     glEnable(GL_DEPTH_TEST);
 
     while (!glfwWindowShouldClose(window)){
+        currentTime = getTime();
+        deltaTime = currentTime - lastTime;
+        lastTime = currentTime;
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         scene->draw();
         glfwPollEvents();
         glfwSwapBuffers(window);
+
     }
     this->terminate();
 }
@@ -93,4 +97,8 @@ void Application::terminate() {
 
 float Application::getTime() {
     return glfwGetTime();
+}
+
+float Application::getDeltaTime() {
+    return deltaTime;
 }

@@ -7,5 +7,5 @@
 void TextureMaterial::uploadVariables() {
     Material::uploadVariables();
     this->texture.bind(0);
-    this->shader->setFloat("time",Application::getTime());
+    this->shader->setFloat("time",Application::getInstance().getTime());
 }
