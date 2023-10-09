@@ -9,12 +9,15 @@
 
 
 #include "Renderable.h"
-#include <GLFW/glfw3.h>
+#include "Camera.h"
+
 class Scene {
 public:
     void addModel(Renderable& model);
 
     void draw();
+
+    Camera cam;
 
 private:
     std::vector<std::unique_ptr<Renderable>> models;

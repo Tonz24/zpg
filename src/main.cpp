@@ -1,6 +1,3 @@
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-
 #include <cstdio>
 #include <random>
 
@@ -10,12 +7,12 @@
 #include "LerpMaterial.h"
 #include "TextureMaterial.h"
 #include "ColorMaterial.h"
-#include "Camera.h"
 #include "Renderable.h"
 #include "Transformation.h"
 #include "Sphere.h"
 #include "Monkey.h"
 #include "Cube.h"
+#include "Camera.h"
 
 static void error_callback(int error, const char* description){ fputs(description, stderr); }
 
@@ -42,22 +39,22 @@ int main(){
     Model* monkey = new Monkey();
     Model* cube = new Cube();
 
-    Controller* c = new Controller(100,2000);
 
     //generate shapes with random positions and materials
     for (int i = 0; i < 10; ++i) {
         Material* colorMat = new ColorMaterial({rng(gen), rng(gen), rng(gen)});
         Material* mat = new Material();
         Material* lerpMat = new LerpMaterial({rng(gen), rng(gen), rng(gen)}, {rng(gen), rng(gen), rng(gen)});
-
         TransformationComposite* t = new TransformationComposite();
         t->addTransformation({new Translation({i * 0.2f, rng(gen), 0}), new Rotation(rng(gen) * 360, {rng(gen), rng(gen), rng(gen)}), new Scale(glm::vec3{rng(gen) / 5})});
-
-        Renderable* renderable = new Renderable(rng(gen) < 0.3f ? cube : (rng(gen) < 0.6f ? monkey : sphere), rng(gen) > 0.5f ? mat : material, t, c);
+        float r = rng(gen);
+        Renderable* renderable = new Renderable(r < 0.3f ? cube : (r < 0.6f ? monkey : sphere), rng(gen) > 0.5f ? mat : material, t);
         Application::getInstance().getScene().addModel(*renderable);
     }
 
-    Camera camera{};
+    Camera cam{};
+    cam.uploadMatrices();
+    Application::getInstance().getScene().cam = cam;
     Application::getInstance().run();
 }
 //RADEK MELČÁK MEL0094

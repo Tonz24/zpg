@@ -12,7 +12,7 @@ public:
     Cube();
 private:
     static inline const std::vector<float> cubeData = {
-            // Front face
+            // front face
             -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f,   // Vertex 0
             0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f,   // Vertex 1
             0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 1.0f,   // Vertex 2
@@ -28,7 +28,7 @@ private:
             0.5f,  0.5f, -0.5f,  0.0f, 0.0f, -1.0f,  // Vertex 6
             -0.5f,  0.5f, -0.5f,  0.0f, 0.0f, -1.0f,  // Vertex 7
 
-            // Right face
+            // right face
             0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 0.0f,   // Vertex 1
             0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 0.0f,   // Vertex 5
             0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f,   // Vertex 2

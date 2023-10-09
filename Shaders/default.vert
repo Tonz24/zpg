@@ -11,10 +11,12 @@ uniform float time;
 
 layout (std140, binding = 5) uniform Transform{
     mat4x4 modelMat;
+    mat4x4 viewMat;
+    mat4x4 projMat;
 };
 
 void main () {
     col = normal * colIn;
     uv = uvIn;
-    gl_Position = modelMat * vec4(vp, 1.0);
+    gl_Position = projMat * viewMat * modelMat * vec4(vp, 1.0);
 }

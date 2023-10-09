@@ -38,3 +38,18 @@ void InputManager::mouseButtonCallbackInternal(GLFWwindow *window, int button, i
 InputMap &InputManager::getInputMap() {
     return this->inputMap;
 }
+
+void InputManager::cursorPositionCallback(GLFWwindow *window, double xpos, double ypos) {
+    glm::vec2 oldPos = InputManager::getInstance().cursorPos;
+    glm::vec2 delta = {xpos - oldPos.x, ypos - oldPos.y};
+
+    for (const auto& func : InputManager::getInstance().mouseCallbacks){
+        func(xpos,ypos,delta.x,delta.y);
+    }
+
+    InputManager::getInstance().cursorPos = {xpos,ypos};
+}
+
+void InputManager::registerMouseCallback(std::function<void(double, double, double, double)> f) {
+    this->mouseCallbacks.push_back(f);
+}

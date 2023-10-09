@@ -22,7 +22,7 @@ void Application::initialize() {
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    this->window = glfwCreateWindow(1920, 1080, "ZPG MELČÁK", glfwGetPrimaryMonitor(), NULL);
+    this->window = glfwCreateWindow(1000, 1080, "ZPG MELČÁK", NULL, NULL);
     if (!this->window){
         glfwTerminate();
         exit(EXIT_FAILURE);
@@ -30,6 +30,8 @@ void Application::initialize() {
 
     glfwMakeContextCurrent(window);
     glfwSwapInterval(0);
+
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     // start GLEW extension handler
     glewExperimental = GL_TRUE;
@@ -40,6 +42,7 @@ void Application::initialize() {
     glfwSetKeyCallback(window,&InputManager::keyCallback);
     glfwSetCursorPosCallback(window, &InputManager::cursorCallback);
     glfwSetMouseButtonCallback(window, &InputManager::mouseButtonCallback);
+    glfwSetCursorPosCallback(window, &InputManager::cursorPositionCallback);
     /*glfwSetWindowFocusCallback(window, window_focus_callback);
     glfwSetWindowIconifyCallback(window, window_iconify_callback);
     glfwSetWindowSizeCallback(window, window_size_callback);
@@ -61,6 +64,8 @@ void Application::initialize() {
     glViewport(0, 0, width, height);
 
     Shader::compileShaders();
+
+    this->transformBuffer = std::make_unique<UBO>(sizeof(glm::mat4x4)*3,5,nullptr);
 
     this->initialized = true;
 
@@ -101,4 +106,8 @@ float Application::getTime() {
 
 float Application::getDeltaTime() {
     return deltaTime;
+}
+
+const UBO &Application::getTransformBuffer() const {
+    return *this->transformBuffer;
 }

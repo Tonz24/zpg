@@ -4,9 +4,11 @@
 
 #pragma once
 #include <GL/glew.h>
-#include "Scene.h"
-
+#include <GLFW/glfw3.h>
 #include <memory>
+
+#include "UBO.h"
+#include "Scene.h"
 
 class Application {
 public:
@@ -19,6 +21,8 @@ public:
     GLFWwindow* getWindow(){
         return this->window;
     }
+
+    const UBO& getTransformBuffer() const;
 
     void initialize();
     void run();
@@ -34,11 +38,12 @@ public:
 private:
     inline static Application* appInstance{nullptr};
 
+    std::unique_ptr<Scene> scene{nullptr};
+    std::unique_ptr<UBO> transformBuffer;
+
     Application();
 
     GLFWwindow* window{nullptr};
-
-    std::unique_ptr<Scene> scene{nullptr};
 
     bool initialized{false};
 

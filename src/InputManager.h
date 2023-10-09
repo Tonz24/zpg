@@ -10,6 +10,7 @@
 #include <functional>
 #include <unordered_map>
 #include <vector>
+#include "vec2.hpp"
 
 struct InputMap{
     inline void addPairing(const char key, std::function<void(int key)> response){
@@ -29,8 +30,11 @@ public:
     static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
     static void cursorCallback(GLFWwindow *window, double x, double y);
     static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mode);
+    static void cursorPositionCallback(GLFWwindow* window, double xpos, double ypos);
 
     InputMap& getInputMap();
+
+    void registerMouseCallback(std::function<void(double, double, double, double)> f);
 
 private:
     InputManager() = default;
@@ -38,6 +42,10 @@ private:
     inline static InputManager* instance{nullptr};
 
     InputMap inputMap{};
+
+    glm::vec2 cursorPos;
+
+    std::vector<std::function<void(double, double, double, double)>> mouseCallbacks{};
 
     void keyCallbackInternal(GLFWwindow* window, int key, int scancode, int action, int mods);
     void cursorCallbackInternal(GLFWwindow *window, double x, double y);

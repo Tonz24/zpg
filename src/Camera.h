@@ -10,7 +10,6 @@
 #include "ext/matrix_clip_space.hpp"
 #include "ext/matrix_transform.hpp"
 
-
 enum Camera_Movement {
     FORWARD,
     BACKWARD,
@@ -25,40 +24,46 @@ const float SPEED = 1.0f;
 const float SENSITIVITY = 0.03f;
 const float ZOOM = 50.0f;
 
-const glm::mat4 projPersp = glm::perspective(glm::radians(60.0f), 16.0f / 9.0f, 0.01f, 150.0f);
-
 //learnopengl.com/Getting-started/Camera
 class Camera{
 public:
+    explicit Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH);
 
-    Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH);
-    Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch);
-
-    glm::mat4 GetViewMatrix() const;
+    [[nodiscard]]glm::mat4 getViewMatrix() const;
 
     void ProcessKeyboard(Camera_Movement direction, float deltaTime);
     void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true);
     void ProcessMouseScroll(float yoffset);
 
-    void setProjectionMatrix(glm::mat4 projectionMatrix);
-    glm::mat4 getProjectionMatrix();
+    void uploadMatrices() const;
+
+    void setAspect(const float& aspect);
+    void setFov(const float& fov);
+    void setNearPlane(const float& nearPlane);
+    void setFarPlane(const float& farPlane);
 
 private:
-    glm::vec3 Position;
-    glm::vec3 Front;
-    glm::vec3 Up;
-    glm::vec3 Right;
-    glm::vec3 WorldUp;
+    glm::vec3 pos{0,0,0};
+    glm::vec3 front{0,0,-1};
+    glm::vec3 up{0,1,0};
+    glm::vec3 right{1,0,0};
+    glm::vec3 worldUp{0,1,0};
 
-    float Yaw;
-    float Pitch;
+    float aspect{16.0f/9.0f};
+    float fov{60.0f};
+    float nearPlane{0.01f};
+    float farPlane{150.0f};
 
-    float MovementSpeed;
-    float MouseSensitivity;
-    float Zoom;
+    void updateProjectionMatrix();
+
+    float yaw{180};
+    float pitch{0};
+
+    float movementSpeed;
+    float mouseSensitivity;
+    float zoom;
 
     void updateCameraVectors();
 
-    glm::mat4 projectionMatrix;
+    glm::mat4 projectionMatrix = glm::perspective(glm::radians(fov), aspect, nearPlane, farPlane);
 };
-

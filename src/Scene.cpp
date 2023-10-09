@@ -8,6 +8,7 @@ void Scene::addModel(Renderable &renderable) {
 }
 
 void Scene::draw() {
+    cam.uploadMatrices();
     for (const auto &renderable : this->models){
         renderable->draw();
     }

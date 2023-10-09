@@ -2,14 +2,13 @@
 // Created by Tonz on 26.09.2023.
 //
 #pragma once
+#include <GL/glew.h>
 
 #include <vector>
 #include <memory>
 
-#include "GL/glew.h"
 #include "Vertex.h"
 #include "VertexType.h"
-
 
 class Model {
 public:
