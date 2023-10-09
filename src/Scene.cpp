@@ -8,8 +8,13 @@ void Scene::addModel(Renderable &renderable) {
 }
 
 void Scene::draw() {
-    cam.uploadMatrices();
+    this->camera->uploadMatrices();
     for (const auto &renderable : this->models){
         renderable->draw();
     }
+}
+
+void Scene::setCamera(Camera* camera) {
+    std::unique_ptr<Camera> newCam = std::unique_ptr<Camera>(camera);
+    std::swap(this->camera,newCam);
 }

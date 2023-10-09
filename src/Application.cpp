@@ -23,9 +23,6 @@ void Application::initialize() {
 
     this->window = std::make_unique<Window>();
 
-
-
-
     // start GLEW extension handler
     glewExperimental = GL_TRUE;
     glewInit();
@@ -58,7 +55,9 @@ void Application::initialize() {
 }
 
 Application::Application() {
+    std::cout << "Callling constructor" << std::endl;
     this->scene = std::make_unique<Scene>();
+    this->initialize();
 }
 
 void Application::run() {
@@ -94,4 +93,12 @@ float Application::getDeltaTime() {
 
 const UBO &Application::getTransformBuffer() const {
     return *this->transformBuffer;
+}
+
+const  Window& Application::getWindow() const {
+    return *this->window;
+}
+
+Window &Application::getWindow() {
+    return *this->window;
 }

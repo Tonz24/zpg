@@ -6,9 +6,11 @@
 #include "iostream"
 
 #include "glm.hpp"
-#include "InputManager.h"
 #include "ext/matrix_clip_space.hpp"
 #include "ext/matrix_transform.hpp"
+
+#include "InputManager.h"
+#include "Observer.h"
 
 enum Camera_Movement {
     FORWARD,
@@ -25,7 +27,7 @@ const float SENSITIVITY = 0.03f;
 const float ZOOM = 50.0f;
 
 //learnopengl.com/Getting-started/Camera
-class Camera{
+class Camera : public Observer<int,int>{
 public:
     explicit Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH);
 
@@ -36,6 +38,8 @@ public:
     void ProcessMouseScroll(float yoffset);
 
     void uploadMatrices() const;
+
+    void update(int width, int height) override;
 
     void setAspect(const float& aspect);
     void setFov(const float& fov);

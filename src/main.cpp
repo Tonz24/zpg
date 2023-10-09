@@ -26,7 +26,7 @@ static void window_size_callback(GLFWwindow* window, int width, int height){
 }
 
 int main(){
-    Application::getInstance().initialize();
+    Application::getInstance();
 
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -52,9 +52,9 @@ int main(){
         Application::getInstance().getScene().addModel(*renderable);
     }
 
-    Camera cam{};
-    cam.uploadMatrices();
-    Application::getInstance().getScene().cam = cam;
+    Camera* cam = new Camera();
+    cam->uploadMatrices();
+    Application::getInstance().getScene().setCamera(cam);
     Application::getInstance().run();
 }
 //RADEK MELČÁK MEL0094

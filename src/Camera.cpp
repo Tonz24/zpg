@@ -8,10 +8,10 @@
 Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch): pos(position), worldUp(up), yaw(yaw), pitch(pitch),
         movementSpeed(SPEED), mouseSensitivity(SENSITIVITY), zoom(ZOOM){
 
+    Application::getInstance().getWindow().attach(this);
     this->initalizeCallbackLambdas();
     this->updateCameraVectors();
 }
-
 
 glm::mat4 Camera::getViewMatrix() const{
     return glm::lookAt(pos, pos + front, up);
@@ -132,4 +132,9 @@ void Camera::initalizeCallbackLambdas() {
         }
     };
     InputManager::getInstance().getInputMap().addPairing({'w','s','a','d'},keyboard);
+}
+
+void Camera::update(int width, int height) {
+    std::cout << width << " " << height << std::endl;
+    this->setAspect(static_cast<float>(width) / static_cast<float>(height));
 }

@@ -6,8 +6,11 @@
 
 #include <cstdint>
 #include <string>
+#include <map>
 
-class Window {
+#include "Observer.h"
+
+class Window : public Subject<int,int> {
 public:
     explicit Window(const uint32_t& width = 800, const uint32_t& height = 600, const std::string& name = "Window");
     [[nodiscard]] float getAspectRatio() const;
@@ -31,7 +34,10 @@ private:
     bool vsync{true};
     bool fullscreen{false};
 
+    inline static std::map<GLFWwindow*,Window*> windowMap{};
+
     static void window_size_callback(GLFWwindow* window, int width, int height){
+        windowMap[window]->notify(width,height);
         glViewport(0, 0, width, height);
     }
 };

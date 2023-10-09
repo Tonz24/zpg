@@ -13,7 +13,6 @@
 
 class Application {
 public:
-
     inline static Application& getInstance() {
         if(appInstance == nullptr)
             appInstance = new Application();
@@ -30,17 +29,21 @@ public:
         return *this->scene;
     }
 
+    [[nodiscard]] const Window& getWindow() const;
+    [[nodiscard]] Window& getWindow();
+
     float getTime();
     float getDeltaTime();
 
 private:
+    Application();
+    Application(Application& app) = delete;
+    void operator = (Application& app) = delete;
     inline static Application* appInstance{nullptr};
 
     std::unique_ptr<Scene> scene{nullptr};
     std::unique_ptr<UBO> transformBuffer;
     std::unique_ptr<Window> window;
-
-    Application();
 
     //GLFWwindow* window{nullptr};
 

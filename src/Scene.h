@@ -7,7 +7,6 @@
 #include<vector>
 #include <memory>
 
-
 #include "Renderable.h"
 #include "Camera.h"
 
@@ -17,9 +16,10 @@ public:
 
     void draw();
 
-    Camera cam;
+    void setCamera(Camera* camera);
 
 private:
+    std::unique_ptr<Camera> camera;
     std::vector<std::unique_ptr<Renderable>> models;
 };
 

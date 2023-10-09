@@ -18,7 +18,7 @@ Window::Window(const uint32_t &width, const uint32_t &height, const std::string&
     }
     glfwMakeContextCurrent(this->glfwWindow);
 
-    glfwSetInputMode(this->glfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    //glfwSetInputMode(this->glfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     int fbWidth{0},fbHeight{0};
     glfwGetFramebufferSize(this->glfwWindow,&fbWidth,&fbHeight);
@@ -32,7 +32,7 @@ Window::Window(const uint32_t &width, const uint32_t &height, const std::string&
     glfwSetCursorPosCallback(this->glfwWindow, &InputManager::cursorPositionCallback);
     glfwSetWindowSizeCallback(this->glfwWindow, Window::window_size_callback);
 
-    std::function<void(int)> f = [this](int key){
+    /*std::function<void(int)> f = [this](int key){
         const GLFWvidmode * mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
         int wWidth = mode->width;
@@ -54,7 +54,9 @@ Window::Window(const uint32_t &width, const uint32_t &height, const std::string&
         glfwSwapInterval(static_cast<int>(this->vsync));
     };
 
-    InputManager::getInstance().getInputMap().addPairing('v',v);
+    InputManager::getInstance().getInputMap().addPairing('v',v);*/
+
+    windowMap[this->glfwWindow] = this;
 }
 
 void Window::toggleVsync() {
