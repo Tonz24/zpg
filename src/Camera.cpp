@@ -8,26 +8,8 @@
 Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch): pos(position), worldUp(up), yaw(yaw), pitch(pitch),
         movementSpeed(SPEED), mouseSensitivity(SENSITIVITY), zoom(ZOOM){
 
-    std::function<void(double,double,double,double)> f = [this](double x, double y, double dx, double dy){
-        dx *= mouseSensitivity;
-        dy *= mouseSensitivity;
-
-        this->yaw += dx;
-        this->pitch -= dy;
-
-        // make sure that when pitch is out of bounds, screen doesn't get flipped
-        if (this->pitch > 89.0f)
-            this->pitch = 89.0f;
-
-        if (this->pitch < -89.0f)
-            this->pitch = -89.0f;
-
-        // update front, right and up Vectors using the updated Euler angles
-        this->updateCameraVectors();
-    };
-
-    InputManager::getInstance().registerMouseCallback(f);
-    updateCameraVectors();
+    this->initalizeCallbackLambdas();
+    this->updateCameraVectors();
 }
 
 
@@ -110,4 +92,44 @@ void Camera::setNearPlane(const float& nearPlane) {
 void Camera::setFarPlane(const float& farPlane) {
     this->farPlane = farPlane;
     this->updateProjectionMatrix();
+}
+
+void Camera::initalizeCallbackLambdas() {
+    std::function<void(double,double,double,double)> mouseMovement = [this](double x, double y, double dx, double dy){
+        dx *= mouseSensitivity;
+        dy *= mouseSensitivity;
+
+        this->yaw += dx;
+        this->pitch -= dy;
+
+        // make sure that when pitch is out of bounds, screen doesn't get flipped
+        if (this->pitch > 89.0f)
+            this->pitch = 89.0f;
+
+        if (this->pitch < -89.0f)
+            this->pitch = -89.0f;
+
+        // update front, right and up Vectors using the updated Euler angles
+        this->updateCameraVectors();
+    };
+    InputManager::getInstance().registerMouseCallback(mouseMovement);
+    std::function<void(int)> keyboard = [this](int key){
+        switch (key) {
+            case 'W':
+                this->ProcessKeyboard(FORWARD,Application::getInstance().getDeltaTime());
+                break;
+            case 'A':
+                this->ProcessKeyboard(LEFT,Application::getInstance().getDeltaTime());
+                break;
+            case 'S':
+                this->ProcessKeyboard(BACKWARD,Application::getInstance().getDeltaTime());
+                break;
+            case 'D':
+                this->ProcessKeyboard(RIGHT,Application::getInstance().getDeltaTime());
+                break;
+            default:
+                break;
+        }
+    };
+    InputManager::getInstance().getInputMap().addPairing({'w','s','a','d'},keyboard);
 }

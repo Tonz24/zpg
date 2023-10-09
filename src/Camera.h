@@ -51,7 +51,7 @@ private:
 
     float aspect{16.0f/9.0f};
     float fov{60.0f};
-    float nearPlane{0.01f};
+    float nearPlane{0.001f};
     float farPlane{150.0f};
 
     void updateProjectionMatrix();
@@ -64,6 +64,8 @@ private:
     float zoom;
 
     void updateCameraVectors();
+
+    void initalizeCallbackLambdas();
 
     glm::mat4 projectionMatrix = glm::perspective(glm::radians(fov), aspect, nearPlane, farPlane);
 };

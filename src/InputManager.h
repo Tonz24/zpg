@@ -16,6 +16,12 @@ struct InputMap{
     inline void addPairing(const char key, std::function<void(int key)> response){
         map[std::toupper(key)].push_back(response);
     }
+    inline void addPairing(std::vector<char>&& keys, std::function<void(int key)> response){
+        for (const char &key : keys){
+            map[std::toupper(key)].push_back(response);
+        }
+    }
+
     std::unordered_map<int,std::vector<std::function<void(int key)>>> map{};
 };
 
