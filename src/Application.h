@@ -9,17 +9,15 @@
 
 #include "UBO.h"
 #include "Scene.h"
+#include "Window.h"
 
 class Application {
 public:
+
     inline static Application& getInstance() {
         if(appInstance == nullptr)
             appInstance = new Application();
         return *appInstance;
-    }
-
-    GLFWwindow* getWindow(){
-        return this->window;
     }
 
     const UBO& getTransformBuffer() const;
@@ -40,10 +38,11 @@ private:
 
     std::unique_ptr<Scene> scene{nullptr};
     std::unique_ptr<UBO> transformBuffer;
+    std::unique_ptr<Window> window;
 
     Application();
 
-    GLFWwindow* window{nullptr};
+    //GLFWwindow* window{nullptr};
 
     bool initialized{false};
 

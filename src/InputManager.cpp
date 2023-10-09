@@ -11,7 +11,6 @@ void InputManager::keyCallback(GLFWwindow *window, int key, int scancode, int ac
 void InputManager::keyCallbackInternal(GLFWwindow *window, int key, int scancode, int action, int mods) {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GL_TRUE);
-    //printf("key_callback [%d,%d,%d,%d] \n", key, scancode, action, mods);
 
     for (const auto &item : this->inputMap.map[key]){
         item(key);
