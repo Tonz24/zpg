@@ -26,7 +26,7 @@ static void window_size_callback(GLFWwindow* window, int width, int height){
 }
 
 int main(){
-    Application::getInstance();
+    Application::getInstance().initialize();
 
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -46,9 +46,9 @@ int main(){
         Material* mat = new Material();
         Material* lerpMat = new LerpMaterial({rng(gen), rng(gen), rng(gen)}, {rng(gen), rng(gen), rng(gen)});
         TransformationComposite* t = new TransformationComposite();
-        t->addTransformation({new Translation({i * 0.2f, rng(gen), 0}), new Rotation(rng(gen) * 360, {rng(gen), rng(gen), rng(gen)}), new Scale(glm::vec3{rng(gen) / 5})});
+        t->addTransformation({new Translation({i * 0.2f, rng(gen), 0}), new Scale({0.1,0.1,0.1})});
         float r = rng(gen);
-        Renderable* renderable = new Renderable(r < 0.3f ? cube : (r < 0.6f ? monkey : sphere), rng(gen) > 0.5f ? mat : material, t);
+        Renderable* renderable = new Renderable(cube ,  mat , t);
         Application::getInstance().getScene().addModel(*renderable);
     }
 

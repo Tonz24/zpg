@@ -30,11 +30,9 @@ void Camera::ProcessKeyboard(Camera_Movement direction, float deltaTime){
 }
 
 void Camera::ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch){
-    xoffset *= mouseSensitivity;
-    yoffset *= mouseSensitivity;
 
-    yaw += xoffset;
-    pitch += yoffset;
+    yaw += xoffset * mouseSensitivity;
+    pitch += yoffset * mouseSensitivity;
 
     // make sure that when pitch is out of bounds, screen doesn't get flipped
     if (pitch > 89.0f)

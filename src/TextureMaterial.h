@@ -3,7 +3,6 @@
 //
 
 #pragma once
-#include "Application.h"
 #include "Material.h"
 #include "Texture.h"
 

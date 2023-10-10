@@ -55,15 +55,15 @@ void Application::initialize() {
 }
 
 Application::Application() {
-    std::cout << "Callling constructor" << std::endl;
     this->scene = std::make_unique<Scene>();
-    this->initialize();
 }
 
 void Application::run() {
     if(!this->initialized) this->initialize();
 
+    glClearColor(0.1f,0.1f,0.1f,1.0f);
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
 
     while (!this->window->shouldClose()){
         currentTime = getTime();

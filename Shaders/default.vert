@@ -9,10 +9,21 @@ out vec2 uv;
 
 uniform float time;
 
+struct lightData{
+    vec3 pos;
+    vec3 color;
+    float strength;
+};
+
 layout (std140, binding = 5) uniform Transform{
     mat4x4 modelMat;
     mat4x4 viewMat;
     mat4x4 projMat;
+};
+
+layout(std140, binding = 6) uniform LightData{
+    lightData[100] lights;
+    int lightsUsed;
 };
 
 void main () {

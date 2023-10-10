@@ -14,5 +14,3 @@ public:
 protected:
     const Shader* shader;
 };
-
-
