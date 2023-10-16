@@ -4,7 +4,6 @@
 #include "Application.h"
 
 #include "Texture.h"
-#include "LerpMaterial.h"
 #include "TextureMaterial.h"
 #include "ColorMaterial.h"
 #include "Renderable.h"
@@ -36,7 +35,7 @@ int main(){
 
     Texture tex("cock.png");
     Material* material = new TextureMaterial(tex);
-    Material* phong = new PhongMaterial({1,1,1},50.0f);
+    Material* phong = new PhongMaterial({1,1,1},100.0f);
 
     Model* sphere = new Sphere();
     Model* monkey = new Monkey();
@@ -46,7 +45,7 @@ int main(){
     test->addTransformation(new Translation({0,0,0}));
 
     TransformationComposite* test2 = new TransformationComposite();
-    test->addTransformation(new Translation({10,0,0}));
+    test->addTransformation(new Translation({10,10,0}));
 
     Light* l = new Light(glm::vec3{1,0,0},test);
     Light* l2 = new Light(glm::vec3{0,0,1},test2);
@@ -60,8 +59,7 @@ int main(){
     for (int i = 2; i < ctrCount; ++i) {
         TransformationComposite* t = new TransformationComposite();
         t->addTransformation({new Translation({(i / (float)ctrCount) * size, rng(gen), 0})});
-        float r = rng(gen);
-        Renderable* renderable = new Renderable(sphere,  phong , t);
+        Renderable* renderable = new Renderable(monkey,  phong , t);
         Application::getInstance().getScene().addModel(*renderable);
     }
 

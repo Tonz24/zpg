@@ -3,10 +3,11 @@
 //
 #pragma once
 #include "Renderable.h"
+#include "LightMaterial.h"
 
 class Light : public Renderable {
 public:
-    explicit Light(const glm::vec3& color = {0,1,0},TransformationComposite* transformation = new TransformationComposite(), Model* model = new Cube(), Material* m = new Material());
+    explicit Light(const glm::vec3& color = {0,1,0},TransformationComposite* transformation = new TransformationComposite(), Model* model = new Cube());
 
     void setColor(const glm::vec3& color);
 

@@ -5,11 +5,13 @@
 #include "Light.h"
 #include "Application.h"
 
-Light::Light(const glm::vec3& color,TransformationComposite *transformation,  Model *model, Material * m)
-    : Renderable(model,m,transformation), color(color){
+Light::Light(const glm::vec3& color,TransformationComposite *transformation,  Model *model)
+    : Renderable(model,new LightMaterial(color),transformation), color(color){
     this->uboPosition = assignPosition();
+
     uploadLightCount();
     uploadToGpu();
+    this->setColor(this->color);
     lights.push_back(this);
 }
 
@@ -44,5 +46,6 @@ void Light::reassignPositions(const int &from) {
 
 void Light::setColor(const glm::vec3 &color) {
     this->color = color;
+    dynamic_cast<LightMaterial*>(this->material.get())->setColor(this->color);
     this->uploadToGpu();
 }
