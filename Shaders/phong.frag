@@ -9,6 +9,7 @@ in vec2 uv;
 uniform float specularity;
 uniform vec3 objectColor;
 uniform float ambientFactor;
+uniform float specularFactor;
 
 struct Light{
     vec3 color;
@@ -71,7 +72,7 @@ void main() {
         float nDotL = dot(nNormal,nDirToLight);
         if (nDotL > 0.0) {
             float specularIntensity = pow(max(dot(reflect(-nDirToLight, nNormal), nDirToCamera), 0.0), specularity);
-            vec3 thisSpecular = light.color * specularIntensity * 5;
+            vec3 thisSpecular = light.color * specularIntensity * specularFactor;
             specular += thisSpecular * attenuation;
         }
     }

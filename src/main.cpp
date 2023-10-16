@@ -35,7 +35,7 @@ int main(){
 
     Texture tex("cock.png");
     Material* material = new TextureMaterial(tex);
-    Material* phong = new PhongMaterial({1,1,1},32.0f,0.2f);
+    Material* phong = new PhongMaterial({1,1,1},32.0f,0.2f,1);
 
     Model* sphere = new Sphere();
     Model* monkey = new Monkey();
@@ -64,7 +64,7 @@ int main(){
     for (int i = 2; i < ctrCount; ++i) {
         auto* t = new TransformationComposite();
         t->addTransformation(new Translation({(i / (float)ctrCount) * size, rng(gen), 0}));
-        auto* renderable = new Renderable(monkey,  phong , t);
+        auto* renderable = new Renderable(sphere,  phong , t);
         Application::getInstance().getScene().addModel(*renderable);
     }
 
