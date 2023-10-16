@@ -19,7 +19,8 @@ public:
         return *appInstance;
     }
 
-    const UBO& getTransformBuffer() const;
+    [[nodiscard]] const UBO& getTransformBuffer() const;
+    [[nodiscard]] const UBO& getLightBuffer() const;
 
     void initialize();
     void run();
@@ -43,6 +44,7 @@ private:
 
     std::unique_ptr<Scene> scene{nullptr};
     std::unique_ptr<UBO> transformBuffer;
+    std::unique_ptr<UBO> lightBuffer;
     std::unique_ptr<Window> window;
 
     //GLFWwindow* window{nullptr};

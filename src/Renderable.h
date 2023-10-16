@@ -13,10 +13,12 @@
 
 class Renderable {
 public:
-    Renderable(Model* model = new Cube(), Material* m = new Material(), TransformationComposite* transformation = new TransformationComposite());
+    explicit Renderable(Model* model = new Cube(), Material* m = new Material(), TransformationComposite* transformation = new TransformationComposite());
 
-    void draw();
-private:
+    virtual void draw();
+    virtual ~Renderable() = default;
+
+protected:
     std::shared_ptr<Model> model;
     std::shared_ptr<Material> material;
     std::shared_ptr<TransformationComposite> transform;

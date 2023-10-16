@@ -150,7 +150,7 @@ void Camera::update(int width, int height) {
 
 void Camera::uploadViewMatrix() const {
     glm::mat4 cameraTranslation = glm::translate(glm::mat4{1},this->pos);
-    glm::vec3 worldSpacePos = cameraTranslation * glm::vec4{this->pos,1.0f};
+    glm::vec3 worldSpacePos = cameraTranslation * glm::vec4{this->pos,0.0f};
     Application::getInstance().getTransformBuffer().setData(sizeof(glm::mat4x4),sizeof(glm::mat4x4),glm::value_ptr(this->viewMatrix));
     Application::getInstance().getTransformBuffer().setData(sizeof(glm::mat4x4)*3,sizeof(glm::vec4),&worldSpacePos);
 }

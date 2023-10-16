@@ -49,9 +49,9 @@ void Application::initialize() {
     Shader::compileShaders();
 
     this->transformBuffer = std::make_unique<UBO>(sizeof(glm::mat4x4)*3 + sizeof(glm::vec4),5,nullptr);
+    this->lightBuffer = std::make_unique<UBO>(sizeof(glm::vec4)*2*100 + sizeof(glm::vec4),6,nullptr);
 
     this->initialized = true;
-
 }
 
 Application::Application() {
@@ -101,4 +101,8 @@ const  Window& Application::getWindow() const {
 
 Window &Application::getWindow() {
     return *this->window;
+}
+
+const UBO &Application::getLightBuffer() const {
+    return *this->lightBuffer;
 }
