@@ -66,12 +66,13 @@ void main() {
         vec3 thisAmbient = light.color * ambientFactor;
         ambient += thisAmbient * attenuation;
 
-        float lightIntensity = max(dot(nNormal,nDirToLight),0.0);
+
+        float diffuseDot = dot(nNormal,nDirToLight);
+        float lightIntensity = max(diffuseDot,0.0);
         vec3 thisDiffuse = lightIntensity * light.color * diffuseFactor;
         diffuse += thisDiffuse * attenuation;
 
-        float nDotL = dot(nNormal,nDirToLight);
-        if (nDotL > 0.0) {
+        if (diffuseDot >= 0.0) {
             float specularIntensity = pow(max(dot(reflect(-nDirToLight, nNormal), nDirToCamera), 0.0), specularity);
             vec3 thisSpecular = light.color * specularIntensity * specularFactor;
             specular += thisSpecular * attenuation;

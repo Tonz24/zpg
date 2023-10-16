@@ -9,6 +9,7 @@ Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch): pos(po
         movementSpeed(SPEED), mouseSensitivity(SENSITIVITY), zoom(ZOOM){
 
     Application::getInstance().getWindow().attach(this);
+    InputManager::getInstance().attach(this);
     this->initalizeCallbackLambdas();
     this->updateCameraVectors();
 
@@ -18,20 +19,6 @@ Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch): pos(po
 
 const glm::mat4& Camera::getViewMatrix() const{
     return this->viewMatrix;
-}
-
-void Camera::ProcessKeyboard(Camera_Movement direction, float deltaTime){
-    float velocity = movementSpeed * deltaTime;
-    if (direction == FORWARD)
-        pos += front * velocity;
-    if (direction == BACKWARD)
-        pos -= front * velocity;
-    if (direction == LEFT)
-        pos -= right * velocity;
-    if (direction == RIGHT)
-        pos += right * velocity;
-
-    this->updateViewMatrix();
 }
 
 void Camera::ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch){
@@ -122,25 +109,6 @@ void Camera::initalizeCallbackLambdas() {
         this->updateCameraVectors();
     };
     InputManager::getInstance().registerMouseCallback(mouseMovement);
-    std::function<void(int)> keyboard = [this](int key){
-        switch (key) {
-            case 'W':
-                this->ProcessKeyboard(FORWARD,Application::getInstance().getDeltaTime());
-                break;
-            case 'A':
-                this->ProcessKeyboard(LEFT,Application::getInstance().getDeltaTime());
-                break;
-            case 'S':
-                this->ProcessKeyboard(BACKWARD,Application::getInstance().getDeltaTime());
-                break;
-            case 'D':
-                this->ProcessKeyboard(RIGHT,Application::getInstance().getDeltaTime());
-                break;
-            default:
-                break;
-        }
-    };
-    InputManager::getInstance().getInputMap().addPairing({'w','s','a','d'},keyboard);
 }
 
 void Camera::update(int width, int height) {
@@ -157,4 +125,40 @@ void Camera::uploadProjectionMatrix() const {
     Application::getInstance().getTransformBuffer().setData(sizeof(glm::mat4x4)*2,sizeof(glm::mat4x4),glm::value_ptr(this->projectionMatrix));
 }
 
+void Camera::update(uint32_t key, uint32_t action) {
+    if (key == GLFW_KEY_W && action == GLFW_PRESS)
+        this->velocity.z += 1;
 
+    if (key == GLFW_KEY_W && action == GLFW_RELEASE)
+        this->velocity.z -= 1;
+
+
+    if (key == GLFW_KEY_S && action == GLFW_PRESS)
+        this->velocity.z += -1;
+
+    if (key == GLFW_KEY_S && action == GLFW_RELEASE)
+        this->velocity.z -= -1;
+
+
+    if (key == GLFW_KEY_A && action == GLFW_PRESS)
+        this->velocity.x += -1;
+
+    if (key == GLFW_KEY_A && action == GLFW_RELEASE)
+        this->velocity.x -= -1;
+
+
+    if (key == GLFW_KEY_D && action == GLFW_PRESS)
+        this->velocity.x += 1;
+
+    if (key == GLFW_KEY_D && action == GLFW_RELEASE)
+        this->velocity.x -= 1;
+}
+
+void Camera::tick() {
+    glm::vec3 oldPos = this->pos;
+    this->pos += this->front * this->velocity.z * Application::getInstance().getDeltaTime();
+    this->pos += this->right * this->velocity.x * Application::getInstance().getDeltaTime();
+
+    if (this->pos != oldPos)
+        this->updateViewMatrix();
+}

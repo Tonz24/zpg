@@ -59,7 +59,7 @@ Window::Window(const uint32_t &width, const uint32_t &height, const std::string&
 
     windowMap[this->glfwWindow] = this;
 
-    InputManager::getInstance().attach(this);
+    //InputManager::getInstance().attach(this);
 }
 
 void Window::toggleVsync() {
