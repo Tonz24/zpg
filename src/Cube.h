@@ -16,17 +16,18 @@ private:
             -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f,   // Vertex 0
             0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f,   // Vertex 1
             0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 1.0f,   // Vertex 2
+
             -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f,   // Vertex 0
             0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 1.0f,   // Vertex 2
             -0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 1.0f,   // Vertex 3
 
-            // Back face
-            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, -1.0f,  // Vertex 4
-            0.5f, -0.5f, -0.5f,  0.0f, 0.0f, -1.0f,  // Vertex 5
-            0.5f,  0.5f, -0.5f,  0.0f, 0.0f, -1.0f,  // Vertex 6
-            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, -1.0f,  // Vertex 4
-            0.5f,  0.5f, -0.5f,  0.0f, 0.0f, -1.0f,  // Vertex 6
+            // back face
             -0.5f,  0.5f, -0.5f,  0.0f, 0.0f, -1.0f,  // Vertex 7
+            0.5f,  0.5f, -0.5f,  0.0f, 0.0f, -1.0f,  // Vertex 6
+            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, -1.0f,  // Vertex 4
+            0.5f,  0.5f, -0.5f,  0.0f, 0.0f, -1.0f,  // Vertex 6
+            0.5f, -0.5f, -0.5f,  0.0f, 0.0f, -1.0f,  // Vertex 5
+            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, -1.0f,  // Vertex 4
 
             // right face
             0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 0.0f,   // Vertex 1
@@ -36,16 +37,16 @@ private:
             0.5f,  0.5f, -0.5f,  1.0f, 0.0f, 0.0f,   // Vertex 6
             0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f,   // Vertex 2
 
-            // Left face
-            -0.5f,  0.5f,  0.5f,  -1.0f, 0.0f, 0.0f,  // Vertex 3
-            -0.5f, -0.5f,  0.5f,  -1.0f, 0.0f, 0.0f,  // Vertex 0
-            -0.5f, -0.5f, -0.5f,  -1.0f, 0.0f, 0.0f,  // Vertex 4
-
+            // left face
             -0.5f,  0.5f,  0.5f,  -1.0f, 0.0f, 0.0f,  // Vertex 3
             -0.5f,  0.5f, -0.5f,  -1.0f, 0.0f, 0.0f,  // Vertex 7
             -0.5f, -0.5f, -0.5f,  -1.0f, 0.0f, 0.0f,  // Vertex 4
 
-            // Top face
+            -0.5f,  0.5f,  0.5f,  -1.0f, 0.0f, 0.0f,  // Vertex 3
+            -0.5f, -0.5f, -0.5f,  -1.0f, 0.0f, 0.0f,  // Vertex 4
+            -0.5f, -0.5f,  0.5f,  -1.0f, 0.0f, 0.0f,  // Vertex 0
+
+            // top face
             -0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0f,   // Vertex 3
             0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0f,   // Vertex 2
             0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f,   // Vertex 6
@@ -53,13 +54,14 @@ private:
             0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f,   // Vertex 6
             -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f,   // Vertex 7
 
-            // Bottom face
-            -0.5f, -0.5f,  0.5f,  0.0f, -1.0f, 0.0f,  // Vertex 0
+            // bottom face
+            0.5f, -0.5f, -0.5f,  0.0f, -1.0f, 0.0f,  // Vertex 5
             0.5f, -0.5f,  0.5f,  0.0f, -1.0f, 0.0f,  // Vertex 1
+            -0.5f, -0.5f,  0.5f,  0.0f, -1.0f, 0.0f,  // Vertex 0
+
+            -0.5f, -0.5f, -0.5f,  0.0f, -1.0f, 0.0f,   // Vertex 4
             0.5f, -0.5f, -0.5f,  0.0f, -1.0f, 0.0f,  // Vertex 5
             -0.5f, -0.5f,  0.5f,  0.0f, -1.0f, 0.0f,  // Vertex 0
-            0.5f, -0.5f, -0.5f,  0.0f, -1.0f, 0.0f,  // Vertex 5
-            -0.5f, -0.5f, -0.5f,  0.0f, -1.0f, 0.0f   // Vertex 4
     };
 };
 

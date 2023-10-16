@@ -15,6 +15,8 @@ void InputManager::keyCallbackInternal(GLFWwindow *window, int key, int scancode
     for (const auto &item : this->inputMap.map[key]){
         item(key);
     }
+
+    this->notify(key,action);
 }
 
 void InputManager::cursorCallback(GLFWwindow *window, double x, double y) {

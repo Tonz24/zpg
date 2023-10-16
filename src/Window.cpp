@@ -18,6 +18,7 @@ Window::Window(const uint32_t &width, const uint32_t &height, const std::string&
     }
     glfwMakeContextCurrent(this->glfwWindow);
 
+
     glfwSetInputMode(this->glfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     int fbWidth{0},fbHeight{0};
@@ -57,6 +58,8 @@ Window::Window(const uint32_t &width, const uint32_t &height, const std::string&
     InputManager::getInstance().getInputMap().addPairing('v',v);*/
 
     windowMap[this->glfwWindow] = this;
+
+    InputManager::getInstance().attach(this);
 }
 
 void Window::toggleVsync() {
@@ -95,4 +98,10 @@ bool Window::shouldClose() const{
 
 void Window::swapBuffers() const {
     glfwSwapBuffers(this->glfwWindow);
+}
+
+void Window::update(int keyCode, int action) {
+    if (keyCode == GLFW_KEY_W && action == GLFW_PRESS){
+        printf("cigger\n");
+    }
 }

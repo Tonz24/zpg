@@ -22,7 +22,7 @@ enum Camera_Movement {
 // Default camera values
 const float YAW = -90.0f;
 const float PITCH = 0.0f;
-const float SPEED = 1.0f;
+const float SPEED = 30.0f;
 const float SENSITIVITY = 0.03f;
 const float ZOOM = 50.0f;
 
@@ -31,7 +31,7 @@ class Camera : public Observer<int,int>{
 public:
     explicit Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH);
 
-    [[nodiscard]]glm::mat4 getViewMatrix() const;
+    [[nodiscard]]const glm::mat4& getViewMatrix() const;
 
     void ProcessKeyboard(Camera_Movement direction, float deltaTime);
     void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true);
@@ -47,6 +47,8 @@ public:
     void setFarPlane(const float& farPlane);
 
 private:
+
+
     glm::vec3 pos{0,0,0};
     glm::vec3 front{0,0,-1};
     glm::vec3 up{0,1,0};
@@ -58,7 +60,11 @@ private:
     float nearPlane{0.001f};
     float farPlane{150.0f};
 
+    void updateViewMatrix();
     void updateProjectionMatrix();
+
+    void uploadViewMatrix() const;
+    void uploadProjectionMatrix() const;
 
     float yaw{180};
     float pitch{0};
@@ -72,4 +78,5 @@ private:
     void initalizeCallbackLambdas();
 
     glm::mat4 projectionMatrix = glm::perspective(glm::radians(fov), aspect, nearPlane, farPlane);
+    glm::mat4 viewMatrix = glm::lookAt(pos,front,up);
 };

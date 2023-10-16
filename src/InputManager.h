@@ -11,6 +11,7 @@
 #include <unordered_map>
 #include <vector>
 #include "vec2.hpp"
+#include "Observer.h"
 
 struct InputMap{
     inline void addPairing(const char key, std::function<void(int key)> response){
@@ -25,7 +26,7 @@ struct InputMap{
     std::unordered_map<int,std::vector<std::function<void(int key)>>> map{};
 };
 
-class InputManager {
+class InputManager : public Subject<int,int> {
 public:
     static inline InputManager& getInstance(){
         if(instance == nullptr)

@@ -9,10 +9,11 @@
 #include "Material.h"
 #include "Transformation.h"
 #include "InputManager.h"
+#include "Cube.h"
 
 class Renderable {
 public:
-    Renderable(Model* model, Material* material, TransformationComposite* transformation);
+    Renderable(Model* model = new Cube(), Material* m = new Material(), TransformationComposite* transformation = new TransformationComposite());
 
     void draw();
 private:

@@ -11,10 +11,13 @@ Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch): pos(po
     Application::getInstance().getWindow().attach(this);
     this->initalizeCallbackLambdas();
     this->updateCameraVectors();
+
+    this->uploadViewMatrix();
+    this->uploadProjectionMatrix();
 }
 
-glm::mat4 Camera::getViewMatrix() const{
-    return glm::lookAt(pos, pos + front, up);
+const glm::mat4& Camera::getViewMatrix() const{
+    return this->viewMatrix;
 }
 
 void Camera::ProcessKeyboard(Camera_Movement direction, float deltaTime){
@@ -27,6 +30,8 @@ void Camera::ProcessKeyboard(Camera_Movement direction, float deltaTime){
         pos -= right * velocity;
     if (direction == RIGHT)
         pos += right * velocity;
+
+    this->updateViewMatrix();
 }
 
 void Camera::ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch){
@@ -55,6 +60,12 @@ void Camera::ProcessMouseScroll(float yoffset){
 
 void Camera::updateProjectionMatrix() {
     this->projectionMatrix = glm::perspective(glm::radians(this->fov), this->aspect, this->nearPlane, this->farPlane);
+    this->uploadProjectionMatrix();
+}
+
+void Camera::updateViewMatrix() {
+    this->viewMatrix = glm::lookAt(this->pos,this->pos + this->front,this->up);
+    this->uploadViewMatrix();
 }
 
 void Camera::updateCameraVectors(){
@@ -67,12 +78,12 @@ void Camera::updateCameraVectors(){
     // also re-calculate the right and up vector
     this->right = glm::normalize(glm::cross(this->front, worldUp));  // normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
     this->up = glm::normalize(glm::cross(right, this->front));
+
+    this->updateViewMatrix();
 }
 
 void Camera::uploadMatrices() const {
-    glm::mat4x4 viewMat = this->getViewMatrix();
-    Application::getInstance().getTransformBuffer().setData(sizeof(glm::mat4x4),sizeof(glm::mat4x4),&viewMat);
-    Application::getInstance().getTransformBuffer().setData(sizeof(glm::mat4x4)*2,sizeof(glm::mat4x4),&this->projectionMatrix);
+    Application::getInstance().getTransformBuffer().setData(sizeof(glm::mat4x4),sizeof(glm::mat4x4),&this->viewMatrix);
 }
 
 void Camera::setAspect(const float& aspect) {
@@ -136,3 +147,16 @@ void Camera::update(int width, int height) {
     std::cout << width << " " << height << std::endl;
     this->setAspect(static_cast<float>(width) / static_cast<float>(height));
 }
+
+void Camera::uploadViewMatrix() const {
+    glm::mat4 cameraTranslation = glm::translate(glm::mat4{1},this->pos);
+    glm::vec3 worldSpacePos = cameraTranslation * glm::vec4{this->pos,1.0f};
+    Application::getInstance().getTransformBuffer().setData(sizeof(glm::mat4x4),sizeof(glm::mat4x4),glm::value_ptr(this->viewMatrix));
+    Application::getInstance().getTransformBuffer().setData(sizeof(glm::mat4x4)*3,sizeof(glm::vec4),&worldSpacePos);
+}
+
+void Camera::uploadProjectionMatrix() const {
+    Application::getInstance().getTransformBuffer().setData(sizeof(glm::mat4x4)*2,sizeof(glm::mat4x4),glm::value_ptr(this->projectionMatrix));
+}
+
+

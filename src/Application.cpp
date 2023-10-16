@@ -48,7 +48,7 @@ void Application::initialize() {
 
     Shader::compileShaders();
 
-    this->transformBuffer = std::make_unique<UBO>(sizeof(glm::mat4x4)*3,5,nullptr);
+    this->transformBuffer = std::make_unique<UBO>(sizeof(glm::mat4x4)*3 + sizeof(glm::vec4),5,nullptr);
 
     this->initialized = true;
 

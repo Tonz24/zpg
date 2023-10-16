@@ -10,12 +10,15 @@
 
 #include "Observer.h"
 
-class Window : public Subject<int,int> {
+class Window : public Subject<int,int>, public Observer<int,int> {
 public:
-    explicit Window(const uint32_t& width = 800, const uint32_t& height = 600, const std::string& name = "Window");
+    explicit Window(const uint32_t& width = 800, const uint32_t& height = 600, const std::string& name = "ZPG Melčák");
     [[nodiscard]] float getAspectRatio() const;
 
     void toggleFullscreen();
+
+    void update(int keyCode, int action) override;
+
     void toggleVsync();
     void use();
     [[nodiscard]] bool shouldClose() const;
