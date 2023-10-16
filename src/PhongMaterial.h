@@ -8,10 +8,11 @@
 
 class PhongMaterial : public Material {
 public:
-    PhongMaterial(const glm::vec3& objectColor = {0.7,0.7,0.7}, const float& specularity = 32.0f);
+    PhongMaterial(const glm::vec3& objectColor = {0.7,0.7,0.7}, const float& specularity = 32.0f, const float& ambientFactor = 32.0f);
     void uploadVariables() override;
 
 private:
     glm::vec3 objectColor{0.7,0.7,0.7};
     float specularity{25};
+    float ambientFactor{0.1};
 };

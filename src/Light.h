@@ -10,6 +10,7 @@ public:
     explicit Light(const glm::vec3& color = {0,1,0},TransformationComposite* transformation = new TransformationComposite(), Model* model = new Cube());
 
     void setColor(const glm::vec3& color);
+    void setAttenuation(const glm::vec3& attenuation);
 
     ~Light() override;
 
@@ -31,4 +32,5 @@ private:
     void uploadToGpu();
 
     glm::vec3 color{1,1,1};
+    glm::vec3 attenuation{1.0f,0.09f,0.032f};
 };

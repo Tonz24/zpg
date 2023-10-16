@@ -101,7 +101,4 @@ void Window::swapBuffers() const {
 }
 
 void Window::update(int keyCode, int action) {
-    if (keyCode == GLFW_KEY_W && action == GLFW_PRESS){
-        printf("cigger\n");
-    }
 }

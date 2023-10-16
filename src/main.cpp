@@ -35,31 +35,36 @@ int main(){
 
     Texture tex("cock.png");
     Material* material = new TextureMaterial(tex);
-    Material* phong = new PhongMaterial({1,1,1},100.0f);
+    Material* phong = new PhongMaterial({1,1,1},32.0f,0.2f);
 
     Model* sphere = new Sphere();
     Model* monkey = new Monkey();
     Model* cube = new Cube();
 
-    TransformationComposite* test = new TransformationComposite();
+    auto* test = new TransformationComposite();
     test->addTransformation(new Translation({0,0,0}));
 
-    TransformationComposite* test2 = new TransformationComposite();
-    test->addTransformation(new Translation({10,10,0}));
+    auto* test2 = new TransformationComposite();
+    test2->addTransformation(new Translation({10,5,0}));
 
-    Light* l = new Light(glm::vec3{1,0,0},test);
-    Light* l2 = new Light(glm::vec3{0,0,1},test2);
+    auto* test3 = new TransformationComposite();
+    test3->addTransformation(new Translation({10,-5,0}));
+
+    auto* l = new Light(glm::vec3{1,0,0},test);
+    auto* l2 = new Light(glm::vec3{0,1,0},test2);
+    auto* l3 = new Light(glm::vec3{0,0,1},test3);
 
     Application::getInstance().getScene().addModel(*l);
     Application::getInstance().getScene().addModel(*l2);
+    Application::getInstance().getScene().addModel(*l3);
 
     int ctrCount = 5;
     int size = 15;
     //generate shapes with random positions and materials
     for (int i = 2; i < ctrCount; ++i) {
-        TransformationComposite* t = new TransformationComposite();
-        t->addTransformation({new Translation({(i / (float)ctrCount) * size, rng(gen), 0})});
-        Renderable* renderable = new Renderable(monkey,  phong , t);
+        auto* t = new TransformationComposite();
+        t->addTransformation(new Translation({(i / (float)ctrCount) * size, rng(gen), 0}));
+        auto* renderable = new Renderable(monkey,  phong , t);
         Application::getInstance().getScene().addModel(*renderable);
     }
 

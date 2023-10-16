@@ -49,7 +49,7 @@ void Application::initialize() {
     Shader::compileShaders();
 
     this->transformBuffer = std::make_unique<UBO>(sizeof(glm::mat4x4)*3 + sizeof(glm::vec4),5,nullptr);
-    this->lightBuffer = std::make_unique<UBO>(sizeof(glm::vec4)*2*100 + sizeof(glm::vec4),6,nullptr);
+    this->lightBuffer = std::make_unique<UBO>(sizeof(glm::vec4)*3*100 + sizeof(glm::vec4),6,nullptr);
 
     this->initialized = true;
 }
