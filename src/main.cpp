@@ -12,7 +12,7 @@
 #include "Monkey.h"
 #include "Cube.h"
 #include "Camera.h"
-#include "PhongMaterial.h"
+#include "BlinnMaterial.h"
 #include "Light.h"
 
 static void error_callback(int error, const char* description){ fputs(description, stderr); }
@@ -35,14 +35,15 @@ int main(){
 
     Texture tex("cock.png");
     Material* material = new TextureMaterial(tex);
-    Material* phong = new PhongMaterial({1,1,1},32.0f,0.2f,1);
+    Material* blinn = new BlinnMaterial({1, 1, 1}, 32.0f, 0.2f, 1);
+    Material* phong = new PhongMaterial({1, 1, 1}, 32.0f, 0.2f, 1);
 
     Model* sphere = new Sphere();
     Model* monkey = new Monkey();
     Model* cube = new Cube();
 
     auto* test = new TransformationComposite();
-    test->addTransformation(new Translation({0,0,0}));
+    test->addTransformation(new Translation({2,0,0}));
 
     auto* test2 = new TransformationComposite();
     test2->addTransformation(new Translation({10,5,0}));
@@ -58,13 +59,13 @@ int main(){
     Application::getInstance().getScene().addModel(*l2);
     Application::getInstance().getScene().addModel(*l3);
 
-    int ctrCount = 5;
-    int size = 15;
+    int ctrCount = 10;
+    int size = 30;
     //generate shapes with random positions and materials
     for (int i = 2; i < ctrCount; ++i) {
         auto* t = new TransformationComposite();
         t->addTransformation(new Translation({(i / (float)ctrCount) * size, rng(gen), 0}));
-        auto* renderable = new Renderable(sphere,  phong , t);
+        auto* renderable = new Renderable(sphere, i % 2 == 0 ? blinn : phong , t);
         Application::getInstance().getScene().addModel(*renderable);
     }
 

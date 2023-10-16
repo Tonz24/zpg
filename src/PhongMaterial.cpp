@@ -9,6 +9,7 @@ void PhongMaterial::uploadVariables() {
     this->shader->setFloat("specularity",this->specularity);
     this->shader->setFloat("ambientFactor",this->ambientFactor);
     this->shader->setFloat("specularFactor", this->specularFactor);
+    this->shader->setFloat("diffuseFactor", this->diffuseFactor);
     Material::uploadVariables();
 }
 
@@ -31,4 +32,8 @@ void PhongMaterial::setAmbientFactor(float ambientFactor) {
 
 void PhongMaterial::setSpecularFactor(float specularFactor) {
     this->specularFactor = specularFactor;
+}
+
+void PhongMaterial::setDiffuseFactor(float diffuseFactor) {
+    this->diffuseFactor = diffuseFactor;
 }

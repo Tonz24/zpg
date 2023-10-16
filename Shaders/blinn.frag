@@ -70,12 +70,12 @@ void main() {
         vec3 thisDiffuse = lightIntensity * light.color * diffuseFactor;
         diffuse += thisDiffuse * attenuation;
 
-        float nDotL = dot(nNormal,nDirToLight);
-        if (nDotL > 0.0) {
-            float specularIntensity = pow(max(dot(reflect(-nDirToLight, nNormal), nDirToCamera), 0.0), specularity);
-            vec3 thisSpecular = light.color * specularIntensity * specularFactor;
-            specular += thisSpecular * attenuation;
-        }
+        vec3 halfwayDir = normalize(nDirToLight + nDirToCamera);
+
+        float specularIntensity = pow(max(dot(halfwayDir, nNormal), 0.0), specularity);
+        vec3 thisSpecular = light.color * specularIntensity * specularFactor;
+        specular += thisSpecular * attenuation;
+
     }
     frag_color = vec4(clamp((specular + diffuse + ambient)*objectColor,0.0,1.0),1.0);
 }

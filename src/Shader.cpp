@@ -126,6 +126,7 @@ void Shader::compileShaders() {
     shaderCache["shader_lerp_color"] = std::make_unique<Shader>(R"(..\Shaders\default.vert)",R"(..\Shaders\uvInterp.frag)");
     shaderCache["shader_texture"] = std::make_unique<Shader>(R"(..\Shaders\default.vert)",R"(..\Shaders\texture.frag)");
     shaderCache["shader_phong"] = std::make_unique<Shader>(R"(..\Shaders\default.vert)",R"(..\Shaders\phong.frag)");
+    shaderCache["shader_blinn"] = std::make_unique<Shader>(R"(..\Shaders\default.vert)",R"(..\Shaders\blinn.frag)");
     shaderCache["shader_light"] = std::make_unique<Shader>(R"(..\Shaders\default.vert)",R"(..\Shaders\light.frag)");
 }
 
