@@ -1,6 +1,7 @@
 #version 420
 
-#define MAX_N_LIGHTS 100
+#define MAX_N_POINT_LIGHTS 30
+#define MAX_N_SPOT_LIGHTS 30
 
 in vec3 worldSpacePos;
 in vec3 worldSpaceNormal;
@@ -13,7 +14,7 @@ uniform float ambientFactor;
 uniform float diffuseFactor;
 uniform float specularFactor;
 
-struct Light{
+struct PointLight{
     vec3 color;
     float kConstant; // 16 B
 
@@ -21,6 +22,19 @@ struct Light{
     float kLinear; // 32 B
 
     float kQuadratic; // 48 B
+};
+
+struct SpotLight{
+    vec3 color;
+    float kConstant; // 16 B
+
+    vec3 worldSpacePos;
+    float kLinear; // 32 B
+
+    vec3 direction;
+    float kQuadratic; // 48 B
+
+    float cutoffAngle; // 64 B
 };
 
 layout (std140, binding = 5) uniform Transform{
@@ -31,19 +45,24 @@ layout (std140, binding = 5) uniform Transform{
 };
 
 layout (std140, binding = 6) uniform Lights{
-    Light lights[MAX_N_LIGHTS]; // 100 * 48 B
+    PointLight pointLights[MAX_N_POINT_LIGHTS]; // 100 * 48 B
+    SpotLight spotLights[MAX_N_SPOT_LIGHTS]; // 100 * 48 B + 100 * 64 B
 
-    vec3 ambientColor;
-    int lightCount; // 100 * 48 B + 16 B
+    int pointLightCount; // 100 * 48 B + 16 B
+    int spotLightCount; // 100 * 48 B + 16 B
 };
 
 uniform float time;
 
 out vec4 frag_color;
 
-float getAttenuation(Light light, float dist){
+float getAttenuation(PointLight light, float dist){
     return 1.0 / (light.kConstant + light.kLinear * dist + light.kQuadratic * pow(dist,2.0));
 }
+float getAttenuationSpotLight(SpotLight light, float dist){
+    return 1.0 / (light.kConstant + light.kLinear * dist + light.kQuadratic * pow(dist,2.0));
+}
+
 
 void main() {
     vec3 diffuse = vec3(0);
@@ -54,8 +73,9 @@ void main() {
     vec3 nDirToCamera = normalize(dirToCamera);
     vec3 nNormal = normalize(worldSpaceNormal);
 
-    for (int i = 0; i < lightCount && i < MAX_N_LIGHTS; i++) {
-        Light light = lights[i];
+    //point lights
+    for (int i = 0; i < pointLightCount && i < MAX_N_POINT_LIGHTS; i++) {
+        PointLight light = pointLights[i];
 
         vec3 dirToLight = light.worldSpacePos - worldSpacePos; //fragment pos to light pos
         float distToLight = length(dirToLight);
@@ -76,6 +96,32 @@ void main() {
             float specularIntensity = pow(max(dot(reflect(-nDirToLight, nNormal), nDirToCamera), 0.0), specularity);
             vec3 thisSpecular = light.color * specularIntensity * specularFactor;
             specular += thisSpecular * attenuation;
+        }
+    }
+    //spotlights
+    for (int i = 0; i < spotLightCount && i < MAX_N_SPOT_LIGHTS; i++) {
+        SpotLight light = spotLights[i];
+
+        vec3 dirToLight = light.worldSpacePos - worldSpacePos; //fragment pos to light pos
+        float distToLight = length(dirToLight);
+        vec3 nDirToLight = normalize(dirToLight);
+        float attenuation = getAttenuationSpotLight(light,distToLight);
+        vec3 nLightDir = normalize(light.direction);
+
+        float angle = dot(nDirToLight,-nLightDir);
+
+        if (angle > light.cutoffAngle){
+
+            float diffuseDot = dot(nNormal,nDirToLight);
+            float lightIntensity = max(diffuseDot,0.0);
+            vec3 thisDiffuse = lightIntensity * light.color * diffuseFactor;
+            diffuse += thisDiffuse * attenuation;
+
+            if (diffuseDot >= 0.0) {
+                float specularIntensity = pow(max(dot(reflect(nLightDir, nNormal), nDirToCamera), 0.0), specularity);
+                vec3 thisSpecular = light.color * specularIntensity * specularFactor;
+                specular += thisSpecular * attenuation;
+            }
         }
     }
     frag_color = vec4(clamp((specular + diffuse + ambient)*objectColor,0.0,1.0),1.0);

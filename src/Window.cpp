@@ -17,7 +17,7 @@ Window::Window(const uint32_t &width, const uint32_t &height, const std::string&
         exit(EXIT_FAILURE);
     }
     glfwMakeContextCurrent(this->glfwWindow);
-
+    glfwSwapInterval(0);
 
     glfwSetInputMode(this->glfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 

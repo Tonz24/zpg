@@ -27,27 +27,31 @@ const float SENSITIVITY = 0.03f;
 const float ZOOM = 50.0f;
 
 //learnopengl.com/Getting-started/Camera
-class Camera : public Observer<int,int>, public Observer<uint32_t ,uint32_t>{
+class Camera : public ITickable, public Observer<int,int>, public Observer<uint32_t ,uint32_t>, public Observer<double,double,double,double>{
 public:
     explicit Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH);
 
     [[nodiscard]]const glm::mat4& getViewMatrix() const;
 
-    void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true);
+    void processMouseMovement(float xoffset, float yoffset);
     void ProcessMouseScroll(float yoffset);
 
     void uploadMatrices() const;
 
     void update(int width, int height) override;
-
     void update(uint32_t key, uint32_t action) override;
+
+    void update(double x, double y, double dx, double dy) override;
 
     void setAspect(const float& aspect);
     void setFov(const float& fov);
     void setNearPlane(const float& nearPlane);
     void setFarPlane(const float& farPlane);
 
-    void tick();
+    void tick() override;
+
+    const glm::vec3 &getPos() const;
+    const glm::vec3 &getFront() const;
 
 private:
     glm::vec3 velocity{0,0,0};

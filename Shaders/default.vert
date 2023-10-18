@@ -24,7 +24,7 @@ void main () {
 
     vec4 wSpacePos = modelMat * vec4(vp,1.0);
     worldSpacePos = wSpacePos.xyz;
-;
+
     vec4 wNormal = modelMat * vec4(normal,0.0);
     worldSpaceNormal = wNormal.xyz;
 

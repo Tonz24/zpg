@@ -19,7 +19,7 @@ void Renderable::uploadModelMatrix(){
     Application::getInstance().getTransformBuffer().setData(sizeof(glm::mat4x4),glm::value_ptr(this->modelMat));
 }
 
-Renderable::Renderable(Model *model, Material *material, TransformationComposite *transformation)
+Renderable::Renderable(Model *model, Material *material, Transformation *transformation)
         : model(std::shared_ptr<Model>(model)), material(std::shared_ptr<Material>(material)){
 
     TransformationComposite* t = new TransformationComposite();
@@ -28,5 +28,9 @@ Renderable::Renderable(Model *model, Material *material, TransformationComposite
     this->rotation =  new Rotation();
     Scale * scale =  new Scale({1,1,1});
 
-   this->transform = std::shared_ptr<TransformationComposite>(transformation);
+   this->transform = std::shared_ptr<Transformation>(transformation);
+}
+
+void Renderable::tick() {
+    ITickable::tick();
 }

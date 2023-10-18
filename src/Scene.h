@@ -12,15 +12,15 @@
 
 class Scene {
 public:
-    void addModel(Renderable& model);
+    void addModel(const std::shared_ptr<IDrawable>& drawable);
+    void addTickable(const std::shared_ptr<ITickable>& tickable);
 
     void draw();
 
-    void setCamera(Camera* camera);
+    void setCamera(const std::shared_ptr<Camera>& newCamera);
 
 private:
-    std::unique_ptr<Camera> camera;
-    std::vector<std::unique_ptr<Renderable>> models;
+    std::shared_ptr<Camera> activeCamera;
+    std::vector<std::shared_ptr<IDrawable>> models;
+    std::vector<std::shared_ptr<ITickable>> tickables;
 };
-
-

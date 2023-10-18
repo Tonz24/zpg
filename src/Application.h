@@ -47,6 +47,14 @@ private:
     std::unique_ptr<UBO> lightBuffer;
     std::unique_ptr<Window> window;
 
+    uint32_t fboId{0};
+    uint32_t fboTexId{0};
+    uint32_t rboId{0};
+    const Shader* fboShader;
+
+    uint32_t quadVBO{0};
+    uint32_t quadVAO{0};
+
     //GLFWwindow* window{nullptr};
 
     bool initialized{false};
@@ -54,4 +62,14 @@ private:
     float currentTime{0};
     float deltaTime{0};
     float lastTime{0};
+
+     float quadVertices[24] = {
+         -1.0f,  1.0f,       0.0f, 1.0f,
+         -1.0f, -1.0f,       0.0f, 0.0f,
+         1.0f, -1.0f,        1.0f, 0.0f,
+
+         -1.0f,  1.0f,       0.0f, 1.0f,
+         1.0f, -1.0f,        1.0f, 0.0f,
+         1.0f,  1.0f,        1.0f, 1.0f
+    };
 };

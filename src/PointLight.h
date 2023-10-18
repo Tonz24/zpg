@@ -1,0 +1,34 @@
+//
+// Created by Tonz on 17.10.2023.
+//
+
+#pragma once
+
+
+#include "Light.h"
+
+class PointLight : public Light {
+public:
+    explicit PointLight(const glm::vec3& color = {0,1,0},TransformationComposite* transformation = new TransformationComposite(), Model* model = new Cube());
+
+    ~PointLight() override;
+private:
+
+
+    inline static int lightCount{0};
+    inline static int assignPosition(){
+        return lightCount++;
+    }
+    inline static void releasePosition(){
+        lightCount--;
+    }
+
+    void uploadToGpu() override;
+
+    static void reassignPositions(const int& from);
+    static void uploadLightCount();
+
+    inline static std::vector<PointLight*> lights{};
+
+    static inline constexpr size_t pointLightOffset = sizeof(glm::vec4)*3*MAX_N_POINT_LIGHTS + sizeof(glm::vec4)*4*MAX_N_SPOT_LIGHTS;
+};

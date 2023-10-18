@@ -12,25 +12,19 @@ public:
     void setColor(const glm::vec3& color);
     void setAttenuation(const glm::vec3& attenuation);
 
-    ~Light() override;
+    void draw() override;
+    void tick() override;
 
-private:
+    virtual ~Light() = default;
 
-    inline static int lightCount{0};
-    inline static int assignPosition(){
-        return lightCount++;
-    }
-    inline static void releasePosition(){
-        lightCount--;
-    }
-    static void reassignPositions(const int& from);
-    static void uploadLightCount();
-
-    inline static std::vector<Light*> lights{};
+protected:
 
     int uboPosition{0};
-    void uploadToGpu();
+    virtual void uploadToGpu() = 0;
 
     glm::vec3 color{1,1,1};
     glm::vec3 attenuation{1.0f,0.09f,0.032f};
+
+    static inline constexpr int MAX_N_POINT_LIGHTS = 30;
+    static inline constexpr int MAX_N_SPOT_LIGHTS = 30;
 };

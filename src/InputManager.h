@@ -26,7 +26,7 @@ struct InputMap{
     std::unordered_map<int,std::vector<std::function<void(int key)>>> map{};
 };
 
-class InputManager : public Subject<uint32_t,uint32_t> {
+class InputManager : public Subject<uint32_t,uint32_t>, public Subject<double,double,double,double> {
 public:
     static inline InputManager& getInstance(){
         if(instance == nullptr)
@@ -57,4 +57,5 @@ private:
     void keyCallbackInternal(GLFWwindow* window, int key, int scancode, int action, int mods);
     void cursorCallbackInternal(GLFWwindow *window, double x, double y);
     void mouseButtonCallbackInternal(GLFWwindow* window, int button, int action, int mode);
+    void cursorPositionCallbackInternal(GLFWwindow* window, double xpos, double ypos);
 };

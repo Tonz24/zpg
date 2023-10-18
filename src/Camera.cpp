@@ -9,7 +9,8 @@ Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch): pos(po
         movementSpeed(SPEED), mouseSensitivity(SENSITIVITY), zoom(ZOOM){
 
     Application::getInstance().getWindow().attach(this);
-    InputManager::getInstance().attach(this);
+    dynamic_cast<Subject<double,double,double,double>*>(&InputManager::getInstance())->attach(this);
+    dynamic_cast<Subject<uint32_t,uint32_t>*>(&InputManager::getInstance())->attach(this);
     this->initalizeCallbackLambdas();
     this->updateCameraVectors();
 
@@ -21,10 +22,10 @@ const glm::mat4& Camera::getViewMatrix() const{
     return this->viewMatrix;
 }
 
-void Camera::ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch){
+void Camera::processMouseMovement(float xoffset, float yoffset){
 
     yaw += xoffset * mouseSensitivity;
-    pitch += yoffset * mouseSensitivity;
+    pitch -= yoffset * mouseSensitivity;
 
     // make sure that when pitch is out of bounds, screen doesn't get flipped
     if (pitch > 89.0f)
@@ -108,7 +109,7 @@ void Camera::initalizeCallbackLambdas() {
         // update front, right and up Vectors using the updated Euler angles
         this->updateCameraVectors();
     };
-    InputManager::getInstance().registerMouseCallback(mouseMovement);
+    //InputManager::getInstance().registerMouseCallback(mouseMovement);
 }
 
 void Camera::update(int width, int height) {
@@ -156,9 +157,22 @@ void Camera::update(uint32_t key, uint32_t action) {
 
 void Camera::tick() {
     glm::vec3 oldPos = this->pos;
-    this->pos += this->front * this->velocity.z * Application::getInstance().getDeltaTime();
-    this->pos += this->right * this->velocity.x * Application::getInstance().getDeltaTime();
+
+    this->pos += this->front * this->velocity.z * Application::getInstance().getDeltaTime() * movementSpeed;
+    this->pos += this->right * this->velocity.x * Application::getInstance().getDeltaTime() *  movementSpeed;
 
     if (this->pos != oldPos)
         this->updateViewMatrix();
+}
+
+void Camera::update(double x, double y, double dx, double dy) {
+    this->processMouseMovement(dx,dy);
+}
+
+const glm::vec3 &Camera::getPos() const {
+    return pos;
+}
+
+const glm::vec3 &Camera::getFront() const {
+    return front;
 }

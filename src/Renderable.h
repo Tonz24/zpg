@@ -11,17 +11,23 @@
 #include "InputManager.h"
 #include "Cube.h"
 
-class Renderable {
-public:
-    explicit Renderable(Model* model = new Cube(), Material* m = new Material(), TransformationComposite* transformation = new TransformationComposite());
+#include "ITickable.h"
+#include "IDrawable.h"
 
-    virtual void draw();
+class Renderable : public ITickable, public IDrawable {
+public:
+    explicit Renderable(Model* model = new Cube(), Material* m = new Material(), Transformation* transformation = new TransformationComposite());
+
+    virtual void draw() override;
+
+    void tick() override;
+
     virtual ~Renderable() = default;
 
 protected:
     std::shared_ptr<Model> model;
     std::shared_ptr<Material> material;
-    std::shared_ptr<TransformationComposite> transform;
+    std::shared_ptr<Transformation> transform;
     //std::shared_ptr<Controller> controller;
 
     Rotation * rotation;

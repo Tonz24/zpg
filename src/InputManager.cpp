@@ -15,7 +15,7 @@ void InputManager::keyCallbackInternal(GLFWwindow *window, int key, int scancode
     for (const auto &item : this->inputMap.map[key]){
         item(key);
     }
-    this->notify(key,action);
+    dynamic_cast<Subject<uint32_t,uint32_t>*>(this)->notify(key,action);
 }
 
 void InputManager::cursorCallback(GLFWwindow *window, double x, double y) {
@@ -40,6 +40,14 @@ InputMap &InputManager::getInputMap() {
 }
 
 void InputManager::cursorPositionCallback(GLFWwindow *window, double xpos, double ypos) {
+   InputManager::getInstance().cursorPositionCallbackInternal(window,xpos,ypos);
+}
+
+void InputManager::registerMouseCallback(std::function<void(double, double, double, double)> f) {
+    this->mouseCallbacks.push_back(f);
+}
+
+void InputManager::cursorPositionCallbackInternal(GLFWwindow *window, double xpos, double ypos) {
     glm::vec2 oldPos = InputManager::getInstance().cursorPos;
     glm::vec2 delta = {xpos - oldPos.x, ypos - oldPos.y};
 
@@ -47,9 +55,6 @@ void InputManager::cursorPositionCallback(GLFWwindow *window, double xpos, doubl
         func(xpos,ypos,delta.x,delta.y);
     }
 
-    InputManager::getInstance().cursorPos = {xpos,ypos};
-}
-
-void InputManager::registerMouseCallback(std::function<void(double, double, double, double)> f) {
-    this->mouseCallbacks.push_back(f);
+    dynamic_cast<Subject<double,double,double,double>*>(this)->notify(xpos,ypos,delta.x, delta.y);
+    this->cursorPos = {xpos,ypos};
 }
