@@ -5,11 +5,10 @@
 #include "ImageEffect.h"
 #include "../Application.h"
 
-ImageEffect::ImageEffect(const glm::vec3& filter) : shader(*Shader::getShaderProgram("shader_fbo")), filter(filter) {
+ImageEffect::ImageEffect(const std::string& shader) : shader(Shader::getShaderProgram(shader)) {
 }
 
 void ImageEffect::apply() {
-    this->shader.use();
-    this->shader.setFloat("time",Application::getInstance().getTime());
-    this->shader.setVec3f("filter",this->filter);
+    this->shader->use();
+    this->shader->setFloat("time",Application::getInstance().getTime());
 }

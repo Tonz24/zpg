@@ -9,13 +9,11 @@
 
 class ImageEffect {
 public:
+    virtual void apply();
 
-    explicit ImageEffect(const glm::vec3& filter);
-    void apply();
-
-private:
-    glm::vec3 filter{0,0,1};
-    const Shader& shader;
+protected:
+    explicit ImageEffect(const std::string& shader);
+    const Shader* shader;
 };
 
 

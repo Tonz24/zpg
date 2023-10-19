@@ -6,6 +6,8 @@
 
 #include "Application.h"
 #include "Shader.h"
+#include "ImageEffects/ColorFilter.h"
+#include "ImageEffects/EmptyEffect.h"
 
 
 void Application::initialize() {
@@ -55,8 +57,11 @@ void Application::initialize() {
     this->framebuffer[0] = new Framebuffer();
     this->framebuffer[1] = new Framebuffer();
 
-    fboShader = Shader::getShaderProgram("shader_fbo");
-    displayShader = Shader::getShaderProgram("shader_display");
+
+    imageEffects.push_back(std::make_unique<ColorFilter>(glm::vec3{1,0,1}));
+
+    finalEffect = std::make_unique<EmptyEffect>();
+
 
     glGenVertexArrays(1, &quadVAO);
     glGenBuffers(1, &quadVBO);
@@ -78,29 +83,27 @@ Application::Application() {
 void Application::run() {
     if(!this->initialized) this->initialize();
 
-    glClearColor(0.1f,0.1f,0.1f,1.0f);
-    glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
+    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 
     while (!this->window->shouldClose()){
         currentTime = getTime();
         deltaTime = currentTime - lastTime;
         lastTime = currentTime;
 
-
         this->framebuffer[0]->bind();
-        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
         glEnable(GL_DEPTH_TEST);
         scene->draw();
-
         glDisable(GL_DEPTH_TEST);
+
         int ping{0}, pong{1};
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < imageEffects.size(); i++) {
 
             framebuffer[pong]->bind();
-            fboShader->use();
-            fboShader->setFloat("time",getTime());
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            imageEffects.at(i)->apply();
 
             glBindVertexArray(quadVAO);
             glActiveTexture(GL_TEXTURE0);
@@ -109,8 +112,7 @@ void Application::run() {
             std::swap(ping,pong);
         }
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        displayShader->use();
-
+        //finalEffect->apply();
         glBindVertexArray(quadVAO);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, this->framebuffer[ping]->getTargetId());
