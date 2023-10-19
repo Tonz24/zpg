@@ -29,3 +29,15 @@ Framebuffer::~Framebuffer() {
     glDeleteRenderbuffers(1,&this->rboId);
     glDeleteFramebuffers(1,&this->id);
 }
+
+void Framebuffer::bind() const {
+    glBindFramebuffer(GL_FRAMEBUFFER, this->id);
+}
+
+void Framebuffer::unbind() const {
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+const uint32_t &Framebuffer::getTargetId() const {
+    return this->target->getId();
+}

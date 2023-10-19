@@ -13,7 +13,7 @@
 
 class Window : public Subject<int,int>, public Observer<int,int> {
 public:
-    explicit Window(const uint32_t& width = 800, const uint32_t& height = 600, const std::string& name = "ZPG Melčák");
+    explicit Window(const uint32_t& width = 1920, const uint32_t& height = 1080, const std::string& name = "ZPG Melčák");
     [[nodiscard]] float getAspectRatio() const;
 
     void toggleFullscreen();

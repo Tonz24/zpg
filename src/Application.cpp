@@ -52,29 +52,7 @@ void Application::initialize() {
     this->lightBuffer = std::make_unique<UBO>(sizeof(glm::vec4)*3*30 + sizeof(glm::vec4)*4*30 +  sizeof(glm::vec4),6,nullptr);
 
 
-    glGenFramebuffers(1, &this->fboId);
-    glBindFramebuffer(GL_FRAMEBUFFER, this->fboId);
-
-    glGenTextures(1, &this->fboTexId);
-    glBindTexture(GL_TEXTURE_2D, this->fboTexId);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1920, 1080, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glBindTexture(GL_TEXTURE_2D, 0);
-
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this->fboTexId, 0);
-
-    glGenRenderbuffers(1, &this->rboId);
-    glBindRenderbuffer(GL_RENDERBUFFER, this->rboId);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, 1920, 1080);
-    glBindRenderbuffer(GL_RENDERBUFFER, 0);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, this->rboId);
-
-    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE){
-        std::cout << "FBO successful" << std::endl;
-    }
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    this->framebuffer = new Framebuffer();
 
     fboShader = Shader::getShaderProgram("shader_fbo");
 
@@ -108,14 +86,14 @@ void Application::run() {
         lastTime = currentTime;
 
 
-        glBindFramebuffer(GL_FRAMEBUFFER, this->fboId);
+        this->framebuffer->bind();
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glEnable(GL_DEPTH_TEST);
         scene->draw();
 
 
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        this->framebuffer->unbind();
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
@@ -123,7 +101,7 @@ void Application::run() {
         fboShader->setFloat("time",getTime());
         glBindVertexArray(quadVAO);
         glDisable(GL_DEPTH_TEST);
-        glBindTexture(GL_TEXTURE_2D, this->fboTexId);
+        glBindTexture(GL_TEXTURE_2D, this->framebuffer->getTargetId());
         glDrawArrays(GL_TRIANGLES, 0, 6);
 
         glfwPollEvents();

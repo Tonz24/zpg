@@ -10,6 +10,7 @@
 #include "UBO.h"
 #include "Scene.h"
 #include "Window.h"
+#include "Framebuffer.h"
 
 class Application {
 public:
@@ -55,7 +56,7 @@ private:
     uint32_t quadVBO{0};
     uint32_t quadVAO{0};
 
-    //GLFWwindow* window{nullptr};
+   Framebuffer* framebuffer;
 
     bool initialized{false};
 
