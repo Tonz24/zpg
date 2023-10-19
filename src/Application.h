@@ -52,11 +52,12 @@ private:
     uint32_t fboTexId{0};
     uint32_t rboId{0};
     const Shader* fboShader;
+    const Shader* displayShader;
 
     uint32_t quadVBO{0};
     uint32_t quadVAO{0};
 
-   Framebuffer* framebuffer;
+   Framebuffer* framebuffer[2];
 
     bool initialized{false};
 

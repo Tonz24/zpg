@@ -14,7 +14,6 @@ public:
     explicit Texture(const glm::vec<2,int>& dimensions);
     ~Texture();
 
-
     void bind(const uint32_t& textureUnit) const;
 
     [[nodiscard]] const bool& isValid() const;

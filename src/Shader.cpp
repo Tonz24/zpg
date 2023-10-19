@@ -129,6 +129,7 @@ void Shader::compileShaders() {
     shaderCache["shader_blinn"] = std::make_unique<Shader>(R"(..\Shaders\default.vert)",R"(..\Shaders\blinn.frag)");
     shaderCache["shader_light"] = std::make_unique<Shader>(R"(..\Shaders\default.vert)",R"(..\Shaders\light.frag)");
     shaderCache["shader_fbo"] = std::make_unique<Shader>(R"(..\Shaders\fbo.vert)",R"(..\Shaders\fbo.frag)");
+    shaderCache["shader_display"] = std::make_unique<Shader>(R"(..\Shaders\fbo.vert)",R"(..\Shaders\display.frag)");
 }
 
 const Shader* Shader::getShaderProgram(const std::string& name) {

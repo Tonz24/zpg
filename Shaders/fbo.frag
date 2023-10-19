@@ -6,9 +6,18 @@ in vec2 uv;
 uniform sampler2D screenTexture;
 
 uniform float time;
+uniform vec3 filter;
+
+const float offset = 1.0 / 1000.0;
+
+//https://github.com/dmnsgn/glsl-tone-map
+vec3 reinhard2(vec3 x) {
+    const float L_white = 4.0;
+
+    return (x * (1.0 + x / (L_white * L_white))) / (1.0 + x);
+}
 
 void main() {
-    vec3 texColor = texture(screenTexture, uv).xyz;
-
-    fragColor = vec4(   sin(texColor.x *sin(time)*50) *0.5 + 0.5 , sin(texColor.y* cos(time)*50 + 1.47) *0.5 + 0.5 , texColor.z,1.0);
+    vec3 col = texture(screenTexture,uv).xyz;
+    fragColor = vec4(col.x, col.y + 0.1, col.z,1.0);
 }

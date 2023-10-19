@@ -52,9 +52,11 @@ void Application::initialize() {
     this->lightBuffer = std::make_unique<UBO>(sizeof(glm::vec4)*3*30 + sizeof(glm::vec4)*4*30 +  sizeof(glm::vec4),6,nullptr);
 
 
-    this->framebuffer = new Framebuffer();
+    this->framebuffer[0] = new Framebuffer();
+    this->framebuffer[1] = new Framebuffer();
 
     fboShader = Shader::getShaderProgram("shader_fbo");
+    displayShader = Shader::getShaderProgram("shader_display");
 
     glGenVertexArrays(1, &quadVAO);
     glGenBuffers(1, &quadVBO);
@@ -86,22 +88,32 @@ void Application::run() {
         lastTime = currentTime;
 
 
-        this->framebuffer->bind();
+        this->framebuffer[0]->bind();
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glEnable(GL_DEPTH_TEST);
         scene->draw();
 
-
-        this->framebuffer->unbind();
-        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        fboShader->use();
-        fboShader->setFloat("time",getTime());
-        glBindVertexArray(quadVAO);
         glDisable(GL_DEPTH_TEST);
-        glBindTexture(GL_TEXTURE_2D, this->framebuffer->getTargetId());
+        int ping{0}, pong{1};
+        for (int i = 0; i < 5; i++) {
+
+            framebuffer[pong]->bind();
+            fboShader->use();
+            fboShader->setFloat("time",getTime());
+
+            glBindVertexArray(quadVAO);
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, framebuffer[ping]->getTargetId());
+            glDrawArrays(GL_TRIANGLES, 0, 6);
+            std::swap(ping,pong);
+        }
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        displayShader->use();
+
+        glBindVertexArray(quadVAO);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, this->framebuffer[ping]->getTargetId());
         glDrawArrays(GL_TRIANGLES, 0, 6);
 
         glfwPollEvents();

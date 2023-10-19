@@ -118,11 +118,11 @@ void main() {
             diffuse += thisDiffuse * attenuation;
 
             if (diffuseDot >= 0.0) {
-                float specularIntensity = pow(max(dot(reflect(nLightDir, nNormal), nDirToCamera), 0.0), specularity);
+                float specularIntensity = pow(max(dot(reflect(-nDirToLight, nNormal), nDirToCamera), 0.0), specularity);
                 vec3 thisSpecular = light.color * specularIntensity * specularFactor;
                 specular += thisSpecular * attenuation;
             }
         }
     }
-    frag_color = vec4(clamp((specular + diffuse + ambient)*objectColor,0.0,1.0),1.0);
+    frag_color = vec4((specular + diffuse + ambient)*objectColor,1.0);
 }

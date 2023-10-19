@@ -11,7 +11,7 @@ float Window::getAspectRatio() const {
 }
 
 Window::Window(const uint32_t &width, const uint32_t &height, const std::string& name) : width(width), height(height), name(name) {
-    this->glfwWindow = glfwCreateWindow(1920, 1080, this->name.c_str(), NULL, NULL);
+    this->glfwWindow = glfwCreateWindow(1920, 1080, this->name.c_str(), glfwGetPrimaryMonitor(), NULL);
     if (!this->glfwWindow){
         glfwTerminate();
         exit(EXIT_FAILURE);
@@ -19,7 +19,7 @@ Window::Window(const uint32_t &width, const uint32_t &height, const std::string&
     glfwMakeContextCurrent(this->glfwWindow);
     glfwSwapInterval(0);
 
-    //glfwSetInputMode(this->glfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetInputMode(this->glfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     int fbWidth{0},fbHeight{0};
     glfwGetFramebufferSize(this->glfwWindow,&fbWidth,&fbHeight);
