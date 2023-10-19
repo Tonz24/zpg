@@ -51,7 +51,6 @@ private:
 
 
     std::vector<std::unique_ptr<ImageEffect>> imageEffects{};
-    std::unique_ptr<ImageEffect> finalEffect;
 
     uint32_t quadVBO{0};
     uint32_t quadVAO{0};

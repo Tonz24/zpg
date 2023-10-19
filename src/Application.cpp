@@ -61,7 +61,7 @@ void Application::initialize() {
 
     imageEffects.push_back(std::make_unique<ColorFilter>(glm::vec3{1.5,1,1}));
 
-    finalEffect = std::make_unique<TonemapACES>();
+    imageEffects.push_back(std::make_unique<TonemapACES>());
 
 
     glGenVertexArrays(1, &quadVAO);
@@ -113,7 +113,6 @@ void Application::run() {
             std::swap(ping,pong);
         }
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        finalEffect->apply();
         glBindVertexArray(quadVAO);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, this->framebuffer[ping]->getTargetId());

@@ -108,20 +108,20 @@ void main() {
         float attenuation = getAttenuationSpotLight(light,distToLight);
         vec3 nLightDir = normalize(light.direction);
 
-        float angle = dot(nDirToLight,-nLightDir);
+        float theta = dot(nDirToLight, normalize(-light.direction));
+        float epsilon = (light.cutoffAngle - cos(20.0));
+        float intensity = clamp((theta - light.cutoffAngle) / epsilon, 0.0, 1.0);
 
-        if (angle > light.cutoffAngle){
+        float diffuseDot = dot(nNormal,nDirToLight);
+        float lightIntensity = max(diffuseDot,0.0);
+        vec3 thisDiffuse = lightIntensity * light.color * diffuseFactor;
+        diffuse += thisDiffuse * attenuation * intensity;
 
-            float diffuseDot = dot(nNormal,nDirToLight);
-            float lightIntensity = max(diffuseDot,0.0);
-            vec3 thisDiffuse = lightIntensity * light.color * diffuseFactor;
-            diffuse += thisDiffuse * attenuation;
-
-            if (diffuseDot >= 0.0) {
-                float specularIntensity = pow(max(dot(reflect(-nDirToLight, nNormal), nDirToCamera), 0.0), specularity);
-                vec3 thisSpecular = light.color * specularIntensity * specularFactor;
-                specular += thisSpecular * attenuation;
-            }
+        if (diffuseDot >= 0.0) {
+            vec3 reflectDir = reflect(-nDirToLight, nNormal);
+            float specularIntensity = pow(max(dot(reflectDir, nDirToCamera), 0.0), specularity);
+            vec3 thisSpecular = light.color * specularIntensity * specularFactor * intensity;
+            specular += thisSpecular * attenuation;
         }
     }
     frag_color = vec4((specular + diffuse + ambient)*objectColor,1.0);
