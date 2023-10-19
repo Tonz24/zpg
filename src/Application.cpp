@@ -8,6 +8,7 @@
 #include "Shader.h"
 #include "ImageEffects/ColorFilter.h"
 #include "ImageEffects/EmptyEffect.h"
+#include "ImageEffects/Tonemap.h"
 
 
 void Application::initialize() {
@@ -53,14 +54,12 @@ void Application::initialize() {
     this->transformBuffer = std::make_unique<UBO>(sizeof(glm::mat4x4)*3 + sizeof(glm::vec4),5,nullptr);
     this->lightBuffer = std::make_unique<UBO>(sizeof(glm::vec4)*3*30 + sizeof(glm::vec4)*4*30 +  sizeof(glm::vec4),6,nullptr);
 
-
     this->framebuffer[0] = new Framebuffer();
     this->framebuffer[1] = new Framebuffer();
 
+    imageEffects.push_back(std::make_unique<ColorFilter>(glm::vec3{1,1,1}));
 
-    imageEffects.push_back(std::make_unique<ColorFilter>(glm::vec3{1,0,1}));
-
-    finalEffect = std::make_unique<EmptyEffect>();
+    finalEffect = std::make_unique<TonemapReinhard>();
 
 
     glGenVertexArrays(1, &quadVAO);
@@ -112,7 +111,7 @@ void Application::run() {
             std::swap(ping,pong);
         }
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        //finalEffect->apply();
+        finalEffect->apply();
         glBindVertexArray(quadVAO);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, this->framebuffer[ping]->getTargetId());
