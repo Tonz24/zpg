@@ -9,6 +9,7 @@
 #include <map>
 
 #include "Observer.h"
+#include "glm.hpp"
 
 class Window : public Subject<int,int>, public Observer<int,int> {
 public:
@@ -26,6 +27,8 @@ public:
 
     [[nodiscard]] const GLFWwindow& getGlfwWindow() const;
     [[nodiscard]] GLFWwindow& getGlfwWindow();
+
+    [[nodiscard]] glm::vec<2,int> getDimensions() const;
 
 private:
     GLFWwindow* glfwWindow;

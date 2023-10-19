@@ -37,6 +37,23 @@ Texture::Texture(const std::string& name) : id(0) {
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, this->dimensions.x, this->dimensions.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, &this->data.data()->get());
     glGenerateMipmap(GL_TEXTURE_2D);
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+Texture::Texture(const glm::vec<2,int>& dimensions) : dimensions(dimensions), id(0), components(3) {
+
+    glGenTextures(1, &this->id);
+    glBindTexture(GL_TEXTURE_2D, this->id);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, dimensions.x, dimensions.y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    this->valid = true;
 }
 
 const bool &Texture::isValid() const {
@@ -52,3 +69,8 @@ Texture::~Texture() {
     stbi_image_free(this->rawData);
     glDeleteTextures(1,&this->id);
 }
+
+const uint32_t &Texture::getId() const {
+    return this->id;
+}
+

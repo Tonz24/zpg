@@ -102,3 +102,7 @@ void Window::swapBuffers() const {
 
 void Window::update(int keyCode, int action) {
 }
+
+glm::vec<2, int> Window::getDimensions() const {
+    return glm::vec<2, int>{this->width,this->height};
+}

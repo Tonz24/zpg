@@ -120,6 +120,7 @@ void Application::run() {
         glClear(GL_COLOR_BUFFER_BIT);
 
         fboShader->use();
+        fboShader->setFloat("time",getTime());
         glBindVertexArray(quadVAO);
         glDisable(GL_DEPTH_TEST);
         glBindTexture(GL_TEXTURE_2D, this->fboTexId);
