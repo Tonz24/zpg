@@ -131,6 +131,7 @@ void Shader::compileShaders() {
 
     shaderCache["effect_empty"] = std::make_unique<Shader>(R"(..\Shaders\ImageEffects\default.vert)",R"(..\Shaders\ImageEffects\empty.frag)");
     shaderCache["effect_filter"] = std::make_unique<Shader>(R"(..\Shaders\ImageEffects\default.vert)",R"(..\Shaders\ImageEffects\colorFilter.frag)");
+    shaderCache["effect_tonemap"] = std::make_unique<Shader>(R"(..\Shaders\ImageEffects\default.vert)",R"(..\Shaders\ImageEffects\tonemap.frag)");
 }
 
 const Shader* Shader::getShaderProgram(const std::string& name) {
