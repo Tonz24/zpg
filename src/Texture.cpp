@@ -66,7 +66,8 @@ void Texture::bind(const uint32_t &textureUnit) const {
 }
 
 Texture::~Texture() {
-    stbi_image_free(this->rawData);
+    if (this->rawData != nullptr)
+        stbi_image_free(this->rawData);
     glDeleteTextures(1,&this->id);
 }
 

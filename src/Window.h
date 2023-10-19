@@ -44,6 +44,9 @@ private:
 
     static void window_size_callback(GLFWwindow* window, int width, int height){
         windowMap[window]->notify(width,height);
+        windowMap[window]->width = width;
+        windowMap[window]->height = height;
+
         glViewport(0, 0, width, height);
     }
 };

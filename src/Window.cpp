@@ -19,11 +19,10 @@ Window::Window(const uint32_t &width, const uint32_t &height, const std::string&
     glfwMakeContextCurrent(this->glfwWindow);
     glfwSwapInterval(0);
 
-    glfwSetInputMode(this->glfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    //glfwSetInputMode(this->glfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     int fbWidth{0},fbHeight{0};
     glfwGetFramebufferSize(this->glfwWindow,&fbWidth,&fbHeight);
-    float ratio = fbWidth / (float)fbHeight;
     glViewport(0, 0, fbWidth, fbHeight);
 
 
