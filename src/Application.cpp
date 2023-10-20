@@ -6,11 +6,12 @@
 
 #include "Application.h"
 #include "Shader.h"
-#include "ImageEffects/ColorFilter.h"
-#include "ImageEffects/EmptyEffect.h"
-#include "ImageEffects/Tonemap.h"
-#include "ImageEffects/GaussianBlur.h"
-#include "ImageEffects/GaussianBlurVertical.h"
+#include "PostProcessing/ColorFilter.h"
+#include "PostProcessing/EmptyEffect.h"
+#include "PostProcessing/Tonemap.h"
+#include "PostProcessing/GaussianBlur.h"
+#include "PostProcessing/GaussianBlurVertical.h"
+#include "PostProcessing/PostFX.h"
 
 
 void Application::initialize() {
@@ -57,22 +58,8 @@ void Application::initialize() {
     this->lightBuffer = std::make_unique<UBO>(sizeof(glm::vec4)*3*30 + sizeof(glm::vec4)*4*30 +  sizeof(glm::vec4),6,nullptr);
 
 
-    this->framebuffer[0] = new Framebuffer();
-    this->framebuffer[1] = new Framebuffer();
-
-    imageEffects.push_back(std::make_unique<GaussianBlur>());
-    imageEffects.push_back(std::make_unique<GaussianBlurVertical>());
-    imageEffects.push_back(std::make_unique<TonemapACES>());
-
-    glGenVertexArrays(1, &quadVAO);
-    glGenBuffers(1, &quadVBO);
-    glBindVertexArray(quadVAO);
-    glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+    PostFX::getInstance().addEffect(GaussianBlur());
+    PostFX::getInstance().addEffect(TonemapACES());
 
     this->initialized = true;
 }
@@ -92,31 +79,14 @@ void Application::run() {
         deltaTime = currentTime - lastTime;
         lastTime = currentTime;
 
-        this->framebuffer[0]->bind();
+        PostFX::getInstance().bindPing();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         glEnable(GL_DEPTH_TEST);
         scene->draw();
         glDisable(GL_DEPTH_TEST);
 
-        int ping{0}, pong{1};
-        for (auto & imageEffect : imageEffects) {
-
-            framebuffer[pong]->bind();
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            imageEffect->apply();
-
-            glBindVertexArray(quadVAO);
-            glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, framebuffer[ping]->getTargetId());
-            glDrawArrays(GL_TRIANGLES, 0, 6);
-            std::swap(ping,pong);
-        }
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        glBindVertexArray(quadVAO);
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, this->framebuffer[ping]->getTargetId());
-        glDrawArrays(GL_TRIANGLES, 0, 6);
+        PostFX::getInstance().applyEffects();
 
         glfwPollEvents();
         this->window->swapBuffers();

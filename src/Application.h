@@ -11,7 +11,7 @@
 #include "Scene.h"
 #include "Window.h"
 #include "Framebuffer.h"
-#include "ImageEffects/ImageEffect.h"
+#include "PostProcessing/ImageEffect.h"
 
 class Application {
 public:
@@ -49,27 +49,10 @@ private:
     std::unique_ptr<UBO> lightBuffer;
     std::unique_ptr<Window> window;
 
-
-    std::vector<std::unique_ptr<ImageEffect>> imageEffects{};
-
-    uint32_t quadVBO{0};
-    uint32_t quadVAO{0};
-
-   Framebuffer* framebuffer[2];
-
     bool initialized{false};
 
     float currentTime{0};
     float deltaTime{0};
     float lastTime{0};
 
-     float quadVertices[24] = {
-         -1.0f,  1.0f,       0.0f, 1.0f,
-         -1.0f, -1.0f,       0.0f, 0.0f,
-         1.0f, -1.0f,        1.0f, 0.0f,
-
-         -1.0f,  1.0f,       0.0f, 1.0f,
-         1.0f, -1.0f,        1.0f, 0.0f,
-         1.0f,  1.0f,        1.0f, 1.0f
-    };
 };
