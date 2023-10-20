@@ -46,16 +46,14 @@ int main(){
     Tree* tree = new Tree();
 
     auto* test = new TransformationComposite();
-    test->addTransformation(new Translation({2,0,0}));
-
+    test->addTransformation(new Translation({12,7,0}));
     auto* test2 = new TransformationComposite();
-    test2->addTransformation(new Translation({10,5,0}));
-
+    test2->addTransformation(new Translation({0,7,0}));
     auto* test3 = new TransformationComposite();
     test3->addTransformation(new Translation({12,7,12}));
 
-    //auto l = std::make_shared<PointLight>(glm::vec3{1,0.5,1},test);
-    //auto l2 = std::make_shared<PointLight>(glm::vec3{0,1,0},test2);
+    auto l = std::make_shared<PointLight>(glm::vec3{0.2,5,0.7},test);
+    auto l2 = std::make_shared<PointLight>(glm::vec3{0,1,0},test2);
     auto l3 = std::make_shared<PointLight>(glm::vec3{1,1,1},test3);
 
     auto l4 = std::make_shared<SpotLight>(glm::vec3{1,1,1},test3);
@@ -69,7 +67,8 @@ int main(){
     //Application::getInstance().getScene().addTickable(l);
 
     Application::getInstance().getScene().addModel(l4);
-    //Application::getInstance().getScene().addModel(l2);
+    Application::getInstance().getScene().addModel(l2);
+    Application::getInstance().getScene().addModel(l);
     Application::getInstance().getScene().addModel(l3);
 
     int ctrCount = 10;

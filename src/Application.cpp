@@ -9,6 +9,8 @@
 #include "ImageEffects/ColorFilter.h"
 #include "ImageEffects/EmptyEffect.h"
 #include "ImageEffects/Tonemap.h"
+#include "ImageEffects/GaussianBlur.h"
+#include "ImageEffects/GaussianBlurVertical.h"
 
 
 void Application::initialize() {
@@ -58,11 +60,9 @@ void Application::initialize() {
     this->framebuffer[0] = new Framebuffer();
     this->framebuffer[1] = new Framebuffer();
 
-
-    imageEffects.push_back(std::make_unique<ColorFilter>(glm::vec3{1.5,1,1}));
-
+    imageEffects.push_back(std::make_unique<GaussianBlur>());
+    imageEffects.push_back(std::make_unique<GaussianBlurVertical>());
     imageEffects.push_back(std::make_unique<TonemapACES>());
-
 
     glGenVertexArrays(1, &quadVAO);
     glGenBuffers(1, &quadVBO);
@@ -85,7 +85,7 @@ void Application::run() {
     if(!this->initialized) this->initialize();
 
     glEnable(GL_CULL_FACE);
-    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
     while (!this->window->shouldClose()){
         currentTime = getTime();
@@ -100,11 +100,11 @@ void Application::run() {
         glDisable(GL_DEPTH_TEST);
 
         int ping{0}, pong{1};
-        for (int i = 0; i < imageEffects.size(); i++) {
+        for (auto & imageEffect : imageEffects) {
 
             framebuffer[pong]->bind();
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            imageEffects.at(i)->apply();
+            imageEffect->apply();
 
             glBindVertexArray(quadVAO);
             glActiveTexture(GL_TEXTURE0);
