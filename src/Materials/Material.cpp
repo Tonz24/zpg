@@ -3,7 +3,7 @@
 //
 
 #include "Material.h"
-#include "Application.h"
+#include "../Application.h"
 
 void Material::uploadVariables() {
     this->shader->use();

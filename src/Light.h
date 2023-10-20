@@ -3,7 +3,7 @@
 //
 #pragma once
 #include "Renderable.h"
-#include "LightMaterial.h"
+#include "Materials/LightMaterial.h"
 
 class Light : public Renderable {
 public:

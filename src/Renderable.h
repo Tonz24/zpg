@@ -6,7 +6,7 @@
 #include <functional>
 
 #include "Model.h"
-#include "Material.h"
+#include "Materials/Material.h"
 #include "Transformation.h"
 #include "InputManager.h"
 #include "Cube.h"

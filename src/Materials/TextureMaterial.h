@@ -4,7 +4,7 @@
 
 #pragma once
 #include "Material.h"
-#include "Texture.h"
+#include "../Texture.h"
 
 class TextureMaterial : public Material {
 public:

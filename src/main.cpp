@@ -4,8 +4,8 @@
 #include "Application.h"
 
 #include "Texture.h"
-#include "TextureMaterial.h"
-#include "ColorMaterial.h"
+#include "Materials/TextureMaterial.h"
+#include "Materials/ColorMaterial.h"
 #include "Renderable.h"
 #include "Transformation.h"
 #include "Sphere.h"
@@ -13,7 +13,7 @@
 #include "Cube.h"
 #include "Tree.h"
 #include "Camera.h"
-#include "BlinnMaterial.h"
+#include "Materials/BlinnMaterial.h"
 #include "PointLight.h"
 #include "SpotLight.h"
 
