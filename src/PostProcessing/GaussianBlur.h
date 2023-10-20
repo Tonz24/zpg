@@ -17,15 +17,14 @@ public:
     }
 
 private:
+    class GaussianBlurHorizontal : public ImageEffect{
+    public:
+        GaussianBlurHorizontal() : ImageEffect("effect_gaussian_blur_horizontal") {}
+    };
 
     class GaussianBlurVertical : public ImageEffect{
     public:
-        GaussianBlurVertical() : ImageEffect("effect_blur_vertical") {}
-    };
-
-    class GaussianBlurHorizontal : public ImageEffect{
-    public:
-        GaussianBlurHorizontal() : ImageEffect("effect_blur_horizontal") {}
+        GaussianBlurVertical() : ImageEffect("effect_gaussian_blur_vertical") {}
     };
 
     GaussianBlurHorizontal horizontal;
