@@ -3,6 +3,7 @@
 //
 
 #include "PostFX.h"
+#include "EmptyEffect.h"
 
 PostFX &PostFX::getInstance() {
     if (instance == nullptr)
@@ -14,12 +15,7 @@ void PostFX::applyEffects() {
     for (auto& effect : this->effects){
         effect->apply();
     }
-
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glBindVertexArray(quadVAO);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, this->pingPongs[ping]->getTargetId());
-    glDrawArrays(GL_TRIANGLES, 0, 6);
+    this->finalRender->apply();
 }
 
 void PostFX::bindPing() {
@@ -35,6 +31,8 @@ PostFX::PostFX() {
 }
 
 void PostFX::initialize() {
+    this->finalRender = std::make_unique<EmptyEffect>();
+
     this->pingPongs[0] = new Framebuffer();
     this->pingPongs[1] = new Framebuffer();
 

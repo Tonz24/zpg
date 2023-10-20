@@ -6,13 +6,21 @@
 
 
 #include "ImageEffect.h"
+#include "PostFX.h"
 
 class EmptyEffect : public ImageEffect {
 public:
-    EmptyEffect();
-    void apply() override;
+    EmptyEffect() : ImageEffect("effect_empty") {}
 
-private:
+    void apply() override {
+        if (this->shader != nullptr) {
+            PostFX& instance = PostFX::getInstance();
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            glClear(GL_COLOR_BUFFER_BIT);
+            this->shader->use();
+
+            instance.drawToTarget();
+            instance.swapValues();
+        }
+    }
 };
-
-

@@ -28,6 +28,7 @@ private:
     Framebuffer* pingPongs[2]{};
 
     std::vector<std::unique_ptr<ImageEffect>> effects{};
+    std::unique_ptr<ImageEffect> finalRender;
 
     uint32_t quadVBO{0};
     uint32_t quadVAO{0};

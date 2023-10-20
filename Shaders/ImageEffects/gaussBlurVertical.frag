@@ -6,7 +6,7 @@ uniform float time;
 
 out vec4 fragColor;
 
-const float scale = 1.0 / 1000.0;
+const float scale = 1.0 / 1080.0;
 
 const vec2 offsets[11] = {
     vec2(-scale*5,0), vec2(-scale*4,0),vec2(-scale*3,0), vec2(-scale*2,0), vec2(-scale,0),
