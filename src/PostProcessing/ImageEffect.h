@@ -12,7 +12,10 @@ public:
     virtual void apply();
 
 protected:
+    virtual void uploadValues();
+
     explicit ImageEffect(const std::string& shader);
+    explicit ImageEffect() = default;
     const Shader* shader;
 };
 

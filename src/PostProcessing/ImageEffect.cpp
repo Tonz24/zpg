@@ -4,11 +4,26 @@
 
 #include "ImageEffect.h"
 #include "../Application.h"
+#include "PostFX.h"
+
 
 ImageEffect::ImageEffect(const std::string& shader) : shader(Shader::getShaderProgram(shader)) {
 }
 
 void ImageEffect::apply() {
-    this->shader->use();
-    this->shader->setFloat("time",Application::getInstance().getTime());
+    if (this->shader != nullptr) {
+        PostFX& instance = PostFX::getInstance();
+        instance.bindPong();
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        this->shader->use();
+        this->uploadValues();
+
+        instance.drawToTarget();
+        instance.swapValues();
+    }
+}
+
+void ImageEffect::uploadValues() {
+    this->shader->setFloat("time", Application::getInstance().getTime());
 }

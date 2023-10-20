@@ -10,7 +10,9 @@
 class ColorFilter : public ImageEffect {
 public:
     ColorFilter(const glm::vec3& filter = {1,1,1});
-    void apply() override;
+
+protected:
+    void uploadValues() override;
 
 private:
     glm::vec3 filter{1,1,1};

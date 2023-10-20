@@ -7,8 +7,8 @@
 ColorFilter::ColorFilter(const glm::vec3& filter) : ImageEffect("effect_filter"), filter(filter) {
 }
 
-void ColorFilter::apply() {
-    ImageEffect::apply();
+void ColorFilter::uploadValues() {
+    ImageEffect::uploadValues();
     this->shader->setVec3f("filter",this->filter);
 }
 

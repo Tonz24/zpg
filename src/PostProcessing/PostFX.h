@@ -6,17 +6,19 @@
 
 
 #include "../Framebuffer.h"
-#include "Tonemap.h"
+#include "ImageEffect.h"
 
 class PostFX {
 public:
 
     static PostFX& getInstance();
 
-    void addEffect(ImageEffect effect);
+    void addEffect(ImageEffect* effect);
     void applyEffects();
     void bindPing();
     void bindPong();
+    void swapValues();
+    void drawToTarget();
 
 private:
     PostFX();
@@ -25,7 +27,7 @@ private:
     inline static PostFX* instance{nullptr};
     Framebuffer* pingPongs[2]{};
 
-    std::vector<ImageEffect> effects{};
+    std::vector<std::unique_ptr<ImageEffect>> effects{};
 
     uint32_t quadVBO{0};
     uint32_t quadVAO{0};

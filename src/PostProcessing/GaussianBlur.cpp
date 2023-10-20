@@ -3,10 +3,3 @@
 //
 
 #include "GaussianBlur.h"
-
-void GaussianBlur::apply() {
-    ImageEffect::apply();
-}
-
-GaussianBlur::GaussianBlur() : ImageEffect("effect_blur_horizontal") {
-}

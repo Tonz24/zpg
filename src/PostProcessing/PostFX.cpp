@@ -12,16 +12,9 @@ PostFX &PostFX::getInstance() {
 
 void PostFX::applyEffects() {
     for (auto& effect : this->effects){
-        this->pingPongs[pong]->bind();
-        glClear(GL_COLOR_BUFFER_BIT);
-        effect.apply();
-
-        glBindVertexArray(quadVAO);
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, pingPongs[ping]->getTargetId());
-        glDrawArrays(GL_TRIANGLES, 0, 6);
-        std::swap(ping,pong);
+        effect->apply();
     }
+
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glBindVertexArray(quadVAO);
     glActiveTexture(GL_TEXTURE0);
@@ -56,6 +49,17 @@ void PostFX::initialize() {
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
 }
 
-void PostFX::addEffect(ImageEffect effect) {
-    this->effects.push_back(effect);
+void PostFX::addEffect(ImageEffect* effect) {
+    this->effects.push_back(std::unique_ptr<ImageEffect>(effect));
+}
+
+void PostFX::swapValues() {
+    std::swap(ping,pong);
+}
+
+void PostFX::drawToTarget() {
+    glBindVertexArray(quadVAO);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, pingPongs[ping]->getTargetId());
+    glDrawArrays(GL_TRIANGLES, 0, 6);
 }
