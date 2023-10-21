@@ -74,7 +74,7 @@ int main(){
         for (int j = 0; j < ctrCount; j++){
             auto* t = new TransformationComposite();
             t->addTransformation(new Translation({(i / (float) ctrCount) * size, rng(gen), (j / (float) ctrCount) * size}));
-            auto renderable = std::make_shared<Renderable>(cube, phong , t);
+            auto renderable = std::make_shared<Renderable>(sphere, phong , t);
             Application::getInstance().getScene().addModel(renderable);
         }
     }
@@ -93,6 +93,7 @@ int main(){
         l4->setPosition(cam->getPos());
     });
 
+    Application::getInstance().setUsePostFX(true);
     Application::getInstance().getScene().addTickable(l4);
     Application::getInstance().run();
 }

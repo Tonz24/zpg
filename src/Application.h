@@ -37,6 +37,7 @@ public:
 
     float getTime();
     float getDeltaTime();
+    void setUsePostFX(bool value);
 
 private:
     Application();
@@ -54,5 +55,5 @@ private:
     float currentTime{0};
     float deltaTime{0};
     float lastTime{0};
-
+    bool usePostFX{true};
 };

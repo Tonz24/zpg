@@ -6,12 +6,8 @@
 
 #include "Application.h"
 #include "Shader.h"
-#include "PostProcessing/ColorFilter.h"
-#include "PostProcessing/EmptyEffect.h"
 #include "PostProcessing/Tonemap.h"
-#include "PostProcessing/GaussianBlur.h"
 #include "PostProcessing/PostFX.h"
-#include "PostProcessing/BoxBlur.h"
 #include "PostProcessing/BloomEffect.h"
 
 
@@ -81,14 +77,19 @@ void Application::run() {
         deltaTime = currentTime - lastTime;
         lastTime = currentTime;
 
-        PostFX::getInstance().bindPing();
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
         glEnable(GL_DEPTH_TEST);
-        scene->draw();
-        glDisable(GL_DEPTH_TEST);
+        if(this->usePostFX) {
+            PostFX::getInstance().bindPing();
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        PostFX::getInstance().applyEffects();
+            scene->draw();
+            glDisable(GL_DEPTH_TEST);
+            PostFX::getInstance().applyEffects();
+        }
+        else{
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            scene->draw();
+        }
 
         glfwPollEvents();
         this->window->swapBuffers();
@@ -123,4 +124,8 @@ Window &Application::getWindow() {
 
 const UBO &Application::getLightBuffer() const {
     return *this->lightBuffer;
+}
+
+void Application::setUsePostFX(bool value) {
+    this->usePostFX = value;
 }
