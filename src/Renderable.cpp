@@ -12,25 +12,49 @@ void Renderable::draw() {
 }
 
 void Renderable::uploadModelMatrix(){
-
-    this->modelMat = glm::mat4{1};
-    this->transform->apply(modelMat);
-
     Application::getInstance().getTransformBuffer().setData(sizeof(glm::mat4x4),glm::value_ptr(this->modelMat));
 }
 
-Renderable::Renderable(Model *model, Material *material, Transformation *transformation)
-        : model(std::shared_ptr<Model>(model)), material(std::shared_ptr<Material>(material)){
+Renderable::Renderable(Model *model, Material *material): model(std::shared_ptr<Model>(model)), material(std::shared_ptr<Material>(material)){
 
-    TransformationComposite* t = new TransformationComposite();
-    this->transform = std::unique_ptr<TransformationComposite>(t);
-    Translation * translation = new Translation({0,0,0});
-    this->rotation =  new Rotation();
-    Scale * scale =  new Scale({1,1,1});
+    this->translation = new Translation();
+    this->rotation = new Rotation();
+    this->scale = new Scale();
 
-   this->transform = std::shared_ptr<Transformation>(transformation);
+    this->transform = std::make_unique<TransformationComposite>();
+    this->transform->addTransformation({this->translation,this->rotation,this->scale});
 }
 
 void Renderable::tick() {
     ITickable::tick();
+}
+
+void Renderable::setTranslation(const glm::vec3 &translation) {
+    this->translation->setTranslation(translation);
+    this->applyTransform();
+}
+
+void Renderable::translate(const glm::vec3 &translation) {
+    this->translation->translate(translation);
+    this->applyTransform();
+}
+
+void Renderable::setScale(const glm::vec3 &scale) {
+    this->scale->setScale(scale);
+    this->applyTransform();
+}
+
+void Renderable::setRotation(const float& angle,const glm::vec3& axis) {
+    this->rotation->setRotation(angle,axis);
+    this->applyTransform();
+}
+
+void Renderable::rotate(const float &angle) {
+    this->rotation->rotate(angle);
+    this->applyTransform();
+}
+
+void Renderable::applyTransform() {
+    this->modelMat = glm::mat4{1};
+    this->transform->apply(modelMat);
 }

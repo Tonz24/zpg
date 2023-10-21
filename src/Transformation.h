@@ -47,7 +47,7 @@ private:
 
 class Scale : public Transformation{
 public:
-    explicit Scale(const glm::vec3& scale = {0,0,0}) : scale(scale){}
+    explicit Scale(const glm::vec3& scale = {1,1,1}) : scale(scale){}
     void apply(glm::mat4 &matrix) const override;
 
     void setScale(const glm::vec3& newScale);

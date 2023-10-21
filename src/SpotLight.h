@@ -9,7 +9,7 @@
 
 class SpotLight : public Light {
 public:
-    explicit SpotLight(const glm::vec3& color = {0,1,0},TransformationComposite* transformation = new TransformationComposite(), Model* model = new Cube());
+    explicit SpotLight(const glm::vec3& color = {0,1,0}, Model* model = new Cube());
 
     ~SpotLight() override;
 

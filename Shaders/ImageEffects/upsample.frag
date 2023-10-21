@@ -12,7 +12,7 @@ void main() {
     float x = filterRadius;
     float y = filterRadius;
 
-    vec2 texCoords = uv ;
+    vec2 texCoords = uv;
 
     vec3 a = texture(srcTexture, vec2(texCoords.x - x, texCoords.y + y)).rgb;
     vec3 b = texture(srcTexture, vec2(texCoords.x,     texCoords.y + y)).rgb;

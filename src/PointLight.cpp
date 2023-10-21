@@ -5,8 +5,7 @@
 #include "PointLight.h"
 #include "Application.h"
 
-PointLight::PointLight(const glm::vec3 &color, TransformationComposite *transformation, Model *model)
-            : Light(color, transformation, model) {
+PointLight::PointLight(const glm::vec3 &color,Model *model): Light(color, model) {
 
     this->uboPosition = assignPosition();
     this->setColor(this->color);

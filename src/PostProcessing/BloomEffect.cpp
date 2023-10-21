@@ -45,7 +45,7 @@ void BloomEffect::UpSample::apply() {
 
 void BloomEffect::UpSample::uploadValues() {
     ImageEffect::uploadValues();
-    this->shader->setFloat("filterRadius",0.005f);
+    this->shader->setFloat("filterRadius",0.0001f);
 }
 
 void BloomEffect::apply() {

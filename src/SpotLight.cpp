@@ -6,8 +6,7 @@
 #include "Application.h"
 
 
-SpotLight::SpotLight(const glm::vec3 &color, TransformationComposite *transformation, Model *model)
-        : Light(color, transformation, model) {
+SpotLight::SpotLight(const glm::vec3 &color, Model *model): Light(color, model) {
 
     this->uboPosition = assignPosition();
     uploadLightCount();

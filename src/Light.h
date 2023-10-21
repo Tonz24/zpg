@@ -7,7 +7,7 @@
 
 class Light : public Renderable {
 public:
-    explicit Light(const glm::vec3& color = {0,1,0},TransformationComposite* transformation = new TransformationComposite(), Model* model = new Cube());
+    explicit Light(const glm::vec3& color = {0,1,0}, Model* model = new Cube());
 
     void setColor(const glm::vec3& color);
     void setAttenuation(const glm::vec3& attenuation);
@@ -16,6 +16,12 @@ public:
     void tick() override;
 
     virtual ~Light() = default;
+
+    virtual void setTranslation(const glm::vec3 &translation) override;
+    virtual void translate(const glm::vec3 &translation) override;
+    virtual void setRotation(const float &angle, const glm::vec3 &axis) override;
+    virtual void rotate(const float &angle) override;
+    virtual void setScale(const glm::vec3 &scale) override;
 
 protected:
 

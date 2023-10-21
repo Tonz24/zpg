@@ -25,8 +25,8 @@ PostFX::PostFX() {
 void PostFX::initialize() {
     this->finalRender = std::make_unique<EmptyEffect>();
 
-    this->pingPongBuffers[0] = new Framebuffer(6);
-    this->pingPongBuffers[1] = new Framebuffer(6);
+    this->pingPongBuffers[0] = new Framebuffer(10);
+    this->pingPongBuffers[1] = new Framebuffer(10);
 
     glGenVertexArrays(1, &quadVAO);
     glGenBuffers(1, &quadVBO);

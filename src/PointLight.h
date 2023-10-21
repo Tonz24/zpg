@@ -9,7 +9,7 @@
 
 class PointLight : public Light {
 public:
-    explicit PointLight(const glm::vec3& color = {0,1,0},TransformationComposite* transformation = new TransformationComposite(), Model* model = new Cube());
+    explicit PointLight(const glm::vec3& color = {0,1,0}, Model* model = new Cube());
 
     ~PointLight() override;
 private:

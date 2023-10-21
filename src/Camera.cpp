@@ -14,8 +14,7 @@ Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch): pos(po
     this->initalizeCallbackLambdas();
     this->updateCameraVectors();
 
-    this->uploadViewMatrix();
-    this->uploadProjectionMatrix();
+    this->uploadMatrices();
 }
 
 const glm::mat4& Camera::getViewMatrix() const{
@@ -71,7 +70,8 @@ void Camera::updateCameraVectors(){
 }
 
 void Camera::uploadMatrices() const {
-    Application::getInstance().getTransformBuffer().setData(sizeof(glm::mat4x4),sizeof(glm::mat4x4),&this->viewMatrix);
+    this->uploadViewMatrix();
+    this->uploadProjectionMatrix();
 }
 
 void Camera::setAspect(const float& aspect) {
