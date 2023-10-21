@@ -12,6 +12,7 @@
 #include "PostProcessing/GaussianBlur.h"
 #include "PostProcessing/PostFX.h"
 #include "PostProcessing/BoxBlur.h"
+#include "PostProcessing/BloomEffect.h"
 
 
 void Application::initialize() {
@@ -58,13 +59,9 @@ void Application::initialize() {
     this->lightBuffer = std::make_unique<UBO>(sizeof(glm::vec4)*3*30 + sizeof(glm::vec4)*4*30 +  sizeof(glm::vec4),6,nullptr);
 
 
-    PostFX::getInstance().addEffect(new GaussianBlur());
-    PostFX::getInstance().addEffect(new GaussianBlur());
-    PostFX::getInstance().addEffect(new GaussianBlur());
-    PostFX::getInstance().addEffect(new GaussianBlur());
-    PostFX::getInstance().addEffect(new GaussianBlur());
-
+    PostFX::getInstance().addEffect(new BloomEffect());
     PostFX::getInstance().addEffect(new TonemapACES());
+
 
     this->initialized = true;
 }

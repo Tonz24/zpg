@@ -52,11 +52,10 @@ int main(){
     auto* test3 = new TransformationComposite();
     test3->addTransformation(new Translation({12,7,12}));
 
-    auto l = std::make_shared<PointLight>(glm::vec3{0.2,5,0.7},test);
-    auto l2 = std::make_shared<PointLight>(glm::vec3{0,1,0},test2);
-    auto l3 = std::make_shared<PointLight>(glm::vec3{1,1,1},test3);
+    auto l = std::make_shared<PointLight>(glm::vec3{0.7,10.5,0.7},test);
 
-    auto l4 = std::make_shared<SpotLight>(glm::vec3{1,1,1},test3);
+
+    auto l4 = std::make_shared<SpotLight>(glm::vec3{0.1,0.1,0.1},test3);
     //l4->setAttenuation({1,0,0});
     l4->setCutoffAngle(25.0f);
 
@@ -66,10 +65,7 @@ int main(){
 
     //Application::getInstance().getScene().addTickable(l);
 
-    Application::getInstance().getScene().addModel(l4);
-    Application::getInstance().getScene().addModel(l2);
     Application::getInstance().getScene().addModel(l);
-    Application::getInstance().getScene().addModel(l3);
 
     int ctrCount = 10;
     int size = 10;

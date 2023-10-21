@@ -19,6 +19,8 @@ public:
     [[nodiscard]] const bool& isValid() const;
     [[nodiscard]] const uint32_t& getId() const;
 
+    const glm::vec<2, int> &getDimensions() const;
+
 private:
     uint32_t id;
 

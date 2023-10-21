@@ -18,14 +18,6 @@ void PostFX::applyEffects() {
     this->finalRender->apply();
 }
 
-void PostFX::bindPing() {
-    this->pingPongs[ping]->bind();
-}
-
-void PostFX::bindPong() {
-    this->pingPongs[pong]->bind();
-}
-
 PostFX::PostFX() {
     this->initialize();
 }
@@ -33,8 +25,8 @@ PostFX::PostFX() {
 void PostFX::initialize() {
     this->finalRender = std::make_unique<EmptyEffect>();
 
-    this->pingPongs[0] = new Framebuffer();
-    this->pingPongs[1] = new Framebuffer();
+    this->pingPongBuffers[0] = new Framebuffer(6);
+    this->pingPongBuffers[1] = new Framebuffer(6);
 
     glGenVertexArrays(1, &quadVAO);
     glGenBuffers(1, &quadVBO);
@@ -55,9 +47,25 @@ void PostFX::swapValues() {
     std::swap(ping,pong);
 }
 
-void PostFX::drawToTarget() {
+void PostFX::drawToTarget(int mipLevel) {
     glBindVertexArray(quadVAO);
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, pingPongs[ping]->getTargetId());
+    glBindTexture(GL_TEXTURE_2D, this->getPing().getTargetId(mipLevel));
     glDrawArrays(GL_TRIANGLES, 0, 6);
+}
+
+void PostFX::bindPing(int mipLevel) {
+    this->pingPongBuffers[ping]->bind(mipLevel);
+}
+
+void PostFX::bindPong(int mipLevel) {
+    this->pingPongBuffers[pong]->bind(mipLevel);
+}
+
+const Framebuffer &PostFX::getPing() {
+    return *this->pingPongBuffers[ping];
+}
+
+const Framebuffer &PostFX::getPong() {
+    return *this->pingPongBuffers[pong];
 }

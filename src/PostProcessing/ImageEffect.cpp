@@ -12,9 +12,9 @@ ImageEffect::ImageEffect(const std::string& shader) : shader(Shader::getShaderPr
 
 void ImageEffect::apply() {
     if (this->shader != nullptr) {
+        glDisable(GL_BLEND);
         PostFX& instance = PostFX::getInstance();
         instance.bindPong();
-        glClear(GL_COLOR_BUFFER_BIT);
 
         this->shader->use();
         this->uploadValues();

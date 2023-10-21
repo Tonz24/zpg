@@ -52,6 +52,7 @@ Texture::Texture(const glm::vec<2,int>& dimensions) : dimensions(dimensions), id
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, dimensions.x, dimensions.y, 0, GL_RGB, GL_HALF_FLOAT, NULL);
+    //glGenerateMipmap(GL_TEXTURE_2D);
 
     glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -75,5 +76,9 @@ Texture::~Texture() {
 
 const uint32_t &Texture::getId() const {
     return this->id;
+}
+
+const glm::vec<2, int> &Texture::getDimensions() const {
+    return dimensions;
 }
 

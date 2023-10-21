@@ -136,6 +136,8 @@ void Shader::compileShaders() {
     shaderCache["effect_gaussian_blur_horizontal"] = std::make_unique<Shader>(R"(..\Shaders\ImageEffects\default.vert)",R"(..\Shaders\ImageEffects\gaussBlurHorizontal.frag)");
     shaderCache["effect_gaussian_blur_vertical"] = std::make_unique<Shader>(R"(..\Shaders\ImageEffects\default.vert)",R"(..\Shaders\ImageEffects\gaussBlurVertical.frag)");
     shaderCache["effect_tonemap"] = std::make_unique<Shader>(R"(..\Shaders\ImageEffects\default.vert)",R"(..\Shaders\ImageEffects\tonemap.frag)");
+    shaderCache["effect_downsample"] = std::make_unique<Shader>(R"(..\Shaders\ImageEffects\default.vert)",R"(..\Shaders\ImageEffects\downsample.frag)");
+    shaderCache["effect_upsample"] = std::make_unique<Shader>(R"(..\Shaders\ImageEffects\default.vert)",R"(..\Shaders\ImageEffects\upsample.frag)");
 }
 
 const Shader* Shader::getShaderProgram(const std::string& name) {

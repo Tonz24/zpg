@@ -11,20 +11,20 @@
 
 class Framebuffer : public Observer<int,int> {
 public:
-    Framebuffer();
-    void bind() const;
+    explicit Framebuffer(int mipLevels = 0);
+    void bind(int mipLevel = 0) const;
     void unbind() const;
-    [[nodiscard]] const uint32_t& getTargetId() const;
-
+    [[nodiscard]] const uint32_t& getTargetId(int mipLevel = 0) const;
+    [[nodiscard]] const glm::vec<2,int>& getTargetDimensions(int mipLevel = 0) const;
 
     void update(int width, int height) override;
 
     ~Framebuffer();
 
 private:
+    int mipLevels{0};
     uint32_t id{0};
     uint32_t rboId{0};
 
-    std::unique_ptr<Texture> target;
-
+    std::vector<std::unique_ptr<Texture>> target;
 };
