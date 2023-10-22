@@ -7,13 +7,15 @@
 
 PointLight::PointLight(const glm::vec3 &color,Model *model): Light(color, model) {
 
-    this->uboPosition = assignPosition();
+    /*this->uboPosition = assignPosition();
     this->setColor(this->color);
     uploadLightCount();
-    lights.push_back(this);
+    this->pushToVector();*/
 }
 
 void PointLight::uploadToGpu() {
+    if (!this->active) return;
+
     glm::vec4 colorVec = {this->color,0};
 
     size_t positionOffset = sizeof(glm::vec4)*3*this->uboPosition;
@@ -45,4 +47,24 @@ void PointLight::reassignPositions(const int &from) {
 
 PointLight::~PointLight() {
     reassignPositions(this->uboPosition);
+}
+
+void PointLight::reassignPositionsImpl(const int &from) {
+    PointLight::reassignPositions(from);
+}
+
+void PointLight::uploadLightCountImpl() {
+    PointLight::uploadLightCount();
+}
+
+int PointLight::assignPositionImpl() {
+    return PointLight::assignPosition();
+}
+
+void PointLight::pushToVector() {
+    lights.push_back(this);
+}
+
+void PointLight::releasePositionImpl() {
+    PointLight::releasePosition();
 }

@@ -8,9 +8,9 @@
 
 class LambertMaterial : public Material {
 public:
-    explicit LambertMaterial(const glm::vec3& objectColor = {0.7,0.7,0.7}, const float& ambientFactor = 1.0f);
+    explicit LambertMaterial(const glm::vec3& objectColor = {0.7,0.7,0.7},const float& diffuseFactor = 1.0f, const float& ambientFactor = 1.0f);
 
-    virtual void uploadVariables() override;
+    void uploadVariables() override;
 
     void setObjectColor(const glm::vec3 &objectColor);
     void setAmbientFactor(float ambientFactor);

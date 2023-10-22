@@ -34,6 +34,17 @@ private:
 
     void uploadToGpu() override;
 
+protected:
+    void reassignPositionsImpl(const int &from) override;
+    void uploadLightCountImpl() override;
+    int assignPositionImpl() override;
+
+    void releasePositionImpl() override;
+
+    void pushToVector() override;
+
+private:
+
     static void reassignPositions(const int& from);
     static void uploadLightCount();
 

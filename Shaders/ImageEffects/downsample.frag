@@ -21,6 +21,7 @@ vec3 prefilter(vec3 color){
 void main() {
     vec2 texCoords = uv;
 
+
     vec2 srcTexelSize = 1.0 / srcResolution;
     float x = srcTexelSize.x;
     float y = srcTexelSize.y;

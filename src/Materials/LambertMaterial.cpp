@@ -5,14 +5,14 @@
 #include "LambertMaterial.h"
 
 void LambertMaterial::uploadVariables() {
+    Material::uploadVariables();
     this->shader->setVec3f("objectColor",this->objectColor);
     this->shader->setFloat("ambientFactor",this->ambientFactor);
     this->shader->setFloat("diffuseFactor", this->diffuseFactor);
-    Material::uploadVariables();
 }
 
-LambertMaterial::LambertMaterial(const glm::vec3 &objectColor,const float& ambientFactor) : objectColor(objectColor),
-    ambientFactor(ambientFactor) {
+LambertMaterial::LambertMaterial(const glm::vec3 &objectColor,const float& diffuseFactor,const float& ambientFactor) : objectColor(objectColor),
+    ambientFactor(ambientFactor), diffuseFactor(diffuseFactor) {
     this->shader = Shader::getShaderProgram("shader_lambert");
 }
 

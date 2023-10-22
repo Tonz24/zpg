@@ -23,14 +23,24 @@ public:
     virtual void rotate(const float &angle) override;
     virtual void setScale(const glm::vec3 &scale) override;
 
+    void activate();
+    void deactivate();
+
 protected:
 
     int uboPosition{0};
     virtual void uploadToGpu() = 0;
+    virtual void reassignPositionsImpl(const int& from) = 0;
+    virtual void uploadLightCountImpl() = 0;
+    virtual int assignPositionImpl() = 0;
+    virtual void releasePositionImpl() = 0;
+    virtual void pushToVector() = 0;
 
     glm::vec3 color{1,1,1};
     glm::vec3 attenuation{1.0f,0.09f,0.032f};
 
     static inline constexpr int MAX_N_POINT_LIGHTS = 30;
     static inline constexpr int MAX_N_SPOT_LIGHTS = 30;
+
+    bool active{false};
 };

@@ -8,14 +8,15 @@
 
 SpotLight::SpotLight(const glm::vec3 &color, Model *model): Light(color, model) {
 
-    this->uboPosition = assignPosition();
+    /*this->uboPosition = assignPosition();
     uploadLightCount();
 
     this->setColor(this->color);
-    lights.push_back(this);
+    this->pushToVector();*/
 }
 
 void SpotLight::uploadToGpu() {
+    if (!this->active) return;
 
     this->modelMat = glm::mat4{1};
     this->transform->apply(this->modelMat);
@@ -68,4 +69,24 @@ void SpotLight::setDirection(const glm::vec3 &direction) {
 void SpotLight::setPosition(const glm::vec3 &position) {
     SpotLight::position = position;
     this->uploadToGpu();
+}
+
+void SpotLight::reassignPositionsImpl(const int &from) {
+    SpotLight::reassignPositions(from);
+}
+
+void SpotLight::uploadLightCountImpl() {
+    SpotLight::uploadLightCount();
+}
+
+int SpotLight::assignPositionImpl() {
+    return SpotLight::assignPosition();
+}
+
+void SpotLight::pushToVector() {
+    lights.push_back(this);
+}
+
+void SpotLight::releasePositionImpl() {
+    SpotLight::releasePosition();
 }

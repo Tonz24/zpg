@@ -129,3 +129,9 @@ const UBO &Application::getLightBuffer() const {
 void Application::setUsePostFX(bool value) {
     this->usePostFX = value;
 }
+
+void Application::setScene(std::unique_ptr<Scene> &scene) {
+    scene->activateLights();
+    this->scene->deactivateLights();
+    this->scene.swap(scene);
+}

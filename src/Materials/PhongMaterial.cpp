@@ -5,35 +5,20 @@
 #include "PhongMaterial.h"
 
 void PhongMaterial::uploadVariables() {
-    this->shader->setVec3f("objectColor",this->objectColor);
+    LambertMaterial::uploadVariables();
     this->shader->setFloat("specularity",this->specularity);
-    this->shader->setFloat("ambientFactor",this->ambientFactor);
     this->shader->setFloat("specularFactor", this->specularFactor);
-    this->shader->setFloat("diffuseFactor", this->diffuseFactor);
-    Material::uploadVariables();
 }
 
-PhongMaterial::PhongMaterial(const glm::vec3 &objectColor, const float &specularity, const float& ambientFactor, const float& specularFactor) :
-    objectColor(objectColor), specularity(specularity), ambientFactor(ambientFactor), specularFactor(specularFactor) {
+PhongMaterial::PhongMaterial(const glm::vec3& objectColor, const float& diffuseFactor,const float& ambientFactor, const float& specularity, const float& specularFactor) :
+        LambertMaterial(objectColor,diffuseFactor,ambientFactor),specularity(specularity), specularFactor(specularFactor) {
     this->shader = Shader::getShaderProgram("shader_phong");
-}
-
-void PhongMaterial::setObjectColor(const glm::vec3 &objectColor) {
-    this->objectColor = objectColor;
 }
 
 void PhongMaterial::setSpecularity(float specularity) {
     this->specularity = specularity;
 }
 
-void PhongMaterial::setAmbientFactor(float ambientFactor) {
-    this->ambientFactor = ambientFactor;
-}
-
 void PhongMaterial::setSpecularFactor(float specularFactor) {
     this->specularFactor = specularFactor;
-}
-
-void PhongMaterial::setDiffuseFactor(float diffuseFactor) {
-    this->diffuseFactor = diffuseFactor;
 }

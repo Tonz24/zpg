@@ -32,6 +32,8 @@ public:
         return *this->scene;
     }
 
+    void setScene(std::unique_ptr<Scene>& scene);
+
     [[nodiscard]] const Window& getWindow() const;
     [[nodiscard]] Window& getWindow();
 

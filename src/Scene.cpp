@@ -8,7 +8,7 @@ void Scene::addModel(const std::shared_ptr<IDrawable>& drawable) {
 }
 
 void Scene::draw() {
-    activeCamera->tick();
+
 
     for (const auto &tickable : this->tickables){
         tickable->tick();
@@ -24,6 +24,20 @@ void Scene::addTickable(const std::shared_ptr<ITickable> &tickable) {
     this->tickables.push_back(tickable);
 }
 
-void Scene::setCamera(const std::shared_ptr<Camera> &newCamera) {
-    this->activeCamera = newCamera;
+void Scene::deactivateLights() {
+    for (auto &light : this->lights){
+        light->deactivate();
+    }
+}
+
+void Scene::activateLights() {
+    for (auto &light : this->lights){
+        light->activate();
+    }
+}
+
+void Scene::addModel(const std::shared_ptr<Light> &light) {
+    this->lights.push_back(light);
+    std::shared_ptr<IDrawable> lightAsDrawable = light;
+    this->addModel(lightAsDrawable);
 }

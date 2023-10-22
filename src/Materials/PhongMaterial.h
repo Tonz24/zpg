@@ -4,26 +4,20 @@
 
 #pragma once
 
-#include "Material.h"
+#include "LambertMaterial.h"
 
-class PhongMaterial : public Material {
+class PhongMaterial : public LambertMaterial {
 public:
-    explicit PhongMaterial(const glm::vec3& objectColor = {0.7,0.7,0.7}, const float& specularity = 32.0f,
-                  const float& ambientFactor = 32.0f, const float& specularFactor = 1.0f);
+    explicit PhongMaterial(const glm::vec3& objectColor = {0.7,0.7,0.7}, const float& diffuseFactor = 1.0f,
+                           const float& ambientFactor = 32.0f, const float& specularity = 32.0f, const float& specularFactor = 1.0f);
 
     virtual void uploadVariables() override;
 
-    void setObjectColor(const glm::vec3 &objectColor);
+
     void setSpecularity(float specularity);
-    void setAmbientFactor(float ambientFactor);
     void setSpecularFactor(float specularFactor);
-    void setDiffuseFactor(float diffuseFactor);
 
 protected:
-    glm::vec3 objectColor{0.7,0.7,0.7};
-    float specularity{25};
-
-    float ambientFactor{0.1};
+    float specularity{32};
     float specularFactor{1};
-    float diffuseFactor{1};
 };

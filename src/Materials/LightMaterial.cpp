@@ -13,6 +13,6 @@ void LightMaterial::setColor(const glm::vec3 &color) {
     this->color = color;
 }
 
-LightMaterial::LightMaterial(const glm::vec3 &color) {
+LightMaterial::LightMaterial(const glm::vec3 &color) : color(color) {
     this->shader = Shader::getShaderProgram("shader_light");
 }

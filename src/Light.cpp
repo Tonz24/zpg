@@ -52,3 +52,19 @@ void Light::setScale(const glm::vec3 &scale) {
     Renderable::setScale(scale);
     this->uploadToGpu();
 }
+
+void Light::activate() {
+    if (!this->active) {
+        this->active = true;
+        this->uboPosition = this->assignPositionImpl();
+        this->uploadLightCountImpl();
+        this->uploadToGpu();
+    }
+}
+
+void Light::deactivate() {
+    if (this->active) {
+        this->active = false;
+        this->reassignPositionsImpl(this->uboPosition);
+    }
+}
