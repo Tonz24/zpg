@@ -1,7 +1,6 @@
 #version 420
 #include "lights.glsl"
 
-
 in vec3 worldSpacePos;
 in vec3 worldSpaceNormal;
 in vec2 uv;

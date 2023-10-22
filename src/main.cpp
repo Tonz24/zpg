@@ -84,40 +84,37 @@ std::unique_ptr<Scene> setupScene3(){
 
     auto scene = std::make_unique<Scene>();
 
-    ConstantMaterial* constant = new ConstantMaterial(glm::vec3{1,1,1});
-    LambertMaterial* lambert = new LambertMaterial(glm::vec3{1, 0.6, 1},0.1);
-    PhongMaterial* phong = new PhongMaterial(glm::vec3{1, 0.6, 1}, 16.0f, 0.1f,0.5f);
-    BlinnMaterial* blinn = new BlinnMaterial(glm::vec3{0.7, 0.4f, 0}, 16.0f, 0.1f,1);
+    Material* constant = new ConstantMaterial(glm::vec3{0.4,0.7,1});
+    Material* lambert = new LambertMaterial(glm::vec3{1, 1, 1},0.1);
+    Material* phong = new PhongMaterial(glm::vec3{0, 1, 1});
+    Material* blinn = new BlinnMaterial(glm::vec3{0.7, 0.2f, 1});
+
+    std::vector<Material*> materials = {constant,lambert,phong,blinn};
 
     Sphere* sphere = new Sphere();
     Monkey* monkey = new Monkey();
     Cube* cube = new Cube();
 
-    auto light = new PointLight(glm::vec3{1.2,1.5,1.5},sphere);
+    std::vector<Model*> models = {sphere,monkey,cube};
+
+    auto light = new PointLight(glm::vec3{1.2,0.4,1.7},sphere);
+    light->setTranslation({5,0,5});
     light->setScale({0.25,0.25,0.25});
     scene->addModel(std::shared_ptr<Light>(light));
+    auto light2 = new PointLight(glm::vec3{0.7,1.7,1.2},sphere);
+    light2->setTranslation({5,0,0});
+    light2->setScale({0.25,0.25,0.25});
+    scene->addModel(std::shared_ptr<Light>(light2));
 
 
-    auto model = new Renderable(sphere,lambert);
-    auto model2 = new Renderable(monkey,blinn);
-    auto model3 = new Renderable(cube,phong);
-    auto model4 = new Renderable(sphere,constant);
-    auto model5 = new Renderable(monkey,phong);
-    auto model6 = new Renderable(cube,lambert);
+    for (int i = 0; i < 5; ++i) {
+        for (int j = 0; j < 5; ++j) {
+            auto model = new Renderable(models[ (i + j) % models.size()],materials[ (i + j) % materials.size()]);
+            model->setTranslation({i*2,-3,j*2});
+            scene->addModel(std::shared_ptr<Renderable>(model));
+        }
+    }
 
-    model->setTranslation({5,0,0});
-    model2->setTranslation({-5,0,0});
-    model3->setTranslation({0,5,0});
-    model4->setTranslation({0,-5,0});
-    model5->setTranslation({0,0,5});
-    model6->setTranslation({0,0,-5});
-
-    scene->addModel(std::shared_ptr<Renderable>(model));
-    scene->addModel(std::shared_ptr<Renderable>(model2));
-    scene->addModel(std::shared_ptr<Renderable>(model3));
-    scene->addModel(std::shared_ptr<Renderable>(model4));
-    scene->addModel(std::shared_ptr<Renderable>(model5));
-    scene->addModel(std::shared_ptr<Renderable>(model6));
 
     return std::move(scene);
 }
