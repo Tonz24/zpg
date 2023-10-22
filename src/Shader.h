@@ -40,4 +40,6 @@ public:
 private:
     inline static std::unordered_map<std::string,std::unique_ptr<Shader>> shaderCache{};
     void checkCompileErrors(unsigned int shader, std::string type);
+
+    std::string loadShader(const std::string& path);
 };

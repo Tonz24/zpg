@@ -55,7 +55,7 @@ void Application::initialize() {
     this->lightBuffer = std::make_unique<UBO>(sizeof(glm::vec4)*3*30 + sizeof(glm::vec4)*4*30 +  sizeof(glm::vec4),6,nullptr);
 
 
-    PostFX::getInstance().addEffect(new BloomEffect(10));
+    PostFX::getInstance().addEffect(new BloomEffect(5));
     PostFX::getInstance().addEffect(new TonemapACES());
 
 

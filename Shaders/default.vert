@@ -4,6 +4,8 @@ layout(location=1) in vec3 normal;
 layout(location=2) in vec3 colIn;
 layout(location=3) in vec2 uvIn;
 
+#include "Tonda.glsl"
+
 out vec3 col;
 out vec3 worldSpacePos;
 out vec3 worldSpaceNormal;

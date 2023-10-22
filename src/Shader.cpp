@@ -2,41 +2,15 @@
 
 Shader::Shader(const char* vertexPath, const char* fragmentPath){
     // 1. retrieve the vertex/fragment source code from filePath
-    std::string vertexCode;
-    std::string fragmentCode;
-    std::ifstream vShaderFile;
-    std::ifstream fShaderFile;
 
     const char *vShaderCode;
     const char *fShaderCode;
 
-
-    vShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-    fShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-    try {
-        // open files
-        vShaderFile.open(vertexPath);
-        fShaderFile.open(fragmentPath);
-        std::stringstream vShaderStream, fShaderStream;
-        // read file's buffer contents into streams
-        vShaderStream << vShaderFile.rdbuf();
-        fShaderStream << fShaderFile.rdbuf();
-        // close file handlers
-        vShaderFile.close();
-        fShaderFile.close();
-        // convert stream into string
-        vertexCode = vShaderStream.str();
-        fragmentCode = fShaderStream.str();
-    }
-
-    catch (std::ifstream::failure &e) {
-        std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ: " << e.what() << std::endl;
-    }
+    std::string vertexCode =  loadShader(vertexPath);
+    std::string fragmentCode = loadShader(fragmentPath);
 
     vShaderCode = vertexCode.c_str();
     fShaderCode = fragmentCode.c_str();
-
-
 
     // 2. compile shaders
     unsigned int vertex, fragment;
@@ -64,6 +38,69 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath){
     glDeleteShader(vertex);
     glDeleteShader(fragment);
 }
+
+std::string Shader::loadShader(const std::string& path) {
+
+    std::string delimiter = "\\";
+
+    std::string pathPath = path;
+    std::string pathPathPath;
+
+    //throw away filename
+    size_t pos = 0;
+    std::string token;
+    while ((pos = pathPath.find(delimiter)) != std::string::npos) {
+        token = pathPath.substr(0, pos);
+        std::cout << token << std::endl;
+        pathPathPath += pathPath.substr(0,pos + delimiter.length());
+        pathPath.erase(0, pos + delimiter.length());
+    }
+    std::cout << pathPath << std::endl;
+    std::string code;
+    std::ifstream shaderFile;
+
+    shaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+
+
+    try {
+        // open files
+        shaderFile.open(path);
+
+        std::stringstream shaderStream;
+
+        // read file's buffer contents into streams
+        shaderStream << shaderFile.rdbuf();
+
+        std::string line;
+
+        while (std::getline(shaderStream, line)) {
+
+            std::string search{"#include"};
+
+            size_t found = line.find(search);
+
+            if (found != std::string::npos) {
+                size_t start = found + search.length();
+                size_t end = line.find(' ', start);
+                std::string wordAfter = line.substr(start, end + start);
+                auto h = wordAfter.substr(2, wordAfter.size() - 3);
+
+                line = loadShader(pathPathPath +  h); //recursively relpace #include with file contents
+            }
+            code += line + "\n";
+        }
+
+        // close file handlers
+        shaderFile.close();
+    }
+
+    catch (std::ifstream::failure &e) {
+        std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ: " << e.what() << std::endl;
+    }
+
+    return code;
+}
+
 
 void Shader::use() const{
     glUseProgram(this->ID);
@@ -143,3 +180,4 @@ void Shader::compileShaders() {
 const Shader* Shader::getShaderProgram(const std::string& name) {
     return Shader::shaderCache[name].get();
 }
+
