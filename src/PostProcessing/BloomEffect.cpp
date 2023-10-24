@@ -49,14 +49,15 @@ void BloomEffect::UpSample::uploadValues() {
 }
 
 void BloomEffect::apply() {
-    this->downSamples[0].getShader().use();
+    this->downSamples[0].getShader().use(); // no need to use shaders multiple times
     for (auto &item : this->downSamples){
         item.apply();
     }
+
     glEnable(GL_BLEND);
     glBlendFunc(GL_ONE, GL_ONE);
     glBlendEquation(GL_FUNC_ADD);
-    this->upSamples[0].getShader().use();
+    this->upSamples[0].getShader().use(); // no need to use shaders multiple times
     for (auto &item : this->upSamples){
         item.apply();
     }
@@ -68,7 +69,7 @@ void BloomEffect::uploadValues() {
 }
 
 BloomEffect::BloomEffect(int sampleCount) : ImageEffect(), sampleCount(sampleCount) {
-    for (int i = 0; i < sampleCount; ++i) {
+    for (int i = 0; i < this->sampleCount; ++i) {
         downSamples.push_back(DownSample(i,i+1));
         upSamples.push_back(UpSample( sampleCount - i,sampleCount - i - 1));
     }

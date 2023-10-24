@@ -9,7 +9,7 @@
 
 #include "Renderable.h"
 #include "Camera.h"
-#include "Light.h"
+#include "Lights/Light.h"
 
 class Scene {
 public:
@@ -21,8 +21,11 @@ public:
     void deactivateLights();
     void activateLights();
 
+    void setActiveCamera(const std::shared_ptr<Camera> &activeCamera);
+
 private:
     std::vector<std::shared_ptr<IDrawable>> models;
     std::vector<std::shared_ptr<ITickable>> tickables;
     std::vector<std::shared_ptr<Light>> lights;
+    std::shared_ptr<Camera> activeCamera;
 };

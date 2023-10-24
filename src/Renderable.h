@@ -16,9 +16,10 @@
 
 class Renderable : public ITickable, public IDrawable {
 public:
-    explicit Renderable(Model* model = new Cube(), Material* m = new Material());
+    explicit Renderable(Model* model = nullptr, Material* m = new Material());
 
     virtual void draw() override;
+    virtual void drawForShadowMapping() override;
     void tick() override;
 
     virtual ~Renderable() = default;

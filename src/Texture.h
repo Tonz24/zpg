@@ -12,6 +12,7 @@ class Texture {
 public:
     explicit Texture(const std::string& name);
     explicit Texture(const glm::vec<2,int>& dimensions);
+    explicit Texture(const glm::vec<2,int>& dimensions, int h);
     ~Texture();
 
     void bind(const uint32_t& textureUnit) const;

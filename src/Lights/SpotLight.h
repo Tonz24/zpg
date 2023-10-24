@@ -9,20 +9,39 @@
 
 class SpotLight : public Light {
 public:
-    explicit SpotLight(const glm::vec3& color = {0,1,0}, Model* model = new Cube());
+    explicit SpotLight(const glm::vec3& color = {0,1,0}, Model* model = nullptr);
 
     ~SpotLight() override;
 
-    void setCutoffAngle(float cutoffAngle);
+    void setOuterCutoffAngle(float cutoffAngle);
+    void setInnerCutoffAngle(float cutoffAngle);
 
     void setDirection(const glm::vec3 &direction);
 
     void setPosition(const glm::vec3 &position);
 
+    void uploadLightSpaceMatrices() const override;
+
+
+protected:
+    void reassignPositionsImpl(const int &from) override;
+    void uploadLightCountImpl() override;
+    int assignPositionImpl() override;
+    void releasePositionImpl() override;
+    void pushToVector() override;
+
 private:
     glm::vec3 position{0,0,0};
     glm::vec3 direction{1,0,0};
-    float cutoffAngle{35.0f};
+
+    glm::mat4 proj = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f,0.01f,10.0f);
+
+    glm::mat4 getViewMat()const override {
+        return glm::lookAt(this->position, {1,0,0},{0,1,0});
+    }
+
+    float outerCutoffAngle{35.0f};
+    float innerCutoffAngle{30.0f};
 
     inline static int lightCount{0};
     inline static int assignPosition(){
@@ -33,17 +52,6 @@ private:
     }
 
     void uploadToGpu() override;
-
-protected:
-    void reassignPositionsImpl(const int &from) override;
-    void uploadLightCountImpl() override;
-    int assignPositionImpl() override;
-
-    void releasePositionImpl() override;
-
-    void pushToVector() override;
-
-private:
 
     static void reassignPositions(const int& from);
     static void uploadLightCount();

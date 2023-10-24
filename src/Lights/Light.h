@@ -2,12 +2,13 @@
 // Created by Tonz on 10.10.2023.
 //
 #pragma once
-#include "Renderable.h"
-#include "Materials/LightMaterial.h"
+#include "../Renderable.h"
+#include "../Materials/LightMaterial.h"
+#include "../Framebuffer.h"
 
 class Light : public Renderable {
 public:
-    explicit Light(const glm::vec3& color = {0,1,0}, Model* model = new Cube());
+    explicit Light(const glm::vec3& color = {0,1,0}, Model* model = nullptr);
 
     void setColor(const glm::vec3& color);
     void setAttenuation(const glm::vec3& attenuation);
@@ -22,6 +23,10 @@ public:
     virtual void setRotation(const float &angle, const glm::vec3 &axis) override;
     virtual void rotate(const float &angle) override;
     virtual void setScale(const glm::vec3 &scale) override;
+    virtual glm::mat4 getViewMat() const = 0;
+    virtual void uploadLightSpaceMatrices() const = 0;
+
+    [[nodiscard]] const Framebuffer& getShadowFbo() const;
 
     void activate();
     void deactivate();
@@ -43,4 +48,6 @@ protected:
     static inline constexpr int MAX_N_SPOT_LIGHTS = 30;
 
     bool active{false};
+
+    std::unique_ptr<Framebuffer> shadowFBO;
 };

@@ -51,13 +51,15 @@ void Application::initialize() {
 
     Shader::compileShaders();
 
-    this->transformBuffer = std::make_unique<UBO>(sizeof(glm::mat4x4)*3 + sizeof(glm::vec4),5,nullptr);
+    this->transformBuffer = std::make_unique<UBO>(sizeof(glm::mat4x4)*4 + sizeof(glm::vec4),5,nullptr);
     this->lightBuffer = std::make_unique<UBO>(sizeof(glm::vec4)*3*30 + sizeof(glm::vec4)*4*30 +  sizeof(glm::vec4),6,nullptr);
 
 
     PostFX::getInstance().addEffect(new BloomEffect(5));
     PostFX::getInstance().addEffect(new TonemapACES());
 
+
+    this->shadowMapShader = Shader::getShaderProgram("shader_shadowMap");
 
     this->initialized = true;
 }
@@ -77,7 +79,6 @@ void Application::run() {
         deltaTime = currentTime - lastTime;
         lastTime = currentTime;
 
-        glEnable(GL_DEPTH_TEST);
         if(this->usePostFX) {
             PostFX::getInstance().bindPing();
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -134,4 +135,8 @@ void Application::setScene(std::unique_ptr<Scene> &scene) {
     scene->activateLights();
     this->scene->deactivateLights();
     this->scene.swap(scene);
+}
+
+const void Application::bindShadowMapShader() {
+    this->shadowMapShader->use();
 }

@@ -8,11 +8,20 @@
 void Renderable::draw() {
     this->material->uploadVariables();
     this->uploadModelMatrix();
-    this->model->draw();
+    if (model.get() != nullptr)
+        this->model->draw();
+}
+
+void Renderable::drawForShadowMapping() {
+    this->uploadModelMatrix();
+    if (model.get() != nullptr)
+        this->model->draw();
 }
 
 void Renderable::uploadModelMatrix(){
     Application::getInstance().getTransformBuffer().setData(sizeof(glm::mat4x4),glm::value_ptr(this->modelMat));
+    glm::mat4x4 normalMatrix = glm::transpose(glm::inverse(this->modelMat));
+    Application::getInstance().getTransformBuffer().setData(sizeof(glm::mat4x4)*3,sizeof(glm::mat4x4),glm::value_ptr(normalMatrix));
 }
 
 Renderable::Renderable(Model *model, Material *material): model(std::shared_ptr<Model>(model)), material(std::shared_ptr<Material>(material)){
@@ -58,3 +67,4 @@ void Renderable::applyTransform() {
     this->modelMat = glm::mat4{1};
     this->transform->apply(modelMat);
 }
+

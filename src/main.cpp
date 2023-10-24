@@ -5,13 +5,12 @@
 
 #include "Texture.h"
 #include "Renderable.h"
-#include "Transformation.h"
 #include "Sphere.h"
 #include "Monkey.h"
 #include "Cube.h"
 #include "Camera.h"
-#include "PointLight.h"
-#include "SpotLight.h"
+#include "Lights/PointLight.h"
+#include "Lights/SpotLight.h"
 
 
 #include "Materials/ConstantMaterial.h"
@@ -35,26 +34,31 @@ static void window_size_callback(GLFWwindow* window, int width, int height){
 std::unique_ptr<Scene> setupScene1(){
     auto scene = std::make_unique<Scene>();
 
-    Material* phong = new PhongMaterial(glm::vec3{1, 0.3, 1}, 16.0f, 0.1f,0.5f);
+    Material* phong = new BlinnMaterial(glm::vec3{1, 1,1},1,0.1,4096,20);
     auto* sphere = new Sphere();
 
-    Light* light = new PointLight(glm::vec3{2,1,2},sphere);
-    scene->addModel(std::shared_ptr<Light>(light));
+    /*SpotLight* spotLight = new SpotLight({5,5,5});
+    spotLight->setDirection({1,0,0});*/
+
+    PointLight* pointLight = new PointLight({5,5,5});
+
+    scene->addModel(std::shared_ptr<Light>(pointLight));
 
     Renderable* model = new Renderable(sphere,phong);
+    model->translate({5,0,0});
 
-    model->setTranslation({5,0,0});
-    scene->addModel(std::shared_ptr<Renderable>(model));
     scene->addModel(std::shared_ptr<Renderable>(model));
 
     return std::move(scene);
-
 }
 
 std::unique_ptr<Scene> setupScene2(){
     auto scene = std::make_unique<Scene>();
 
-    auto* phong = new PhongMaterial(glm::vec3{1, 0.6, 1}, 16.0f, 0.1f,0.5f);
+    auto* phong = new PhongMaterial(glm::vec3{1, 0.6, 1});
+    Material* constant = new ConstantMaterial(glm::vec3{0.4,0.7,1});
+    Material* lambert = new LambertMaterial(glm::vec3{1, 1, 1},0.1);
+    Material* blinn = new BlinnMaterial(glm::vec3{0.7, 0, 0});
     auto* sphere = new Sphere();
 
     auto light = new PointLight(glm::vec3{1.5,1.5,1.5},sphere);
@@ -63,9 +67,9 @@ std::unique_ptr<Scene> setupScene2(){
 
 
     auto model = new Renderable(sphere,phong);
-    auto model2 = new Renderable(sphere,phong);
-    auto model3 = new Renderable(sphere,phong);
-    auto model4 = new Renderable(sphere,phong);
+    auto model2 = new Renderable(sphere,lambert);
+    auto model3 = new Renderable(sphere,blinn);
+    auto model4 = new Renderable(sphere,constant);
 
     model->setTranslation({5,0,0});
     model2->setTranslation({-5,0,0});
@@ -97,24 +101,52 @@ std::unique_ptr<Scene> setupScene3(){
 
     std::vector<Model*> models = {sphere,monkey,cube};
 
-    auto light = new PointLight(glm::vec3{1.2,0.4,1.7},sphere);
-    light->setTranslation({5,0,5});
+    auto light = new PointLight(glm::vec3{1.7,0,0},sphere);
     light->setScale({0.25,0.25,0.25});
     scene->addModel(std::shared_ptr<Light>(light));
-    auto light2 = new PointLight(glm::vec3{0.7,1.7,1.2},sphere);
-    light2->setTranslation({5,0,0});
+
+    auto light2 = new PointLight(glm::vec3{0,1.7,0},sphere);
     light2->setScale({0.25,0.25,0.25});
     scene->addModel(std::shared_ptr<Light>(light2));
 
+    auto light3 = new PointLight(glm::vec3{0,0,1.7},sphere);
+    light3->setScale({0.25,0.25,0.25});
+    scene->addModel(std::shared_ptr<Light>(light3));
+
+    light->setTickFunction([light](){
+       light->setTranslation({sin(glfwGetTime() + 2.094)*5 + 5,0,cos(glfwGetTime() + 2.094)*5 + 5});
+    });
+
+    light2->setTickFunction([light2](){
+        light2->setTranslation({sin(glfwGetTime())*5 + 5,0,cos(glfwGetTime())*5 + 5});
+    });
+
+    light3->setTickFunction([light3](){
+        light3->setTranslation({sin(glfwGetTime() + 2.094*2)*5 + 5 ,0,cos(glfwGetTime() + 2.094*2)*5 + 5 });
+    });
+
+    scene->addTickable(std::shared_ptr<ITickable>(light));
+    scene->addTickable(std::shared_ptr<ITickable>(light2));
+    scene->addTickable(std::shared_ptr<ITickable>(light3));
 
     for (int i = 0; i < 5; ++i) {
         for (int j = 0; j < 5; ++j) {
             auto model = new Renderable(models[ (i + j) % models.size()],materials[ (i + j) % materials.size()]);
             model->setTranslation({i*2,-3,j*2});
             scene->addModel(std::shared_ptr<Renderable>(model));
+
+            model->setTickFunction([model, i, j]() mutable{
+               model->setScale({sin(glfwGetTime()/2.0 + i + j)*0.5 + 0.5 + 0.1,1.0,sin(glfwGetTime()/2.0 + i - j)*0.5 + 0.5 + 0.1});
+            });
+            scene->addTickable(std::shared_ptr<ITickable>(model));
         }
     }
 
+    Material* phong2 = new BlinnMaterial(glm::vec3{1, 1, 1},1,0.1);
+    auto model = new Renderable(cube,phong2);
+    model->setTranslation({0,-5,0});
+    model->setScale({100,0.05,100});
+    scene->addModel(std::shared_ptr<Renderable>(model));
 
     return std::move(scene);
 }
@@ -132,6 +164,9 @@ int main(){
     scene2->addTickable(cam);
     scene3->addTickable(cam);
 
+    scene->setActiveCamera(cam);
+    scene2->setActiveCamera(cam);
+    scene3->setActiveCamera(cam);
     Application::getInstance().setScene(scene3);
 
     Application::getInstance().setUsePostFX(true);

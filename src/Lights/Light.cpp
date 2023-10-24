@@ -3,11 +3,11 @@
 //
 
 #include "Light.h"
-#include "Application.h"
+#include "../Application.h"
 
 Light::Light(const glm::vec3& color, Model *model)
     : Renderable(model,new LightMaterial(color)), color(color) {
-
+    this->shadowFBO = std::make_unique<Framebuffer>(5.0f);
 }
 void Light::setColor(const glm::vec3 &color) {
     this->color = color;
@@ -67,4 +67,8 @@ void Light::deactivate() {
         this->active = false;
         this->reassignPositionsImpl(this->uboPosition);
     }
+}
+
+const Framebuffer& Light::getShadowFbo() const {
+    return *shadowFBO;
 }

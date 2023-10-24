@@ -119,7 +119,7 @@ void Camera::update(int width, int height) {
 
 void Camera::uploadViewMatrix() const {
     Application::getInstance().getTransformBuffer().setData(sizeof(glm::mat4x4),sizeof(glm::mat4x4),glm::value_ptr(this->viewMatrix));
-    Application::getInstance().getTransformBuffer().setData(sizeof(glm::mat4x4)*3,sizeof(glm::vec4),&this->pos);
+    Application::getInstance().getTransformBuffer().setData(sizeof(glm::mat4x4)*4,sizeof(glm::vec3),&this->pos);
 }
 
 void Camera::uploadProjectionMatrix() const {

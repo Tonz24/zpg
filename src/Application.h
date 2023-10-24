@@ -41,6 +41,8 @@ public:
     float getDeltaTime();
     void setUsePostFX(bool value);
 
+    const void bindShadowMapShader();
+
 private:
     Application();
     Application(Application& app) = delete;
@@ -58,4 +60,6 @@ private:
     float deltaTime{0};
     float lastTime{0};
     bool usePostFX{true};
+
+    const Shader* shadowMapShader;
 };

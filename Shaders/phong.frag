@@ -1,6 +1,8 @@
 #version 420
 #include "lights.glsl"
 
+#include "transformBuffer.glsl"
+
 in vec3 worldSpacePos;
 in vec3 worldSpaceNormal;
 in vec2 uv;
@@ -67,8 +69,8 @@ void main() {
         vec3 nLightDir = normalize(light.direction);
 
         float theta = dot(nDirToLight, normalize(-light.direction));
-        float epsilon = (light.cutoffAngle - cos(20.0));
-        float intensity = clamp((theta - light.cutoffAngle) / epsilon, 0.0, 1.0);
+        float epsilon = (light.innerCutoffAngle - light.outerCutoffAngle);
+        float intensity = clamp((theta - light.outerCutoffAngle) / epsilon, 0.0, 1.0);
 
         float diffuseDot = dot(nNormal,nDirToLight);
         float lightIntensity = max(diffuseDot,0.0);

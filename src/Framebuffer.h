@@ -12,7 +12,9 @@
 class Framebuffer : public Observer<int,int> {
 public:
     explicit Framebuffer(int mipLevels = 0);
+    explicit Framebuffer(float h);
     void bind(int mipLevel = 0) const;
+    void bindDepth(int mipLevel = 0) const;
     void unbind() const;
     [[nodiscard]] const uint32_t& getTargetId(int mipLevel = 0) const;
     [[nodiscard]] const glm::vec<2,int>& getTargetDimensions(int mipLevel = 0) const;

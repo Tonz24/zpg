@@ -3,16 +3,11 @@
 //
 
 #include "SpotLight.h"
-#include "Application.h"
+#include "../Application.h"
 
 
 SpotLight::SpotLight(const glm::vec3 &color, Model *model): Light(color, model) {
 
-    /*this->uboPosition = assignPosition();
-    uploadLightCount();
-
-    this->setColor(this->color);
-    this->pushToVector();*/
 }
 
 void SpotLight::uploadToGpu() {
@@ -20,7 +15,6 @@ void SpotLight::uploadToGpu() {
 
     this->modelMat = glm::mat4{1};
     this->transform->apply(this->modelMat);
-    glm::vec4 worldSpacePos = this->modelMat * glm::vec4{0,0,0,1};
 
     size_t positionOffset = sizeof(glm::vec4)*3*MAX_N_POINT_LIGHTS + sizeof(glm::vec4)*4*this->uboPosition;
 
@@ -35,8 +29,10 @@ void SpotLight::uploadToGpu() {
     Application::getInstance().getLightBuffer().setData(positionOffset + sizeof(glm::vec4)*2 + sizeof(glm::vec3),sizeof(float),&this->attenuation.z); //quadratic
 
 
-    float cutOffcos = glm::cos(glm::radians(this->cutoffAngle));
-    Application::getInstance().getLightBuffer().setData(positionOffset + sizeof(glm::vec4)*3 ,sizeof(float),&cutOffcos); //cutoffAngle
+    float outerCutoffcos = glm::cos(glm::radians(this->outerCutoffAngle));
+    float innerCutoffcos = glm::cos(glm::radians(this->innerCutoffAngle));
+    Application::getInstance().getLightBuffer().setData(positionOffset + sizeof(glm::vec4)*3 ,sizeof(float),&innerCutoffcos); //innerCutoffAngle
+    Application::getInstance().getLightBuffer().setData(positionOffset + sizeof(glm::vec4)*3 + sizeof(float) ,sizeof(float),&outerCutoffcos); //outerCutoffAngle
 }
 
 void SpotLight::uploadLightCount() {
@@ -56,8 +52,13 @@ SpotLight::~SpotLight() {
     reassignPositions(this->uboPosition);
 }
 
-void SpotLight::setCutoffAngle(float cutoffAngle) {
-    this->cutoffAngle = cutoffAngle;
+void SpotLight::setOuterCutoffAngle(float cutoffAngle) {
+    this->outerCutoffAngle = cutoffAngle;
+    this->uploadToGpu();
+}
+
+void SpotLight::setInnerCutoffAngle(float cutoffAngle) {
+    this->innerCutoffAngle = cutoffAngle;
     this->uploadToGpu();
 }
 
@@ -90,3 +91,11 @@ void SpotLight::pushToVector() {
 void SpotLight::releasePositionImpl() {
     SpotLight::releasePosition();
 }
+
+void SpotLight::uploadLightSpaceMatrices() const {
+    glm::mat4 viewMat = this->getViewMat();
+    Application::getInstance().getTransformBuffer().setData(sizeof(glm::mat4x4),sizeof(glm::mat4x4),&viewMat);
+    Application::getInstance().getTransformBuffer().setData(sizeof(glm::mat4x4)*2,sizeof(glm::mat4x4),&this->proj);
+}
+
+

@@ -3,7 +3,7 @@
 //
 
 #include "PointLight.h"
-#include "Application.h"
+#include "../Application.h"
 
 PointLight::PointLight(const glm::vec3 &color,Model *model): Light(color, model) {
 
@@ -67,4 +67,12 @@ void PointLight::pushToVector() {
 
 void PointLight::releasePositionImpl() {
     PointLight::releasePosition();
+}
+
+glm::mat4 PointLight::getViewMat() const {
+    return glm::mat4();
+}
+
+void PointLight::uploadLightSpaceMatrices() const {
+
 }

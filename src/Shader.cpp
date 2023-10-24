@@ -81,8 +81,7 @@ std::string Shader::loadShader(const std::string& path) {
 
             if (found != std::string::npos) {
                 size_t start = found + search.length();
-                size_t end = line.find(' ', start);
-                std::string wordAfter = line.substr(start, end + start);
+                std::string wordAfter = line.substr(start, line.size() - start);
                 auto h = wordAfter.substr(2, wordAfter.size() - 3);
 
                 line = loadShader(pathPathPath +  h); //recursively relpace #include with file contents
@@ -161,10 +160,12 @@ void Shader::compileShaders() {
     shaderCache["shader_default"] = std::make_unique<Shader>(R"(..\Shaders\default.vert)",R"(..\Shaders\default.frag)");
     shaderCache["shader_constant"] = std::make_unique<Shader>(R"(..\Shaders\default.vert)",R"(..\Shaders\constant.frag)");
     shaderCache["shader_texture"] = std::make_unique<Shader>(R"(..\Shaders\default.vert)",R"(..\Shaders\texture.frag)");
-    shaderCache["shader_lambert"] = std::make_unique<Shader>(R"(..\Shaders\default.vert)",R"(..\Shaders\lambert.frag)");
     shaderCache["shader_phong"] = std::make_unique<Shader>(R"(..\Shaders\default.vert)",R"(..\Shaders\phong.frag)");
+    shaderCache["shader_lambert"] = std::make_unique<Shader>(R"(..\Shaders\default.vert)",R"(..\Shaders\lambert.frag)");
     shaderCache["shader_blinn"] = std::make_unique<Shader>(R"(..\Shaders\default.vert)",R"(..\Shaders\blinn.frag)");
     shaderCache["shader_light"] = std::make_unique<Shader>(R"(..\Shaders\default.vert)",R"(..\Shaders\light.frag)");
+
+    shaderCache["shader_shadowMap"] = std::make_unique<Shader>(R"(..\Shaders\shadowMap.vert)",R"(..\Shaders\shadowMap.frag)");
 
     shaderCache["effect_empty"] = std::make_unique<Shader>(R"(..\Shaders\ImageEffects\default.vert)",R"(..\Shaders\ImageEffects\empty.frag)");
     shaderCache["effect_filter"] = std::make_unique<Shader>(R"(..\Shaders\ImageEffects\default.vert)",R"(..\Shaders\ImageEffects\colorFilter.frag)");
