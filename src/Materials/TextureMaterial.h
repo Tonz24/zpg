@@ -3,10 +3,10 @@
 //
 
 #pragma once
-#include "Material.h"
+#include "ConstantMaterial.h"
 #include "../Texture.h"
 
-class TextureMaterial : public Material {
+class TextureMaterial : public ConstantMaterial {
 public:
     explicit TextureMaterial(Texture& texture) : texture(texture){
         this->shader = Shader::getShaderProgram("shader_texture");

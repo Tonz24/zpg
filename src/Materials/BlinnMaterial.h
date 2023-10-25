@@ -9,9 +9,7 @@
 
 class BlinnMaterial : public PhongMaterial {
 public:
-    explicit BlinnMaterial(const glm::vec3& objectColor = {0.7,0.7,0.7}, const float& diffuseFactor = 1.0f,
-                           const float& ambientFactor = 0.1f, const float& specularity = 32.0f, const float& specularFactor = 1.0f);
-
+    BlinnMaterial(const glm::vec3& objectColor = {1,1,0}, const float& diffuseFactor = 1,const float& ambientFactor = 0.1,
+                const float& specularity = 32, const float& specularFactor = 1) :
+                PhongMaterial("shader_blinn",objectColor,diffuseFactor,ambientFactor,specularity,specularFactor) {}
 };
-
-

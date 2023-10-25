@@ -6,12 +6,12 @@
 #include "../Application.h"
 
 Light::Light(const glm::vec3& color, Model *model)
-    : Renderable(model,new LightMaterial(color)), color(color) {
+    : Renderable(model,new ConstantMaterial(color)), color(color) {
     this->shadowFBO = std::make_unique<Framebuffer>(5.0f);
 }
 void Light::setColor(const glm::vec3 &color) {
     this->color = color;
-    dynamic_cast<LightMaterial*>(this->material.get())->setColor(this->color);
+    this->material->setObjectColor(color);
     this->uploadToGpu();
 }
 

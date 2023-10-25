@@ -6,7 +6,7 @@
 #include <functional>
 
 #include "Model.h"
-#include "Materials/Material.h"
+#include "Materials/ConstantMaterial.h"
 #include "Transformation.h"
 #include "InputManager.h"
 #include "Cube.h"
@@ -16,11 +16,13 @@
 
 class Renderable : public ITickable, public IDrawable {
 public:
-    explicit Renderable(Model* model = nullptr, Material* m = new Material());
+    explicit Renderable(Model* model = nullptr, ConstantMaterial* m = new ConstantMaterial());
 
     virtual void draw() override;
     virtual void drawForShadowMapping() override;
     void tick() override;
+
+    const ConstantMaterial &getMaterial() const override;
 
     virtual ~Renderable() = default;
 
@@ -32,7 +34,7 @@ public:
 
 protected:
     std::shared_ptr<Model> model;
-    std::shared_ptr<Material> material;
+    std::shared_ptr<ConstantMaterial> material;
     std::unique_ptr<TransformationComposite> transform;
     Translation* translation;
     Rotation* rotation;

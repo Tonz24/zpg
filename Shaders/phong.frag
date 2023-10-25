@@ -5,6 +5,7 @@
 
 in vec3 worldSpacePos;
 in vec3 worldSpaceNormal;
+in vec4 lightSpacePos;
 in vec2 uv;
 
 uniform float specularity;
@@ -13,6 +14,8 @@ uniform float ambientFactor;
 uniform float diffuseFactor;
 uniform float specularFactor;
 uniform float time;
+
+uniform sampler2D shadowMap;
 
 out vec4 frag_color;
 
@@ -23,6 +26,13 @@ float getAttenuationSpotLight(SpotLight light, float dist){
     return 1.0 / (light.kConstant + light.kLinear * dist + light.kQuadratic * pow(dist,2.0));
 }
 
+float calculateShadow(){
+    vec3 projCoords = lightSpacePos.xyz / lightSpacePos.w;
+    projCoords = projCoords * 0.5 + 0.5;
+    float closestDepth = texture(shadowMap, projCoords.xy).r;
+    float bias = 0.005;
+    return projCoords.z - bias > closestDepth ? 1.0 : 0.0;
+}
 
 void main() {
     vec3 diffuse = vec3(0);
@@ -84,5 +94,6 @@ void main() {
             specular += thisSpecular * attenuation;
         }
     }
-    frag_color = vec4((specular + diffuse + ambient)*objectColor,1.0);
+    //frag_color = vec4((ambient +  (1 - calculateShadow())* (diffuse + specular))*objectColor,1.0);
+    frag_color = vec4((ambient +  diffuse + specular)*objectColor,1.0);
 }

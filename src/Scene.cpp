@@ -10,25 +10,29 @@ void Scene::addModel(const std::shared_ptr<IDrawable>& drawable) {
 }
 
 void Scene::draw() {
-    glEnable(GL_DEPTH_TEST);
-    Application::getInstance().bindShadowMapShader();
+    /*Application::getInstance().bindShadowMapShader();
     for (const auto &light : lights){
-        //TODO: bind light's fbo
         light->getShadowFbo().bindDepth();
         glClear(GL_DEPTH_BUFFER_BIT);
         light->uploadLightSpaceMatrices();
         for (const auto &model : this->models){
             model->drawForShadowMapping();
         }
+        light->getShadowFbo().unbind();
     }
     PostFX::getInstance().bindPing();
-    this->activeCamera->uploadMatrices();
+    this->activeCamera->uploadMatrices();*/
 
     for (const auto &tickable : this->tickables){
         tickable->tick();
     }
 
     for (const auto &model : this->models){
+        /*model->getMaterial().getShader().use();
+        glm::mat4 lightSpaceMat = lights[0]->getLightSpaceMatrix();
+        uint32_t texId = lights[0]->getShadowFbo().getTargetId(0);
+        glBindTexture(GL_TEXTURE_2D,texId);
+        model->getMaterial().getShader().setMat4f("lightspaceMat",lightSpaceMat);*/
         model->draw();
     }
 }

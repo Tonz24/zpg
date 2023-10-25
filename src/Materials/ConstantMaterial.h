@@ -3,19 +3,23 @@
 //
 
 #pragma once
-#include "Material.h"
+#include "../Shader.h"
 
-class ConstantMaterial : public Material {
+class ConstantMaterial {
 public:
-    explicit ConstantMaterial(const glm::vec3& color) : color(color){
-        this->shader = Shader::getShaderProgram("shader_constant");
+    ConstantMaterial(const glm::vec3& objectColor = {1,1,0}) : objectColor(objectColor), shader(Shader::getShaderProgram("shader_constant")){}
+
+    virtual void uploadVariables();
+
+    [[nodiscard]] const Shader& getShader() const;
+
+    void setObjectColor(const glm::vec3 &objectColor) {
+        this->objectColor = objectColor;
     }
-    ConstantMaterial() = delete;
 
-    void uploadVariables() override;
+protected:
+    explicit ConstantMaterial(const std::string& programName, const glm::vec3& objectColor) : shader(Shader::getShaderProgram(programName)), objectColor(objectColor){}
 
-private:
-    glm::vec3 color{0,1,1};
+    const Shader* shader;
+    glm::vec3 objectColor{1,1,0};
 };
-
-

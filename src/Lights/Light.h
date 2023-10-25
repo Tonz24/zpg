@@ -3,7 +3,7 @@
 //
 #pragma once
 #include "../Renderable.h"
-#include "../Materials/LightMaterial.h"
+#include "../Materials/ConstantMaterial.h"
 #include "../Framebuffer.h"
 
 class Light : public Renderable {
@@ -25,6 +25,7 @@ public:
     virtual void setScale(const glm::vec3 &scale) override;
     virtual glm::mat4 getViewMat() const = 0;
     virtual void uploadLightSpaceMatrices() const = 0;
+    virtual glm::mat4 getLightSpaceMatrix() const = 0;
 
     [[nodiscard]] const Framebuffer& getShadowFbo() const;
 

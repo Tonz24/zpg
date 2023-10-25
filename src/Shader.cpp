@@ -100,9 +100,12 @@ std::string Shader::loadShader(const std::string& path) {
     return code;
 }
 
-
 void Shader::use() const{
     glUseProgram(this->ID);
+}
+
+void Shader::unbind() const {
+    glUseProgram(0);
 }
 
 void Shader::setBool(const std::string& name, bool value) const{
@@ -117,24 +120,25 @@ void Shader::setFloat(const std::string& name, float value) const{
     glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
 }
 
-void Shader::setVec2f(const std::string& name,glm::vec2 vec) const{
+void Shader::setVec2f(const std::string& name,const glm::vec2& vec) const{
     glUniform2f(glGetUniformLocation(ID, name.c_str()), vec.x,vec.y);
 }
 
-void Shader::setVec2i(const std::string& name,glm::vec<2,int> vec) const{
+void Shader::setVec2i(const std::string& name,const glm::vec<2,int>& vec) const{
     glUniform2i(glGetUniformLocation(ID, name.c_str()), vec.x,vec.y);
 }
 
-void Shader::setVec3f(const std::string& name, glm::vec3 vec) const{
+void Shader::setVec3f(const std::string& name,const glm::vec3& vec) const{
     glUniform3f(glGetUniformLocation(ID, name.c_str()), vec.x,vec.y,vec.z);
 }
 
-void Shader::setVec4f(const std::string& name, glm::vec4 vec) const {
+void Shader::setVec4f(const std::string& name,const glm::vec4& vec) const {
     glUniform4f(glGetUniformLocation(ID, name.c_str()), vec.x, vec.y, vec.z, vec.w);
 }
 
-void Shader::setMat4f(const std::string& name, glm::mat4x4 mat) const{
-    glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE,glm::value_ptr(mat));
+void Shader::setMat4f(const std::string& name,const glm::mat4x4& mat) const{
+    int loc = glGetUniformLocation(ID, name.c_str());
+    glUniformMatrix4fv(loc, 1, GL_FALSE,glm::value_ptr(mat));
 }
 
 void Shader::checkCompileErrors(unsigned int shader, std::string type){
@@ -157,14 +161,12 @@ void Shader::checkCompileErrors(unsigned int shader, std::string type){
 }
 
 void Shader::compileShaders() {
-    shaderCache["shader_default"] = std::make_unique<Shader>(R"(..\Shaders\default.vert)",R"(..\Shaders\default.frag)");
     shaderCache["shader_constant"] = std::make_unique<Shader>(R"(..\Shaders\default.vert)",R"(..\Shaders\constant.frag)");
-    shaderCache["shader_texture"] = std::make_unique<Shader>(R"(..\Shaders\default.vert)",R"(..\Shaders\texture.frag)");
     shaderCache["shader_phong"] = std::make_unique<Shader>(R"(..\Shaders\default.vert)",R"(..\Shaders\phong.frag)");
     shaderCache["shader_lambert"] = std::make_unique<Shader>(R"(..\Shaders\default.vert)",R"(..\Shaders\lambert.frag)");
     shaderCache["shader_blinn"] = std::make_unique<Shader>(R"(..\Shaders\default.vert)",R"(..\Shaders\blinn.frag)");
-    shaderCache["shader_light"] = std::make_unique<Shader>(R"(..\Shaders\default.vert)",R"(..\Shaders\light.frag)");
 
+    shaderCache["shader_texture"] = std::make_unique<Shader>(R"(..\Shaders\default.vert)",R"(..\Shaders\texture.frag)");
     shaderCache["shader_shadowMap"] = std::make_unique<Shader>(R"(..\Shaders\shadowMap.vert)",R"(..\Shaders\shadowMap.frag)");
 
     shaderCache["effect_empty"] = std::make_unique<Shader>(R"(..\Shaders\ImageEffects\default.vert)",R"(..\Shaders\ImageEffects\empty.frag)");
@@ -181,4 +183,6 @@ void Shader::compileShaders() {
 const Shader* Shader::getShaderProgram(const std::string& name) {
     return Shader::shaderCache[name].get();
 }
+
+
 

@@ -23,16 +23,17 @@ public:
 
     // use/activate the shader
     virtual void use() const;
+    virtual void unbind() const;
 
     // utility uniform functions
     void setBool(const std::string& name, bool value) const;
     void setInt(const std::string& name, int value) const;
     void setFloat(const std::string& name, float value) const;
-    void setVec2f(const std::string& name, glm::vec2 vec) const;
-    void setVec2i(const std::string &name, glm::vec<2, int> vec) const;
-    void setVec3f(const std::string& name, glm::vec3 vec) const;
-    void setVec4f(const std::string& name, glm::vec4 vec) const;
-    void setMat4f(const std::string& name, glm::mat4x4 mat) const;
+    void setVec2f(const std::string& name, const glm::vec2& vec) const;
+    void setVec2i(const std::string &name, const glm::vec<2, int>& vec) const;
+    void setVec3f(const std::string& name, const glm::vec3& vec) const;
+    void setVec4f(const std::string& name, const glm::vec4& vec) const;
+    void setMat4f(const std::string& name, const glm::mat4x4& mat) const;
 
     static void compileShaders();
     static const Shader* getShaderProgram(const std::string& name);

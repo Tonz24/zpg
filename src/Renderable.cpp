@@ -24,7 +24,7 @@ void Renderable::uploadModelMatrix(){
     Application::getInstance().getTransformBuffer().setData(sizeof(glm::mat4x4)*3,sizeof(glm::mat4x4),glm::value_ptr(normalMatrix));
 }
 
-Renderable::Renderable(Model *model, Material *material): model(std::shared_ptr<Model>(model)), material(std::shared_ptr<Material>(material)){
+Renderable::Renderable(Model *model, ConstantMaterial *material): model(std::shared_ptr<Model>(model)), material(std::shared_ptr<ConstantMaterial>(material)){
 
     this->translation = new Translation();
     this->rotation = new Rotation();
@@ -68,3 +68,6 @@ void Renderable::applyTransform() {
     this->transform->apply(modelMat);
 }
 
+const ConstantMaterial &Renderable::getMaterial()const {
+    return *this->material;
+}

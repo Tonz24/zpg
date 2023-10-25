@@ -98,4 +98,13 @@ void SpotLight::uploadLightSpaceMatrices() const {
     Application::getInstance().getTransformBuffer().setData(sizeof(glm::mat4x4)*2,sizeof(glm::mat4x4),&this->proj);
 }
 
+glm::mat4 SpotLight::getLightSpaceMatrix() const {
+    glm::mat4 lSpaceMat = this->proj * this->getViewMat();
+    return lSpaceMat;
+}
+
+const ConstantMaterial &SpotLight::getMaterial() const {
+    return *this->material;
+}
+
 

@@ -4,11 +4,12 @@
 
 #pragma once
 
-#include "Material.h"
+#include "ConstantMaterial.h"
 
-class LambertMaterial : public Material {
+class LambertMaterial : public ConstantMaterial {
 public:
-    explicit LambertMaterial(const glm::vec3& objectColor = {0.7,0.7,0.7},const float& diffuseFactor = 1.0f, const float& ambientFactor = 0.1f);
+    LambertMaterial(const glm::vec3 &objectColor = {1,1,0},const float& diffuseFactor = 1,const float& ambientFactor = 0.1)
+    : ConstantMaterial("shader_lambert",objectColor),ambientFactor(ambientFactor), diffuseFactor(diffuseFactor){}
 
     void uploadVariables() override;
 
@@ -17,7 +18,8 @@ public:
     void setDiffuseFactor(float diffuseFactor);
 
 protected:
-    glm::vec3 objectColor{0.7,0.7,0.7};
+    LambertMaterial(const std::string& programName, const glm::vec3 &objectColor = {1,1,0},const float& diffuseFactor = 1,const float& ambientFactor = 0.1)
+            : ConstantMaterial(programName,objectColor),ambientFactor(ambientFactor), diffuseFactor(diffuseFactor){}
 
     float ambientFactor{0.1};
     float diffuseFactor{1};

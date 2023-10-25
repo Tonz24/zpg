@@ -3,8 +3,14 @@
 //
 
 #include "ConstantMaterial.h"
+#include "../Application.h"
 
 void ConstantMaterial::uploadVariables() {
-    Material::uploadVariables();
-    shader->setVec3f("color",this->color);
+    this->shader->use();
+    this->shader->setFloat("time",Application::getInstance().getTime());
+    this->shader->setVec3f("objectColor",this->objectColor);
+}
+
+const Shader &ConstantMaterial::getShader() const {
+    return *this->shader;
 }

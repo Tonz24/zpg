@@ -76,3 +76,7 @@ glm::mat4 PointLight::getViewMat() const {
 void PointLight::uploadLightSpaceMatrices() const {
 
 }
+
+glm::mat4 PointLight::getLightSpaceMatrix() const {
+    return glm::mat4{0};
+}

@@ -83,6 +83,7 @@ void Application::run() {
             PostFX::getInstance().bindPing();
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+            glEnable(GL_DEPTH_TEST);
             scene->draw();
             glDisable(GL_DEPTH_TEST);
             PostFX::getInstance().applyEffects();

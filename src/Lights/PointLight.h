@@ -17,6 +17,10 @@ public:
 
     void uploadLightSpaceMatrices() const override;
 
+    glm::mat4 getLightSpaceMatrix() const override;
+
+
+
 private:
 
 

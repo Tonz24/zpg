@@ -8,16 +8,20 @@
 
 class PhongMaterial : public LambertMaterial {
 public:
-    explicit PhongMaterial(const glm::vec3& objectColor = {0.7,0.7,0.7}, const float& diffuseFactor = 1.0f,
-                           const float& ambientFactor = 0.1f, const float& specularity = 32.0f, const float& specularFactor = 1.0f);
+    explicit PhongMaterial(const glm::vec3& objectColor = {1,1,0}, const float& diffuseFactor = 1,const float& ambientFactor = 0.1,
+                  const float& specularity = 32, const float& specularFactor = 1) :
+            LambertMaterial("shader_phong",objectColor,diffuseFactor,ambientFactor),specularity(specularity), specularFactor(specularFactor) {}
 
-    virtual void uploadVariables() override;
-
+    void uploadVariables() override;
 
     void setSpecularity(float specularity);
     void setSpecularFactor(float specularFactor);
 
 protected:
+    explicit PhongMaterial(const std::string& programName ,const glm::vec3& objectColor = {1,1,0}, const float& diffuseFactor = 1,const float& ambientFactor = 0.1,
+                  const float& specularity = 32, const float& specularFactor = 1) :
+            LambertMaterial(programName,objectColor,diffuseFactor,ambientFactor),specularity(specularity), specularFactor(specularFactor) {}
+
     float specularity{32};
     float specularFactor{1};
 };

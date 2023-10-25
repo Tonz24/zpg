@@ -22,6 +22,10 @@ public:
 
     void uploadLightSpaceMatrices() const override;
 
+    glm::mat4 getLightSpaceMatrix() const override;
+
+    const ConstantMaterial &getMaterial() const override;
+
 
 protected:
     void reassignPositionsImpl(const int &from) override;

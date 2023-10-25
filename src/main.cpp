@@ -34,20 +34,28 @@ static void window_size_callback(GLFWwindow* window, int width, int height){
 std::unique_ptr<Scene> setupScene1(){
     auto scene = std::make_unique<Scene>();
 
-    Material* phong = new BlinnMaterial(glm::vec3{1, 1,1},1,0.1,4096,20);
+    ConstantMaterial* phong = new PhongMaterial(glm::vec3{1, 1,1},1,0.1,4096,20);
     auto* sphere = new Sphere();
+    auto* cube = new Cube();
 
-    /*SpotLight* spotLight = new SpotLight({5,5,5});
-    spotLight->setDirection({1,0,0});*/
+    SpotLight* spotLight = new SpotLight({2,2,2},sphere);
+    spotLight->setDirection({1,0,0});
 
-    PointLight* pointLight = new PointLight({5,5,5});
-
-    scene->addModel(std::shared_ptr<Light>(pointLight));
+    scene->addModel(std::shared_ptr<Light>(spotLight));
 
     Renderable* model = new Renderable(sphere,phong);
-    model->translate({5,0,0});
+    model->setTickFunction([model](){
+       model->setTranslation({5,0,sin(glfwGetTime())});
+    });
+
+    scene->addTickable(std::shared_ptr<ITickable>(model));
+
+    Renderable* cubeModel = new Renderable(cube,phong);
+    cubeModel->translate({8,0,0});
+    cubeModel->setScale({0.1,100,100});
 
     scene->addModel(std::shared_ptr<Renderable>(model));
+    scene->addModel(std::shared_ptr<Renderable>(cubeModel));
 
     return std::move(scene);
 }
@@ -56,9 +64,9 @@ std::unique_ptr<Scene> setupScene2(){
     auto scene = std::make_unique<Scene>();
 
     auto* phong = new PhongMaterial(glm::vec3{1, 0.6, 1});
-    Material* constant = new ConstantMaterial(glm::vec3{0.4,0.7,1});
-    Material* lambert = new LambertMaterial(glm::vec3{1, 1, 1},0.1);
-    Material* blinn = new BlinnMaterial(glm::vec3{0.7, 0, 0});
+    ConstantMaterial* constant = new ConstantMaterial(glm::vec3{0.4,0.7,1});
+    ConstantMaterial* lambert = new LambertMaterial(glm::vec3{1, 1, 1},0.1);
+    ConstantMaterial* blinn = new BlinnMaterial(glm::vec3{0.7, 0, 0});
     auto* sphere = new Sphere();
 
     auto light = new PointLight(glm::vec3{1.5,1.5,1.5},sphere);
@@ -88,12 +96,12 @@ std::unique_ptr<Scene> setupScene3(){
 
     auto scene = std::make_unique<Scene>();
 
-    Material* constant = new ConstantMaterial(glm::vec3{0.4,0.7,1});
-    Material* lambert = new LambertMaterial(glm::vec3{1, 1, 1},0.1);
-    Material* phong = new PhongMaterial(glm::vec3{0, 1, 1});
-    Material* blinn = new BlinnMaterial(glm::vec3{0.7, 0.2f, 1});
+    ConstantMaterial* constant = new ConstantMaterial(glm::vec3{0.4,0.7,1});
+    ConstantMaterial* lambert = new LambertMaterial(glm::vec3{1, 1, 1},0.1);
+    ConstantMaterial* phong = new PhongMaterial(glm::vec3{0, 1, 1});
+    ConstantMaterial* blinn = new BlinnMaterial(glm::vec3{0.7, 0.2f, 1});
 
-    std::vector<Material*> materials = {constant,lambert,phong,blinn};
+    std::vector<ConstantMaterial*> materials = {constant,lambert,phong,blinn};
 
     Sphere* sphere = new Sphere();
     Monkey* monkey = new Monkey();
@@ -142,7 +150,7 @@ std::unique_ptr<Scene> setupScene3(){
         }
     }
 
-    Material* phong2 = new BlinnMaterial(glm::vec3{1, 1, 1},1,0.1);
+    ConstantMaterial* phong2 = new BlinnMaterial(glm::vec3{1, 1, 1},1,0.1);
     auto model = new Renderable(cube,phong2);
     model->setTranslation({0,-5,0});
     model->setScale({100,0.05,100});
