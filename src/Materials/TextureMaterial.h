@@ -6,11 +6,9 @@
 #include "ConstantMaterial.h"
 #include "../Texture.h"
 
-class TextureMaterial : public ConstantMaterial {
+class TextureMaterial : public Material {
 public:
-    explicit TextureMaterial(Texture& texture) : texture(texture){
-        this->shader = Shader::getShaderProgram("shader_texture");
-    }
+    explicit TextureMaterial(Texture& texture) : Material("shader_texture"), texture(texture) {}
     TextureMaterial() = delete;
 
     void uploadVariables() override;

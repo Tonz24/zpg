@@ -31,11 +31,14 @@ public:
     virtual void setRotation(const float& angle,const glm::vec3& axis);
     virtual void rotate(const float& angle);
     virtual void setScale(const glm::vec3& scale);
+    virtual void setRotateAround(float angle, const glm::vec3& point, const glm::vec3& axis);
+    virtual void rotateAround(float angle);
 
 protected:
     std::shared_ptr<Model> model;
     std::shared_ptr<ConstantMaterial> material;
     std::unique_ptr<TransformationComposite> transform;
+    RotateAroundPoint* rotateAroundPoint;
     Translation* translation;
     Rotation* rotation;
     Scale* scale;

@@ -5,6 +5,6 @@
 #include "TextureMaterial.h"
 
 void TextureMaterial::uploadVariables() {
-    ConstantMaterial::uploadVariables();
+    Material::uploadVariables();
     this->texture.bind(0);
 }

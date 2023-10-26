@@ -6,12 +6,8 @@
 
 void LambertMaterial::uploadVariables() {
     ConstantMaterial::uploadVariables();
-    this->shader->setFloat("ambientFactor",this->ambientFactor);
-    this->shader->setFloat("diffuseFactor", this->diffuseFactor);
-}
-
-void LambertMaterial::setObjectColor(const glm::vec3 &objectColor) {
-    this->objectColor = objectColor;
+    this->shader.setFloat("ambientFactor",this->ambientFactor);
+    this->shader.setFloat("diffuseFactor", this->diffuseFactor);
 }
 
 void LambertMaterial::setAmbientFactor(float ambientFactor) {

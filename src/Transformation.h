@@ -26,6 +26,10 @@ public:
     void setTranslation(const glm::vec3& newTranslation);
     void translate(const glm::vec3& newTranslation);
 
+    const glm::vec3 &getTranslation() const {
+        return translation;
+    }
+
 private:
     glm::vec3 translation{0};
 };
@@ -66,4 +70,38 @@ public:
 
 private:
     std::vector<std::unique_ptr<Transformation>> transformations{};
+};
+
+class RotateAroundPoint : public Transformation{
+public:
+    explicit RotateAroundPoint(float angle = 0, const glm::vec3 &point = {0,0,0}, const glm::vec3 &axis = {0,1,0}):
+        angle(angle), point(point),axis(axis) {}
+
+    void apply(glm::mat4 &matrix) const override {
+        glm::mat4 trans = glm::translate(glm::mat4{1},-this->point);
+        glm::mat4 rot = glm::rotate(glm::mat4{1},glm::radians(this->angle),this->axis);
+        glm::mat4 back = glm::translate(glm::mat4{1},this->point);
+        matrix = back * rot * trans * matrix;
+    }
+
+    void setRotation(float angle) {
+        this->angle = angle;
+    }
+
+    void rotate(float angle) {
+        this->angle += angle;
+    }
+
+    void setPoint(const glm::vec3 &point) {
+        this->point = point;
+    }
+
+    void setAxis(const glm::vec3 &axis) {
+        this->axis = glm::normalize(axis);
+    }
+
+private:
+    float angle{10};
+    glm::vec3 point{0};
+    glm::vec3 axis{0,1,0};
 };

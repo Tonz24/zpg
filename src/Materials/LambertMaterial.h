@@ -13,7 +13,6 @@ public:
 
     void uploadVariables() override;
 
-    void setObjectColor(const glm::vec3 &objectColor);
     void setAmbientFactor(float ambientFactor);
     void setDiffuseFactor(float diffuseFactor);
 

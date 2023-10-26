@@ -29,9 +29,10 @@ Renderable::Renderable(Model *model, ConstantMaterial *material): model(std::sha
     this->translation = new Translation();
     this->rotation = new Rotation();
     this->scale = new Scale();
+    this->rotateAroundPoint = new RotateAroundPoint();
 
     this->transform = std::make_unique<TransformationComposite>();
-    this->transform->addTransformation({this->translation,this->rotation,this->scale});
+    this->transform->addTransformation({this->rotateAroundPoint,this->translation,this->rotation,this->scale});
 }
 
 void Renderable::tick() {
@@ -70,4 +71,15 @@ void Renderable::applyTransform() {
 
 const ConstantMaterial &Renderable::getMaterial()const {
     return *this->material;
+}
+void Renderable::setRotateAround(float angle, const glm::vec3& point, const glm::vec3& axis){
+    this->rotateAroundPoint->setRotation(angle);
+    this->rotateAroundPoint->setPoint(point - this->translation->getTranslation());
+    this->rotateAroundPoint->setAxis(axis);
+    this->applyTransform();
+}
+
+void Renderable::rotateAround(float angle) {
+    this->rotateAroundPoint->rotate(angle);
+    this->applyTransform();
 }

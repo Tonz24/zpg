@@ -65,24 +65,32 @@ std::unique_ptr<Scene> setupScene2(){
 
     auto* phong = new PhongMaterial(glm::vec3{1, 0.6, 1});
     ConstantMaterial* constant = new ConstantMaterial(glm::vec3{0.4,0.7,1});
-    ConstantMaterial* lambert = new LambertMaterial(glm::vec3{1, 1, 1},0.1);
-    ConstantMaterial* blinn = new BlinnMaterial(glm::vec3{0.7, 0, 0});
+    LambertMaterial* lambert = new LambertMaterial(glm::vec3{1, 1, 1},0.1);
+    BlinnMaterial* blinn = new BlinnMaterial(glm::vec3{0.7, 0, 0});
     auto* sphere = new Sphere();
+    auto* cube = new Cube();
 
     auto light = new PointLight(glm::vec3{1.5,1.5,1.5},sphere);
     light->setScale({0.25,0.25,0.25});
     scene->addModel(std::shared_ptr<Light>(light));
 
 
-    auto model = new Renderable(sphere,phong);
-    auto model2 = new Renderable(sphere,lambert);
-    auto model3 = new Renderable(sphere,blinn);
+    auto model = new Renderable(cube,constant);
+    auto model2 = new Renderable(sphere,constant);
+    auto model3 = new Renderable(sphere,constant);
     auto model4 = new Renderable(sphere,constant);
 
-    model->setTranslation({5,0,0});
+    model->setTranslation({1,0,0});
+
+    model->setTickFunction([model]() mutable{
+        model->setRotateAround(glfwGetTime()*100.0f,{0,0,0},{0,1,0});
+    });
+
+    scene->addTickable(std::shared_ptr<ITickable>(model));
+
     model2->setTranslation({-5,0,0});
     model3->setTranslation({0,5,0});
-    model4->setTranslation({0,-5,0});
+    model4->setTranslation({0,0,-5});
 
     scene->addModel(std::shared_ptr<Renderable>(model));
     scene->addModel(std::shared_ptr<Renderable>(model2));

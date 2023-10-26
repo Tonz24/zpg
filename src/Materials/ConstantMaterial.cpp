@@ -6,11 +6,11 @@
 #include "../Application.h"
 
 void ConstantMaterial::uploadVariables() {
-    this->shader->use();
-    this->shader->setFloat("time",Application::getInstance().getTime());
-    this->shader->setVec3f("objectColor",this->objectColor);
+    Material::uploadVariables();
+    this->shader.setFloat("time",Application::getInstance().getTime());
+    this->shader.setVec3f("objectColor",this->objectColor);
 }
 
 const Shader &ConstantMaterial::getShader() const {
-    return *this->shader;
+    return this->shader;
 }
