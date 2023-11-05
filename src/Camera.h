@@ -22,7 +22,7 @@ enum Camera_Movement {
 // Default camera values
 const float YAW = -90.0f;
 const float PITCH = 0.0f;
-const float SPEED = 30.0f;
+const float SPEED = 5.0f;
 const float SENSITIVITY = 0.03f;
 const float ZOOM = 50.0f;
 
@@ -50,8 +50,8 @@ public:
 
     void tick() override;
 
-    const glm::vec3 &getPos() const;
-    const glm::vec3 &getFront() const;
+    [[nodiscard]] const glm::vec3 &getPos() const;
+    [[nodiscard]] const glm::vec3 &getFront() const;
 
 private:
     glm::vec3 velocity{0,0,0};
@@ -81,8 +81,6 @@ private:
     float zoom;
 
     void updateCameraVectors();
-
-    void initalizeCallbackLambdas();
 
     glm::mat4 projectionMatrix = glm::perspective(glm::radians(fov), aspect, nearPlane, farPlane);
     glm::mat4 viewMatrix = glm::lookAt(pos,front,up);

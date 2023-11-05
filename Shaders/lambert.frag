@@ -69,5 +69,16 @@ void main() {
         vec3 thisDiffuse = lightIntensity * light.color * diffuseFactor;
         diffuse += thisDiffuse * attenuation * intensity;
     }
+    for (int i = 0; i < directionalLightCount && i < MAX_N_DIRECTIONAL_LIGHTS; i++) {
+        DirectionalLight light = directionalLights[i];
+
+        vec3 nLightDir = normalize(light.direction);
+
+        float diffuseDot = dot(nNormal,nLightDir);
+        float lightIntensity = max(diffuseDot,0.0);
+        vec3 thisDiffuse = lightIntensity * light.color * diffuseFactor;
+        diffuse += thisDiffuse;
+    }
+
     frag_color = vec4((diffuse + ambient)*objectColor,1.0);
 }

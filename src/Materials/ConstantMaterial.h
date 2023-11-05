@@ -14,9 +14,9 @@ public:
 
     virtual void uploadVariables() override;
 
-    [[nodiscard]] const Shader& getShader() const;
+    [[nodiscard]] const ShaderProgram& getShader() const;
 
-    void setObjectColor(const glm::vec3 &objectColor) {
+    void setObjectColor(const glm::vec3 &objectColor) override {
         this->objectColor = objectColor;
     }
 

@@ -10,7 +10,7 @@ void EmptyEffect::apply() {
 
         PostFX& instance = PostFX::getInstance();
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        this->shader->use();
+        this->shader->bind();
 
         glViewport(0, 0, 1920, 1080);
         instance.drawToTarget(0);

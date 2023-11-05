@@ -26,7 +26,7 @@ public:
     void setTranslation(const glm::vec3& newTranslation);
     void translate(const glm::vec3& newTranslation);
 
-    const glm::vec3 &getTranslation() const {
+    [[nodiscard]] const glm::vec3 &getTranslation() const {
         return translation;
     }
 

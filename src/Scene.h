@@ -7,7 +7,7 @@
 #include<vector>
 #include <memory>
 
-#include "Renderable.h"
+#include "SceneObject.h"
 #include "Camera.h"
 #include "Lights/Light.h"
 

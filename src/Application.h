@@ -61,5 +61,5 @@ private:
     float lastTime{0};
     bool usePostFX{true};
 
-    const Shader* shadowMapShader;
+    const ShaderProgram* shadowMapShader;
 };

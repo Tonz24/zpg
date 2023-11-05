@@ -5,17 +5,22 @@
 #pragma once
 
 
-#include "../Shader.h"
+#include "../ShaderProgram.h"
 
 class Material {
 public:
     virtual void uploadVariables(){
-        this->shader.use();
+        this->shader.bind();
     }
 
+    const ShaderProgram &getShader() const {
+        return shader;
+    }
+
+    virtual void setObjectColor(const glm::vec3 &objectColor) = 0;
 protected:
-    explicit Material(const std::string &programName) : shader(*Shader::getShaderProgram(programName)){}
-    const Shader& shader;
+    explicit Material(const std::string &programName) : shader(*ShaderProgram::getShaderProgram(programName)){}
+    const ShaderProgram& shader;
 };
 
 

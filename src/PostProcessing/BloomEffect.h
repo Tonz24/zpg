@@ -23,7 +23,7 @@ private:
 
         void apply() override;
         explicit DownSample(int sampleFrom, int sampleTo);
-        const Shader& getShader() const {
+        const ShaderProgram& getShader() const {
             return *this->shader;
         }
 
@@ -38,7 +38,7 @@ private:
     public:
         void apply() override;
         explicit UpSample(int sampleFrom, int sampleTo) : ImageEffect("effect_upsample"), sampleFrom(sampleFrom), sampleTo(sampleTo) {}
-        const Shader& getShader() const {
+        const ShaderProgram& getShader() const {
             return *this->shader;
         }
 

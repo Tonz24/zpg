@@ -6,7 +6,7 @@
 #include "../Application.h"
 
 Light::Light(const glm::vec3& color, Model *model)
-    : Renderable(model,new ConstantMaterial(color)), color(color) {
+    : SceneObject(model, new ConstantMaterial(color)), color(color) {
     this->shadowFBO = std::make_unique<Framebuffer>(5.0f);
 }
 void Light::setColor(const glm::vec3 &color) {
@@ -21,35 +21,35 @@ void Light::setAttenuation(const glm::vec3 &attenuation) {
 }
 
 void Light::draw() {
-    Renderable::draw();
+    SceneObject::draw();
 }
 
 void Light::tick() {
-    Renderable::tick();
+    SceneObject::tick();
 }
 
 void Light::setTranslation(const glm::vec3 &translation) {
-    Renderable::setTranslation(translation);
+    SceneObject::setTranslation(translation);
     this->uploadToGpu();
 }
 
 void Light::translate(const glm::vec3 &translation) {
-    Renderable::translate(translation);
+    SceneObject::translate(translation);
     this->uploadToGpu();
 }
 
 void Light::setRotation(const float &angle, const glm::vec3 &axis) {
-    Renderable::setRotation(angle, axis);
+    SceneObject::setRotation(angle, axis);
     this->uploadToGpu();
 }
 
 void Light::rotate(const float &angle) {
-    Renderable::rotate(angle);
+    SceneObject::rotate(angle);
     this->uploadToGpu();
 }
 
 void Light::setScale(const glm::vec3 &scale) {
-    Renderable::setScale(scale);
+    SceneObject::setScale(scale);
     this->uploadToGpu();
 }
 

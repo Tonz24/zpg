@@ -7,10 +7,10 @@
 
 void ConstantMaterial::uploadVariables() {
     Material::uploadVariables();
-    this->shader.setFloat("time",Application::getInstance().getTime());
-    this->shader.setVec3f("objectColor",this->objectColor);
+    this->shader.setVar("time", Application::getInstance().getTime());
+    this->shader.setVar("objectColor", this->objectColor);
 }
 
-const Shader &ConstantMaterial::getShader() const {
+const ShaderProgram &ConstantMaterial::getShader() const {
     return this->shader;
 }

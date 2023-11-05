@@ -42,8 +42,8 @@ Framebuffer::~Framebuffer() {
 
 void Framebuffer::bind(int mipLevel) const {
     glBindFramebuffer(GL_FRAMEBUFFER, this->id);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-                           GL_TEXTURE_2D, this->target[mipLevel]->getId(), 0);
+    if (mipLevel < this->target.size())
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this->target[mipLevel]->getId(), 0);
 }
 
 void Framebuffer::bindDepth(int mipLevel) const {
@@ -61,7 +61,7 @@ const uint32_t &Framebuffer::getTargetId(int mipLevel) const {
 }
 
 void Framebuffer::update(int width, int height) {
-    glm::vec<2,int> screenDimensions = Application::getInstance().getWindow().getDimensions();
+    glm::vec<2,int> screenDimensions{width,height};
 
     //clear textures and renderbuffer
     this->target.clear();

@@ -6,8 +6,8 @@
 
 void PhongMaterial::uploadVariables() {
     LambertMaterial::uploadVariables();
-    this->shader.setFloat("specularity",this->specularity);
-    this->shader.setFloat("specularFactor", this->specularFactor);
+    this->shader.setVar("specularity", this->specularity);
+    this->shader.setVar("specularFactor", this->specularFactor);
 }
 
 void PhongMaterial::setSpecularity(float specularity) {

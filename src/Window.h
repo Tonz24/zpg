@@ -11,14 +11,15 @@
 #include "Observer.h"
 #include "glm.hpp"
 
-class Window : public Subject<int,int>, public Observer<int,int> {
+class Window : public Subject<int,int>, public Observer<uint32_t ,uint32_t> {
 public:
     explicit Window(const uint32_t& width = 1920, const uint32_t& height = 1080, const std::string& name = "ZPG Melčák");
     [[nodiscard]] float getAspectRatio() const;
 
     void toggleFullscreen();
+    void toggleCursorLock();
 
-    void update(int keyCode, int action) override;
+    void update(uint32_t keyCode, uint32_t action) override;
 
     void toggleVsync();
     void use();
@@ -39,6 +40,7 @@ private:
 
     bool vsync{true};
     bool fullscreen{false};
+    bool cursorLock{true};
 
     inline static std::map<GLFWwindow*,Window*> windowMap{};
 

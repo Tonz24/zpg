@@ -1,10 +1,10 @@
 //https://learnopengl.com/Guest-Articles/2022/Phys.-Based-Bloom
+//https://www.iryoku.com/next-generation-post-processing-in-call-of-duty-advanced-warfare
 
 #version 420
 in vec2 uv;
 
 uniform sampler2D srcTexture;
-uniform vec2 srcResolution;
 uniform float bloomTreshold;
 uniform int doPrefilter;
 
@@ -21,8 +21,7 @@ vec3 prefilter(vec3 color){
 void main() {
     vec2 texCoords = uv;
 
-
-    vec2 srcTexelSize = 1.0 / srcResolution;
+    vec2 srcTexelSize = 1.0 / textureSize(srcTexture,0)*2.0;
     float x = srcTexelSize.x;
     float y = srcTexelSize.y;
 

@@ -24,7 +24,7 @@ public:
 
     glm::mat4 getLightSpaceMatrix() const override;
 
-    const ConstantMaterial &getMaterial() const override;
+    const Material &getMaterial() const override;
 
 
 protected:
@@ -62,7 +62,7 @@ private:
 
     inline static std::vector<SpotLight*> lights{};
 
-    static inline constexpr size_t spotLightOffset = sizeof(glm::vec4)*3*MAX_N_POINT_LIGHTS + sizeof(glm::vec4)*4*MAX_N_SPOT_LIGHTS + sizeof(int);
+    static inline constexpr size_t spotLightOffset = sizeof(glm::vec4)*3*MAX_N_POINT_LIGHTS + sizeof(glm::vec4)*4*MAX_N_SPOT_LIGHTS + sizeof(glm::vec4)*3*MAX_N_DIRECTIONAL_LIGHTS + sizeof(int);
 };
 
 

@@ -5,7 +5,7 @@
 #include <functional>
 
 #include "Application.h"
-#include "Shader.h"
+#include "ShaderProgram.h"
 #include "PostProcessing/Tonemap.h"
 #include "PostProcessing/PostFX.h"
 #include "PostProcessing/BloomEffect.h"
@@ -49,17 +49,17 @@ void Application::initialize() {
     glfwGetVersion(&major, &minor, &revision);
     printf("Using GLFW %i.%i.%i\n", major, minor, revision);
 
-    Shader::compileShaders();
+    ShaderProgram::compileShaders();
 
     this->transformBuffer = std::make_unique<UBO>(sizeof(glm::mat4x4)*4 + sizeof(glm::vec4),5,nullptr);
-    this->lightBuffer = std::make_unique<UBO>(sizeof(glm::vec4)*3*30 + sizeof(glm::vec4)*4*30 +  sizeof(glm::vec4),6,nullptr);
+    this->lightBuffer = std::make_unique<UBO>(sizeof(glm::vec4)*3*30*2 + sizeof(glm::vec4)*4*30 +sizeof(glm::vec4),6,nullptr);
 
 
     PostFX::getInstance().addEffect(new BloomEffect(5));
     PostFX::getInstance().addEffect(new TonemapACES());
 
 
-    this->shadowMapShader = Shader::getShaderProgram("shader_shadowMap");
+    this->shadowMapShader = ShaderProgram::getShaderProgram("shader_shadowMap");
 
     this->initialized = true;
 }
@@ -71,24 +71,25 @@ Application::Application() {
 void Application::run() {
     if(!this->initialized) this->initialize();
 
-    glEnable(GL_CULL_FACE);
+    //glEnable(GL_CULL_FACE);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-
     while (!this->window->shouldClose()){
         currentTime = getTime();
         deltaTime = currentTime - lastTime;
         lastTime = currentTime;
 
+
         if(this->usePostFX) {
             PostFX::getInstance().bindPing();
+            glEnable(GL_DEPTH_TEST);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-            glEnable(GL_DEPTH_TEST);
             scene->draw();
             glDisable(GL_DEPTH_TEST);
             PostFX::getInstance().applyEffects();
         }
         else{
+            glEnable(GL_DEPTH_TEST);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             scene->draw();
         }
@@ -139,5 +140,5 @@ void Application::setScene(std::unique_ptr<Scene> &scene) {
 }
 
 const void Application::bindShadowMapShader() {
-    this->shadowMapShader->use();
+    this->shadowMapShader->bind();
 }

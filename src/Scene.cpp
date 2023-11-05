@@ -32,7 +32,7 @@ void Scene::draw() {
         glm::mat4 lightSpaceMat = lights[0]->getLightSpaceMatrix();
         uint32_t texId = lights[0]->getShadowFbo().getTargetId(0);
         glBindTexture(GL_TEXTURE_2D,texId);
-        model->getMaterial().getShader().setMat4f("lightspaceMat",lightSpaceMat);*/
+        model->getMaterial().getShader().setVar("lightspaceMat",lightSpaceMat);*/
         model->draw();
     }
 }

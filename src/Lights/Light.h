@@ -2,11 +2,11 @@
 // Created by Tonz on 10.10.2023.
 //
 #pragma once
-#include "../Renderable.h"
+#include "../SceneObject.h"
 #include "../Materials/ConstantMaterial.h"
 #include "../Framebuffer.h"
 
-class Light : public Renderable {
+class Light : public SceneObject {
 public:
     explicit Light(const glm::vec3& color = {0,1,0}, Model* model = nullptr);
 
@@ -47,6 +47,7 @@ protected:
 
     static inline constexpr int MAX_N_POINT_LIGHTS = 30;
     static inline constexpr int MAX_N_SPOT_LIGHTS = 30;
+    static inline constexpr int MAX_N_DIRECTIONAL_LIGHTS = 30;
 
     bool active{false};
 

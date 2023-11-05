@@ -23,7 +23,6 @@ public:
 
 private:
 
-
     inline static int lightCount{0};
     inline static int assignPosition(){
         return lightCount++;
@@ -49,9 +48,7 @@ private:
     static void reassignPositions(const int& from);
     static void uploadLightCount();
 
-
-
     inline static std::vector<PointLight*> lights{};
 
-    static inline constexpr size_t pointLightOffset = sizeof(glm::vec4)*3*MAX_N_POINT_LIGHTS + sizeof(glm::vec4)*4*MAX_N_SPOT_LIGHTS;
+    static inline constexpr size_t pointLightOffset = sizeof(glm::vec4)*3*MAX_N_POINT_LIGHTS + sizeof(glm::vec4)*4*MAX_N_SPOT_LIGHTS + sizeof(glm::vec4)*3*MAX_N_DIRECTIONAL_LIGHTS;
 };

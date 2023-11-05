@@ -94,6 +94,24 @@ void main() {
             specular += thisSpecular * attenuation;
         }
     }
+    for (int i = 0; i < directionalLightCount && i < MAX_N_DIRECTIONAL_LIGHTS; i++) {
+        DirectionalLight light = directionalLights[i];
+
+        vec3 nLightDir = normalize(light.direction);
+
+        float diffuseDot = dot(nNormal,nLightDir);
+        float lightIntensity = max(diffuseDot,0.0);
+        vec3 thisDiffuse = lightIntensity * light.color * diffuseFactor;
+        diffuse += thisDiffuse;
+
+        if (diffuseDot >= 0.0) {
+            vec3 reflectDir = reflect(-nLightDir, nNormal);
+            float specularIntensity = pow(max(dot(reflectDir, nDirToCamera), 0.0), specularity);
+            vec3 thisSpecular = light.color * specularIntensity * specularFactor;
+            specular += thisSpecular;
+        }
+    }
+
     //frag_color = vec4((ambient +  (1 - calculateShadow())* (diffuse + specular))*objectColor,1.0);
     frag_color = vec4((ambient +  diffuse + specular)*objectColor,1.0);
 }

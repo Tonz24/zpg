@@ -58,7 +58,7 @@ Window::Window(const uint32_t &width, const uint32_t &height, const std::string&
 
     windowMap[this->glfwWindow] = this;
 
-    //InputManager::getInstance().attach(this);
+    dynamic_cast<Subject<uint32_t ,uint32_t>*>(&InputManager::getInstance())->attach(this);
 }
 
 void Window::toggleVsync() {
@@ -99,9 +99,21 @@ void Window::swapBuffers() const {
     glfwSwapBuffers(this->glfwWindow);
 }
 
-void Window::update(int keyCode, int action) {
+void Window::update(uint32_t keyCode, uint32_t action) {
+    if (keyCode == GLFW_KEY_C && action == GLFW_PRESS){
+        this->toggleCursorLock();
+    }
 }
 
 glm::vec<2, int> Window::getDimensions() const {
     return glm::vec<2, int>{this->width,this->height};
+}
+
+void Window::toggleCursorLock() {
+    this->cursorLock = !this->cursorLock;
+
+    if (this->cursorLock)
+        glfwSetInputMode(this->glfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    else
+        glfwSetInputMode(this->glfwWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 }

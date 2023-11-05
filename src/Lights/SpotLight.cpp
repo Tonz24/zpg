@@ -103,7 +103,7 @@ glm::mat4 SpotLight::getLightSpaceMatrix() const {
     return lSpaceMat;
 }
 
-const ConstantMaterial &SpotLight::getMaterial() const {
+const Material &SpotLight::getMaterial() const {
     return *this->material;
 }
 

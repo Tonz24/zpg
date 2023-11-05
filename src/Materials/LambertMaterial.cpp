@@ -6,8 +6,8 @@
 
 void LambertMaterial::uploadVariables() {
     ConstantMaterial::uploadVariables();
-    this->shader.setFloat("ambientFactor",this->ambientFactor);
-    this->shader.setFloat("diffuseFactor", this->diffuseFactor);
+    this->shader.setVar("ambientFactor", this->ambientFactor);
+    this->shader.setVar("diffuseFactor", this->diffuseFactor);
 }
 
 void LambertMaterial::setAmbientFactor(float ambientFactor) {

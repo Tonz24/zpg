@@ -20,7 +20,7 @@ public:
 protected:
     void uploadValues() override {
         ImageEffect::uploadValues();
-        this->shader->setInt("tonemapType",0);
+        this->shader->setVar("tonemapType", 0);
     }
 };
 
@@ -32,7 +32,7 @@ public:
 protected:
     void uploadValues() override {
         ImageEffect::uploadValues();
-        this->shader->setInt("tonemapType",1);
+        this->shader->setVar("tonemapType", 1);
     }
 };
 
@@ -43,7 +43,7 @@ public:
 protected:
     void uploadValues() override {
         ImageEffect::uploadValues();
-        this->shader->setInt("tonemapType",2);
+        this->shader->setVar("tonemapType", 2);
     }
 };
 

@@ -11,9 +11,8 @@ Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch): pos(po
     Application::getInstance().getWindow().attach(this);
     dynamic_cast<Subject<double,double,double,double>*>(&InputManager::getInstance())->attach(this);
     dynamic_cast<Subject<uint32_t,uint32_t>*>(&InputManager::getInstance())->attach(this);
-    this->initalizeCallbackLambdas();
-    this->updateCameraVectors();
 
+    this->updateCameraVectors();
     this->uploadMatrices();
 }
 
@@ -26,14 +25,12 @@ void Camera::processMouseMovement(float xoffset, float yoffset){
     yaw += xoffset * mouseSensitivity;
     pitch -= yoffset * mouseSensitivity;
 
-    // make sure that when pitch is out of bounds, screen doesn't get flipped
     if (pitch > 89.0f)
         pitch = 89.0f;
 
     if (pitch < -89.0f)
         pitch = -89.0f;
 
-    // update front, right and up Vectors using the updated Euler angles
     updateCameraVectors();
 }
 
@@ -89,27 +86,6 @@ void Camera::setNearPlane(const float& nearPlane) {
 void Camera::setFarPlane(const float& farPlane) {
     this->farPlane = farPlane;
     this->updateProjectionMatrix();
-}
-
-void Camera::initalizeCallbackLambdas() {
-    std::function<void(double,double,double,double)> mouseMovement = [this](double x, double y, double dx, double dy){
-        dx *= mouseSensitivity;
-        dy *= mouseSensitivity;
-
-        this->yaw += dx;
-        this->pitch -= dy;
-
-        // make sure that when pitch is out of bounds, screen doesn't get flipped
-        if (this->pitch > 89.0f)
-            this->pitch = 89.0f;
-
-        if (this->pitch < -89.0f)
-            this->pitch = -89.0f;
-
-        // update front, right and up Vectors using the updated Euler angles
-        this->updateCameraVectors();
-    };
-    //InputManager::getInstance().registerMouseCallback(mouseMovement);
 }
 
 void Camera::update(int width, int height) {

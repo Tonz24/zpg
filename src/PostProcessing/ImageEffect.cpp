@@ -7,7 +7,7 @@
 #include "PostFX.h"
 
 
-ImageEffect::ImageEffect(const std::string& shader) : shader(Shader::getShaderProgram(shader)) {
+ImageEffect::ImageEffect(const std::string& shader) : shader(ShaderProgram::getShaderProgram(shader)) {
 }
 
 void ImageEffect::apply() {
@@ -16,7 +16,7 @@ void ImageEffect::apply() {
         PostFX& instance = PostFX::getInstance();
         instance.bindPong();
 
-        this->shader->use();
+        this->shader->bind();
         this->uploadValues();
 
         instance.drawToTarget();
@@ -25,5 +25,4 @@ void ImageEffect::apply() {
 }
 
 void ImageEffect::uploadValues() {
-    this->shader->setFloat("time", Application::getInstance().getTime());
 }

@@ -24,9 +24,8 @@ BloomEffect::DownSample::DownSample(int sampleFrom, int sampleTo) : ImageEffect(
 
 void BloomEffect::DownSample::uploadValues() {
     ImageEffect::uploadValues();
-    this->shader->setVec2f("srcResolution",PostFX::getInstance().getPing().getTargetDimensions(this->sampleFrom));
-    this->shader->setInt("doPrefilter",this->sampleFrom == 0);
-    this->shader->setFloat("bloomTreshold",1.0f);
+    this->shader->setVar("doPrefilter", this->sampleFrom == 0);
+    this->shader->setVar("bloomTreshold", 1.0f);
 }
 
 void BloomEffect::UpSample::apply() {
@@ -45,11 +44,11 @@ void BloomEffect::UpSample::apply() {
 
 void BloomEffect::UpSample::uploadValues() {
     ImageEffect::uploadValues();
-    this->shader->setFloat("filterRadius",0.000001f);
+    this->shader->setVar("filterRadius",  0.001f);
 }
 
 void BloomEffect::apply() {
-    this->downSamples[0].getShader().use(); // no need to use shaders multiple times
+    this->downSamples[0].getShader().bind(); // no need to use the shader multiple times
     for (auto &item : this->downSamples){
         item.apply();
     }
@@ -57,7 +56,7 @@ void BloomEffect::apply() {
     glEnable(GL_BLEND);
     glBlendFunc(GL_ONE, GL_ONE);
     glBlendEquation(GL_FUNC_ADD);
-    this->upSamples[0].getShader().use(); // no need to use shaders multiple times
+    this->upSamples[0].getShader().bind(); // no need to use the shader multiple times
     for (auto &item : this->upSamples){
         item.apply();
     }
@@ -70,7 +69,7 @@ void BloomEffect::uploadValues() {
 
 BloomEffect::BloomEffect(int sampleCount) : ImageEffect(), sampleCount(sampleCount) {
     for (int i = 0; i < this->sampleCount; ++i) {
-        downSamples.push_back(DownSample(i,i+1));
-        upSamples.push_back(UpSample( sampleCount - i,sampleCount - i - 1));
+        downSamples.emplace_back(DownSample(i,i+1));
+        upSamples.emplace_back(UpSample( sampleCount - i,sampleCount - i - 1));
     }
 }

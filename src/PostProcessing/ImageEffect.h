@@ -5,7 +5,7 @@
 #pragma once
 
 
-#include "../Shader.h"
+#include "../ShaderProgram.h"
 
 class ImageEffect {
 public:
@@ -16,7 +16,7 @@ protected:
 
     explicit ImageEffect(const std::string& shader);
     explicit ImageEffect() = default;
-    const Shader* shader;
+    const ShaderProgram* shader;
 };
 
 
