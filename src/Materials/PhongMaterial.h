@@ -17,6 +17,8 @@ public:
     void setSpecularity(float specularity);
     void setSpecularFactor(float specularFactor);
 
+    void setSpecularMap(std::shared_ptr<Texture> specularMap);
+
 protected:
     explicit PhongMaterial(const std::string& programName ,const glm::vec3& objectColor = {1,1,0}, const float& diffuseFactor = 1,const float& ambientFactor = 0.1,
                   const float& specularity = 32, const float& specularFactor = 1) :
@@ -24,4 +26,7 @@ protected:
 
     float specularity{32};
     float specularFactor{1};
+
+
+    std::shared_ptr<Texture> specularMap;
 };

@@ -14,8 +14,13 @@ uniform float ambientFactor;
 uniform float diffuseFactor;
 uniform float specularFactor;
 uniform float time;
+uniform int hasDiffuse;
+uniform int hasSpecular;
 
 uniform sampler2D shadowMap;
+
+layout (binding = 0) uniform sampler2D diffuseMap;
+layout (binding = 1) uniform sampler2D specularMap;
 
 out vec4 frag_color;
 
@@ -43,6 +48,9 @@ void main() {
     vec3 nDirToCamera = normalize(dirToCamera);
     vec3 nNormal = normalize(worldSpaceNormal);
 
+    vec3 diffuseColor = mix(objectColor,texture(diffuseMap,uv).xyz,float(hasDiffuse));
+    vec3 specularComponent = mix(vec3(1.0),texture(specularMap,uv).xyz,float(hasSpecular));
+
     //point lights
     for (int i = 0; i < pointLightCount && i < MAX_N_POINT_LIGHTS; i++) {
         PointLight light = pointLights[i];
@@ -64,7 +72,7 @@ void main() {
 
         if (diffuseDot >= 0.0) {
             float specularIntensity = pow(max(dot(reflect(-nDirToLight, nNormal), nDirToCamera), 0.0), specularity);
-            vec3 thisSpecular = light.color * specularIntensity * specularFactor;
+            vec3 thisSpecular = light.color * specularIntensity * specularFactor * specularComponent;
             specular += thisSpecular * attenuation;
         }
     }
@@ -90,7 +98,7 @@ void main() {
         if (diffuseDot >= 0.0) {
             vec3 reflectDir = reflect(-nDirToLight, nNormal);
             float specularIntensity = pow(max(dot(reflectDir, nDirToCamera), 0.0), specularity);
-            vec3 thisSpecular = light.color * specularIntensity * specularFactor * intensity;
+            vec3 thisSpecular = light.color * specularIntensity * specularFactor * intensity * specularComponent;
             specular += thisSpecular * attenuation;
         }
     }
@@ -107,11 +115,11 @@ void main() {
         if (diffuseDot >= 0.0) {
             vec3 reflectDir = reflect(-nLightDir, nNormal);
             float specularIntensity = pow(max(dot(reflectDir, nDirToCamera), 0.0), specularity);
-            vec3 thisSpecular = light.color * specularIntensity * specularFactor;
+            vec3 thisSpecular = light.color * specularIntensity * specularFactor * specularComponent;
             specular += thisSpecular;
         }
     }
 
     //frag_color = vec4((ambient +  (1 - calculateShadow())* (diffuse + specular))*objectColor,1.0);
-    frag_color = vec4((ambient +  diffuse + specular)*objectColor,1.0);
+    frag_color = vec4((ambient +  diffuse + specular)*diffuseColor,1.0);
 }

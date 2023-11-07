@@ -42,19 +42,22 @@ std::unique_ptr<Scene> setupScene1(){
     auto* phong = new PhongMaterial(glm::vec3{1, 0.6, 1});
     auto* blinn = new BlinnMaterial(glm::vec3{1, 1, 0.6});
 
-    auto* sphere = new Cube();
+    auto tex = std::make_shared<Texture>("container.png");
+    auto spec = std::make_shared<Texture>("container_specular.png");
 
+    phong->setDiffuseMap(tex);
+    phong->setSpecularMap(spec);
+
+    auto* sphere = new Cube();
 
     auto light = new PointLight(glm::vec3{1.2,1.2,1.2},sphere);
     light->setScale({0.25,0.25,0.25});
     scene->addModel(std::shared_ptr<Light>(light));
 
-
     auto model = new SceneObject(sphere, phong);
     auto model2 = new SceneObject(sphere, phong);
     auto model3 = new SceneObject(sphere, phong);
     auto model4 = new SceneObject(sphere, phong);
-
 
     model->setTranslation({3,0,0});
     model2->setTranslation({-3,0,0});
@@ -84,7 +87,6 @@ std::unique_ptr<Scene> setupScene2(){
     auto* ma = new PhongMaterial(glm::vec3{0.75686,  0.26667,  0.05490});
 
     auto* sphere = new Sphere();
-
 
     auto light = new PointLight(glm::vec3{2,2,2},sphere);
     light->setScale({2,2,2});
@@ -250,24 +252,34 @@ std::unique_ptr<Scene> setupScene5(){
     auto scene = std::make_unique<Scene>();
 
     ConstantMaterial* constant = new ConstantMaterial(glm::vec3{0.4,0.7,1});
-    ConstantMaterial* lambert = new LambertMaterial(glm::vec3{1, 1, 0.3});
-    ConstantMaterial* phong = new PhongMaterial(glm::vec3{0.659, 0.553, 0.255});
-    ConstantMaterial* blinn = new BlinnMaterial(glm::vec3{0.7, 0.2f, 1});
+    LambertMaterial* lambert = new LambertMaterial(glm::vec3{1, 1, 0.3});
+    PhongMaterial* phong = new PhongMaterial(glm::vec3{0.159, 0.553, 1.0});
+    BlinnMaterial* blinn = new BlinnMaterial(glm::vec3{0.7, 0.2f, 1});
 
-    std::vector<ConstantMaterial*> materials = {constant,lambert,phong,blinn};
+    std::vector<ConstantMaterial*> materials = {lambert,phong};
+
+    auto tex = std::make_shared<Texture>("container.png");
+    auto spec = std::make_shared<Texture>("container_specular.png");
+
+    lambert->setDiffuseMap(tex);
+    phong->setDiffuseMap(tex);
+    phong->setSpecularMap(spec);
+
 
     Sphere* sphere = new Sphere();
     Monkey* monkey = new Monkey();
     Cube* cube = new Cube();
     Tree* tree = new Tree();
     Bush* bush = new Bush();
+    Quad* quad = new Quad();
 
     std::vector<Model*> models = {tree,sphere,monkey,cube,bush};
 
     for (int i = 0; i < 10; ++i) {
         for (int j = 0; j < 10; ++j) {
             int m =  rand() % models.size();
-            auto model = new SceneObject(models[m],phong);
+            auto model = new SceneObject(models[rand() % models.size()],materials[ rand() % materials.size()]);
+            //auto model = new SceneObject(quad,lambert);
 
             if (m == 0)
                 model->setTranslation({i*10,0,j*10});
@@ -279,15 +291,16 @@ std::unique_ptr<Scene> setupScene5(){
             scene->addModel(std::shared_ptr<SceneObject>(model));
         }
     }
+    LambertMaterial* lambertGround = new LambertMaterial(glm::vec3{1, 1, 0.3});
+    auto texGr = std::make_shared<Texture>("grass.png");
+    lambertGround->setDiffuseMap(texGr);
 
-    ConstantMaterial* phong2 = new PhongMaterial(glm::vec3{0.459, 0.612, 0.447},1,0.1,256,0.5);
-    auto ground = new SceneObject(cube, phong2);
+    auto ground = new SceneObject(quad, lambertGround);
 
-    ground->setScale({500,0.05,500});
+    ground->setScale({50,1,50});
     ground->setTranslation({50,0,50});
     ground->applyTransform();
     scene->addModel(std::shared_ptr<SceneObject>(ground));
-
 
     auto light = new PointLight(glm::vec3{2,2,2},sphere);
 
@@ -297,7 +310,6 @@ std::unique_ptr<Scene> setupScene5(){
     });
 
     std::shared_ptr<Light> dirLight = std::make_shared<DirectionalLight>(glm::vec3{0.3,0.1,0.3});
-
 
     scene->addModel(dirLight);
 
@@ -349,7 +361,7 @@ int main(){
     auto scene6 = setupScene6();
 
     auto flashLight = new SpotLight(glm::vec3{2,2,2});
-    flashLight->setOuterCutoffAngle(30);
+    flashLight->setOuterCutoffAngle(25);
     flashLight->setInnerCutoffAngle(0);
     //flashLight->setAttenuation({1,0.001f,0.0003f});
     scene5->addModel(std::shared_ptr<Light>(flashLight));
@@ -373,7 +385,7 @@ int main(){
     scene4->setActiveCamera(cam);
     scene5->setActiveCamera(cam);
     scene6->setActiveCamera(cam);
-    Application::getInstance().setScene(scene5); //2 //5
+    Application::getInstance().setScene(scene); //2 //5
 
     Application::getInstance().setUsePostFX(true);
     Application::getInstance().run();

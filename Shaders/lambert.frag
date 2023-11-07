@@ -12,6 +12,9 @@ uniform vec3 objectColor;
 uniform float ambientFactor;
 uniform float diffuseFactor;
 uniform float time;
+uniform int hasDiffuse;
+
+layout (binding = 0) uniform sampler2D diffuseMap;
 
 out vec4 frag_color;
 
@@ -22,7 +25,6 @@ float getAttenuationSpotLight(SpotLight light, float dist){
     return 1.0 / (light.kConstant + light.kLinear * dist + light.kQuadratic * pow(dist,2.0));
 }
 
-
 void main() {
     vec3 diffuse = vec3(0);
     vec3 ambient = vec3(0);
@@ -30,6 +32,8 @@ void main() {
     vec3 dirToCamera = worldSpaceCameraPos - worldSpacePos;
     vec3 nDirToCamera = normalize(dirToCamera);
     vec3 nNormal = normalize(worldSpaceNormal);
+
+    vec3 diffuseColor = mix(objectColor,texture(diffuseMap,uv).xyz,float(hasDiffuse));
 
     //point lights
     for (int i = 0; i < pointLightCount && i < MAX_N_POINT_LIGHTS; i++) {
@@ -43,7 +47,6 @@ void main() {
 
         vec3 thisAmbient = light.color * ambientFactor;
         ambient += thisAmbient * attenuation;
-
 
         float diffuseDot = dot(nNormal,nDirToLight);
         float lightIntensity = max(diffuseDot,0.0);
@@ -80,5 +83,5 @@ void main() {
         diffuse += thisDiffuse;
     }
 
-    frag_color = vec4((diffuse + ambient)*objectColor,1.0);
+    frag_color = vec4((diffuse + ambient)*diffuseColor,1.0);
 }

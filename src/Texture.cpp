@@ -34,7 +34,6 @@ Texture::Texture(const std::string& name) : id(0) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, this->dimensions.x, this->dimensions.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, &this->data.data()->get());
     glGenerateMipmap(GL_TEXTURE_2D);
 
