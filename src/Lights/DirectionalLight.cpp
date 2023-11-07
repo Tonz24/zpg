@@ -7,7 +7,7 @@
 
 
 DirectionalLight::DirectionalLight(const glm::vec3 &color,const glm::vec3& direction, Model *model): Light(color, model), direction(direction) {
-
+    this->projMat = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f,0.01f,10.0f);
 }
 
 void DirectionalLight::uploadToGpu() {

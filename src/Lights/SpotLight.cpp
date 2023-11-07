@@ -7,7 +7,7 @@
 
 
 SpotLight::SpotLight(const glm::vec3 &color, Model *model): Light(color, model) {
-
+    projMat = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f,0.01f,10.0f);
 }
 
 void SpotLight::uploadToGpu() {
@@ -95,11 +95,11 @@ void SpotLight::releasePositionImpl() {
 void SpotLight::uploadLightSpaceMatrices() const {
     glm::mat4 viewMat = this->getViewMat();
     Application::getInstance().getTransformBuffer().setData(sizeof(glm::mat4x4),sizeof(glm::mat4x4),&viewMat);
-    Application::getInstance().getTransformBuffer().setData(sizeof(glm::mat4x4)*2,sizeof(glm::mat4x4),&this->proj);
+    Application::getInstance().getTransformBuffer().setData(sizeof(glm::mat4x4)*2,sizeof(glm::mat4x4),&this->projMat);
 }
 
 glm::mat4 SpotLight::getLightSpaceMatrix() const {
-    glm::mat4 lSpaceMat = this->proj * this->getViewMat();
+    glm::mat4 lSpaceMat = this->projMat * this->getViewMat();
     return lSpaceMat;
 }
 

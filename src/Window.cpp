@@ -11,7 +11,7 @@ float Window::getAspectRatio() const {
 }
 
 Window::Window(const uint32_t &width, const uint32_t &height, const std::string& name) : width(width), height(height), name(name) {
-    this->glfwWindow = glfwCreateWindow(1920, 1080, this->name.c_str(), NULL, NULL);
+    this->glfwWindow = glfwCreateWindow(1920, 1080, this->name.c_str(), glfwGetPrimaryMonitor(), NULL);
     if (!this->glfwWindow){
         glfwTerminate();
         exit(EXIT_FAILURE);
@@ -24,7 +24,6 @@ Window::Window(const uint32_t &width, const uint32_t &height, const std::string&
     int fbWidth{0},fbHeight{0};
     glfwGetFramebufferSize(this->glfwWindow,&fbWidth,&fbHeight);
     glViewport(0, 0, fbWidth, fbHeight);
-
 
     glfwSetKeyCallback(this->glfwWindow,&InputManager::keyCallback);
     glfwSetCursorPosCallback(this->glfwWindow, &InputManager::cursorCallback);

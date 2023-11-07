@@ -53,7 +53,6 @@ protected:
 
     glm::mat4 modelMat{1};
 
-
     void applyTransform(const glm::mat4& modelMat);
     std::vector<std::unique_ptr<SceneObject>> children{};
     void uploadModelMatrix();

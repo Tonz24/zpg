@@ -10,17 +10,28 @@
 
 class Texture {
 public:
+
+    //Load from path
     explicit Texture(const std::string& name);
+
+    //cubemap constructor
+    explicit Texture(const std::string& name,const std::vector<std::string>& names);
+
+    //constructor for texture with specified dimensions with no data
     explicit Texture(const glm::vec<2,int>& dimensions);
-    explicit Texture(const glm::vec<2,int>& dimensions, int h);
+
+    //don't use
+    explicit Texture(const glm::vec<2,glm::i32,glm::packed_highp>& dimensions, int h);
     ~Texture();
 
     void bind(const uint32_t& textureUnit) const;
+    void bindCubemap(const uint32_t& textureUnit) const;
+
 
     [[nodiscard]] const bool& isValid() const;
     [[nodiscard]] const uint32_t& getId() const;
 
-    const glm::vec<2, int> &getDimensions() const;
+    [[nodiscard]] const glm::vec<2, int> &getDimensions() const;
 
 private:
     uint32_t id;

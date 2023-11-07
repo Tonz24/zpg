@@ -27,6 +27,7 @@ void Scene::draw() {
         tickable->tick();
     }
 
+    glDepthFunc(GL_LEQUAL);
     for (const auto &model : this->models){
         /*model->getMaterial().getShader().use();
         glm::mat4 lightSpaceMat = lights[0]->getLightSpaceMatrix();
@@ -35,6 +36,7 @@ void Scene::draw() {
         model->getMaterial().getShader().setVar("lightspaceMat",lightSpaceMat);*/
         model->draw();
     }
+    glDepthFunc(GL_LESS);
 }
 
 void Scene::addTickable(const std::shared_ptr<ITickable> &tickable) {

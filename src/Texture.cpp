@@ -40,6 +40,36 @@ Texture::Texture(const std::string& name) : id(0) {
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+Texture::Texture(const std::string &name, const std::vector<std::string>& names) :id(0) {
+    stbi_set_flip_vertically_on_load(false);
+    std::string fullName{R"(..\Assets\Textures\)" + name};
+
+    glm::vec<2,int> size{0};
+    int comp{0};
+
+    glGenTextures(1, &this->id);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, this->id);
+
+    for (unsigned int i = 0; i < names.size(); i++){
+        std::string actualName = fullName + "\\" + names[i];
+        uint8_t* texData = stbi_load(actualName.c_str(),&size.x,&size.y,&comp,0);
+
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, size.x, size.y, 0, GL_RGB, GL_UNSIGNED_BYTE, texData);
+        stbi_image_free(texData);
+    }
+    this->dimensions = size;
+    this->valid = true;
+    this->name = name;
+    this->components = comp;
+
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glBindTexture(GL_TEXTURE_2D, 0);
+}
+
 Texture::Texture(const glm::vec<2,int>& dimensions) : dimensions(dimensions), id(0), components(3) {
 
     glGenTextures(1, &this->id);
@@ -62,7 +92,7 @@ Texture::Texture(const glm::vec<2,int>& dimensions) : dimensions(dimensions), id
     this->valid = true;
 }
 
-Texture::Texture(const glm::vec<2, int> &dimensions, int h):  dimensions(dimensions), id(0), components(3) {
+Texture::Texture(const glm::vec<2,glm::i32,glm::packed_highp> &dimensions, int h):  dimensions(dimensions), id(0), components(3) {
     glGenTextures(1, &this->id);
     glBindTexture(GL_TEXTURE_2D, this->id);
 
@@ -99,4 +129,9 @@ const uint32_t &Texture::getId() const {
 
 const glm::vec<2, int> &Texture::getDimensions() const {
     return dimensions;
+}
+
+void Texture::bindCubemap(const uint32_t &textureUnit) const {
+    glActiveTexture(GL_TEXTURE0 + textureUnit);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, this->id);
 }

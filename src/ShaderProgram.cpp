@@ -168,6 +168,7 @@ void ShaderProgram::compileShaders() {
     shaderCache["shader_texture"] = std::unique_ptr<ShaderProgram>(new ShaderProgram(R"(..\Shaders\default.vert)", R"(..\Shaders\texture.frag)"));
     shaderCache["shader_fur"] = std::unique_ptr<ShaderProgram>(new ShaderProgram(R"(..\Shaders\fur.vert)",R"(..\Shaders\fur.geom)", R"(..\Shaders\fur.frag)"));
     shaderCache["shader_shadowMap"] = std::unique_ptr<ShaderProgram>(new ShaderProgram(R"(..\Shaders\shadowMap.vert)", R"(..\Shaders\shadowMap.frag)"));
+    shaderCache["shader_skybox"] = std::unique_ptr<ShaderProgram>(new ShaderProgram(R"(..\Shaders\skybox.vert)", R"(..\Shaders\skybox.frag)"));
 
     shaderCache["effect_empty"] = std::unique_ptr<ShaderProgram>(new ShaderProgram(R"(..\Shaders\ImageEffects\default.vert)", R"(..\Shaders\ImageEffects\empty.frag)"));
     shaderCache["effect_filter"] = std::unique_ptr<ShaderProgram>(new ShaderProgram(R"(..\Shaders\ImageEffects\default.vert)", R"(..\Shaders\ImageEffects\colorFilter.frag)"));

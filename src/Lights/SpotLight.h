@@ -38,8 +38,6 @@ private:
     glm::vec3 position{0,0,0};
     glm::vec3 direction{1,0,0};
 
-    glm::mat4 proj = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f,0.01f,10.0f);
-
     glm::mat4 getViewMat()const override {
         return glm::lookAt(this->position, {1,0,0},{0,1,0});
     }

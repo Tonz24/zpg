@@ -52,4 +52,7 @@ protected:
     bool active{false};
 
     std::unique_ptr<Framebuffer> shadowFBO;
+
+    glm::mat4 projMat;
+    glm::mat4 viewMat;
 };

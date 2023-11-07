@@ -22,6 +22,7 @@
 #include "Models/Quad.h"
 #include "Materials/FurMaterial.h"
 #include "Lights/DirectionalLight.h"
+#include "Materials/Skybox.h"
 
 
 static void error_callback(int error, const char* description){ fputs(description, stderr); }
@@ -385,7 +386,16 @@ int main(){
     scene4->setActiveCamera(cam);
     scene5->setActiveCamera(cam);
     scene6->setActiveCamera(cam);
-    Application::getInstance().setScene(scene); //2 //5
+
+    auto cube = new Cube();
+
+    Skybox* skybox = new Skybox("skybox_water");
+
+    auto h = std::make_shared<SceneObject>(cube,skybox);
+
+    scene5->addModel(h);
+
+    Application::getInstance().setScene(scene5); //2 //5
 
     Application::getInstance().setUsePostFX(true);
     Application::getInstance().run();
