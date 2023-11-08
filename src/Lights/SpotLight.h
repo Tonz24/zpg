@@ -26,6 +26,10 @@ public:
 
     const Material &getMaterial() const override;
 
+    inline static int getLightCount(){
+        return lightCount;
+    }
+
 
 protected:
     void reassignPositionsImpl(const int &from) override;
@@ -60,7 +64,7 @@ private:
 
     inline static std::vector<SpotLight*> lights{};
 
-    static inline constexpr size_t spotLightOffset = sizeof(glm::vec4)*3*MAX_N_POINT_LIGHTS + sizeof(glm::vec4)*4*MAX_N_SPOT_LIGHTS + sizeof(glm::vec4)*3*MAX_N_DIRECTIONAL_LIGHTS + sizeof(int);
+    static inline constexpr size_t spotLightOffset = 48*MAX_N_POINT_LIGHTS + 64*MAX_N_SPOT_LIGHTS + 112*MAX_N_DIRECTIONAL_LIGHTS + sizeof(int);
 };
 
 

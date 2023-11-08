@@ -17,6 +17,7 @@ public:
     void bindDepth(int mipLevel = 0) const;
     void unbind() const;
     [[nodiscard]] const uint32_t& getTargetId(int mipLevel = 0) const;
+    [[nodiscard]] const Texture* getTarget(int mipLevel = 0) const;
     [[nodiscard]] const glm::vec<2,int>& getTargetDimensions(int mipLevel = 0) const;
 
     void update(int width, int height) override;

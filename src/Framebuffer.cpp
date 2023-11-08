@@ -43,7 +43,7 @@ Framebuffer::~Framebuffer() {
 void Framebuffer::bind(int mipLevel) const {
     glBindFramebuffer(GL_FRAMEBUFFER, this->id);
     if (mipLevel < this->target.size())
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this->target[mipLevel]->getId(), 0);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this->target[mipLevel]->getId(), 0);
 }
 
 void Framebuffer::bindDepth(int mipLevel) const {
@@ -108,4 +108,8 @@ Framebuffer::Framebuffer(float h) : mipLevels(0) {
     this->unbind();
 
     Application::getInstance().getWindow().attach(this);
+}
+
+const Texture* Framebuffer::getTarget(int mipLevel) const {
+    return this->target[mipLevel].get();
 }

@@ -89,17 +89,20 @@ std::unique_ptr<Scene> setupScene2(){
 
     auto* sphere = new Sphere();
 
-    auto light = new PointLight(glm::vec3{2,2,2},sphere);
+    auto light = new PointLight(glm::vec3{2,2,2}*0.5f,sphere);
     light->setScale({2,2,2});
     light->setAttenuation({1,0.01,0.01});
     scene->addModel(std::shared_ptr<Light>(light));
 
     auto mercury = new SceneObject(sphere, m);
     auto venus = new SceneObject(sphere, v);
+    venus->setCanCastRays(true);
     auto earth = new SceneObject(sphere, e);
+    earth->setCanCastRays(true);
     auto moon = new SceneObject(sphere, mo);
 
     auto mars = new SceneObject(sphere, ma);
+    mars->setCanCastRays(true);
     auto phobos = new SceneObject(sphere, mo);
     auto deimos = new SceneObject(sphere, mo);
 
@@ -279,11 +282,13 @@ std::unique_ptr<Scene> setupScene5(){
     for (int i = 0; i < 10; ++i) {
         for (int j = 0; j < 10; ++j) {
             int m =  rand() % models.size();
-            auto model = new SceneObject(models[rand() % models.size()],materials[ rand() % materials.size()]);
+            auto model = new SceneObject(models[m],materials[ rand() % materials.size()]);
             //auto model = new SceneObject(quad,lambert);
 
-            if (m == 0)
+            if (m == 0){
                 model->setTranslation({i*10,0,j*10});
+                //model->setCanCastRays(true);
+            }
             else
                 model->setTranslation({i*10,3,j*10});
             model->translate({rand() % 100 / 5.0f,0,rand() % 100 / 5.0f });
@@ -303,19 +308,22 @@ std::unique_ptr<Scene> setupScene5(){
     ground->applyTransform();
     scene->addModel(std::shared_ptr<SceneObject>(ground));
 
-    auto light = new PointLight(glm::vec3{2,2,2},sphere);
+    auto light = new PointLight(glm::vec3{2,2.6,0.8},sphere);
+    light->setTranslation(glm::vec3{50,3,50});
+    light->applyTransform();
 
     light->setTickFunction([light](){
-        light->setTranslation(glm::mix(glm::vec3{0,2,0},glm::vec3{100,2,100},glm::sin(glfwGetTime()) * 0.5f + 0.5f));
+        light->setTranslation(glm::mix(glm::vec3{0,2,0},glm::vec3{100,2,100},glm::sin(glfwGetTime()*0.3) * 0.5f + 0.5f));
         light->applyTransform();
     });
 
-    std::shared_ptr<Light> dirLight = std::make_shared<DirectionalLight>(glm::vec3{0.3,0.1,0.3});
-
-    scene->addModel(dirLight);
+    std::shared_ptr<Light> dirLight = std::make_shared<DirectionalLight>(glm::vec3{0.3,0.1,3.1});
+    dirLight->setTranslation(glm::vec3{50,5,50});
+    dirLight->applyTransform();
+    //scene->addModel(dirLight);
 
     scene->addModel(std::shared_ptr<Light>(light));
-    scene->addTickable(std::shared_ptr<ITickable>(light));
+    //scene->addTickable(std::shared_ptr<ITickable>(light));
 
     return std::move(scene);
 }
@@ -364,6 +372,7 @@ int main(){
     auto flashLight = new SpotLight(glm::vec3{2,2,2});
     flashLight->setOuterCutoffAngle(25);
     flashLight->setInnerCutoffAngle(0);
+    flashLight->setCanCastRays(false);
     //flashLight->setAttenuation({1,0.001f,0.0003f});
     scene5->addModel(std::shared_ptr<Light>(flashLight));
 
@@ -395,7 +404,7 @@ int main(){
 
     scene5->addModel(h);
 
-    Application::getInstance().setScene(scene5); //2 //5
+    Application::getInstance().setScene(scene2); //2 //5
 
     Application::getInstance().setUsePostFX(true);
     Application::getInstance().run();

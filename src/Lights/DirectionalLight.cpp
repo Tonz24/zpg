@@ -16,7 +16,7 @@ void DirectionalLight::uploadToGpu() {
     this->modelMat = glm::mat4{1};
     this->transform->apply(this->modelMat);
 
-    size_t positionOffset = sizeof(glm::vec4)*3*MAX_N_POINT_LIGHTS + sizeof(glm::vec4)*4*MAX_N_SPOT_LIGHTS + sizeof(glm::vec4)*3*this->uboPosition;
+    size_t positionOffset = sizeof(glm::vec4)*3*MAX_N_POINT_LIGHTS + sizeof(glm::vec4)*4*MAX_N_SPOT_LIGHTS + sizeof(glm::vec4)*7*this->uboPosition;
 
     Application::getInstance().getLightBuffer().setData(positionOffset,sizeof(glm::vec3),&this->color); //color
     Application::getInstance().getLightBuffer().setData(positionOffset + sizeof(glm::vec3),sizeof(float),&this->attenuation.x); //constant
@@ -24,7 +24,7 @@ void DirectionalLight::uploadToGpu() {
     Application::getInstance().getLightBuffer().setData(positionOffset + sizeof(glm::vec4),sizeof(glm::vec3),&this->direction); //direction
     Application::getInstance().getLightBuffer().setData(positionOffset + sizeof(glm::vec4) + sizeof(glm::vec3),sizeof(float),&this->attenuation.y); //linear
 
-    Application::getInstance().getLightBuffer().setData(positionOffset + sizeof(glm::vec4) + sizeof(glm::vec3) + sizeof(float),sizeof(float),&this->attenuation.z); //linear
+    Application::getInstance().getLightBuffer().setData(positionOffset + sizeof(glm::vec4) + sizeof(glm::vec3) + sizeof(float),sizeof(float),&this->attenuation.z); //quadratic
 }
 
 void DirectionalLight::uploadLightCount() {

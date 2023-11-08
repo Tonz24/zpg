@@ -22,10 +22,18 @@ public:
     void activateLights();
 
     void setActiveCamera(const std::shared_ptr<Camera> &activeCamera);
+    const Camera& getActiveCamera() const{
+        return *this->activeCamera;
+    }
+
+    const std::vector<std::shared_ptr<IDrawable>>& getRayCasters() const{
+        return this->rayCasters;
+    }
 
 private:
-    std::vector<std::shared_ptr<IDrawable>> models;
-    std::vector<std::shared_ptr<ITickable>> tickables;
-    std::vector<std::shared_ptr<Light>> lights;
-    std::shared_ptr<Camera> activeCamera;
+    std::vector<std::shared_ptr<IDrawable>> models{};
+    std::vector<std::shared_ptr<IDrawable>> rayCasters{};
+    std::vector<std::shared_ptr<ITickable>> tickables{};
+    std::vector<std::shared_ptr<Light>> lights{};
+    std::shared_ptr<Camera> activeCamera{};
 };

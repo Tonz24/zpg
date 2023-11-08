@@ -169,16 +169,19 @@ void ShaderProgram::compileShaders() {
     shaderCache["shader_fur"] = std::unique_ptr<ShaderProgram>(new ShaderProgram(R"(..\Shaders\fur.vert)",R"(..\Shaders\fur.geom)", R"(..\Shaders\fur.frag)"));
     shaderCache["shader_shadowMap"] = std::unique_ptr<ShaderProgram>(new ShaderProgram(R"(..\Shaders\shadowMap.vert)", R"(..\Shaders\shadowMap.frag)"));
     shaderCache["shader_skybox"] = std::unique_ptr<ShaderProgram>(new ShaderProgram(R"(..\Shaders\skybox.vert)", R"(..\Shaders\skybox.frag)"));
+    shaderCache["shader_occlusion"] = std::unique_ptr<ShaderProgram>(new ShaderProgram(R"(..\Shaders\default.vert)", R"(..\Shaders\occlusion.frag)"));
 
     shaderCache["effect_empty"] = std::unique_ptr<ShaderProgram>(new ShaderProgram(R"(..\Shaders\ImageEffects\default.vert)", R"(..\Shaders\ImageEffects\empty.frag)"));
     shaderCache["effect_filter"] = std::unique_ptr<ShaderProgram>(new ShaderProgram(R"(..\Shaders\ImageEffects\default.vert)", R"(..\Shaders\ImageEffects\colorFilter.frag)"));
     shaderCache["effect_box_blur_horizontal"] = std::unique_ptr<ShaderProgram>(new ShaderProgram(R"(..\Shaders\ImageEffects\default.vert)", R"(..\Shaders\ImageEffects\boxBlurHorizontal.frag)"));
+    shaderCache["effect_radial_blur"] = std::unique_ptr<ShaderProgram>(new ShaderProgram(R"(..\Shaders\ImageEffects\default.vert)", R"(..\Shaders\ImageEffects\radialBlur.frag)"));
     shaderCache["effect_box_blur_vertical"] = std::unique_ptr<ShaderProgram>(new ShaderProgram(R"(..\Shaders\ImageEffects\default.vert)", R"(..\Shaders\ImageEffects\boxBlurVertical.frag)"));
     shaderCache["effect_gaussian_blur_horizontal"] = std::unique_ptr<ShaderProgram>(new ShaderProgram(R"(..\Shaders\ImageEffects\default.vert)", R"(..\Shaders\ImageEffects\gaussBlurHorizontal.frag)"));
     shaderCache["effect_gaussian_blur_vertical"] = std::unique_ptr<ShaderProgram>(new ShaderProgram(R"(..\Shaders\ImageEffects\default.vert)", R"(..\Shaders\ImageEffects\gaussBlurVertical.frag)"));
     shaderCache["effect_tonemap"] = std::unique_ptr<ShaderProgram>(new ShaderProgram(R"(..\Shaders\ImageEffects\default.vert)", R"(..\Shaders\ImageEffects\tonemap.frag)"));
     shaderCache["effect_downsample"] = std::unique_ptr<ShaderProgram>(new ShaderProgram(R"(..\Shaders\ImageEffects\default.vert)", R"(..\Shaders\ImageEffects\downsample.frag)"));
     shaderCache["effect_upsample"] = std::unique_ptr<ShaderProgram>(new ShaderProgram(R"(..\Shaders\ImageEffects\default.vert)", R"(..\Shaders\ImageEffects\upsample.frag)"));
+    shaderCache["effect_add"] = std::unique_ptr<ShaderProgram>(new ShaderProgram(R"(..\Shaders\ImageEffects\default.vert)", R"(..\Shaders\ImageEffects\add.frag)"));
 }
 
 const ShaderProgram* ShaderProgram::getShaderProgram(const std::string& name) {

@@ -33,6 +33,8 @@ public:
 
     [[nodiscard]] const glm::vec<2, int> &getDimensions() const;
 
+    [[nodiscard]] const uint8_t * getData() const;
+
 private:
     uint32_t id;
 

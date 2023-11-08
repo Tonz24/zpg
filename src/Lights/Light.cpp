@@ -8,6 +8,7 @@
 Light::Light(const glm::vec3& color, Model *model)
     : SceneObject(model, new ConstantMaterial(color)), color(color) {
     this->shadowFBO = std::make_unique<Framebuffer>(5.0f);
+    this->castRays = true;
 }
 void Light::setColor(const glm::vec3 &color) {
     this->color = color;

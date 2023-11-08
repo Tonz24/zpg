@@ -20,6 +20,22 @@ public:
     glm::mat4 getLightSpaceMatrix() const override;
 
 
+    inline static int getLightCount(){
+        return lightCount;
+    }
+    inline static const std::vector<PointLight*>& getLights(){
+        return lights;
+    }
+
+
+protected:
+    void reassignPositionsImpl(const int &from) override;
+    void uploadLightCountImpl() override;
+    int assignPositionImpl() override;
+
+    void releasePositionImpl() override;
+
+    void pushToVector() override;
 
 private:
 
@@ -33,22 +49,10 @@ private:
 
     void uploadToGpu() override;
 
-protected:
-    void reassignPositionsImpl(const int &from) override;
-    void uploadLightCountImpl() override;
-    int assignPositionImpl() override;
-
-    void releasePositionImpl() override;
-
-    void pushToVector() override;
-
-private:
-
-
     static void reassignPositions(const int& from);
     static void uploadLightCount();
 
     inline static std::vector<PointLight*> lights{};
 
-    static inline constexpr size_t pointLightOffset = sizeof(glm::vec4)*3*MAX_N_POINT_LIGHTS + sizeof(glm::vec4)*4*MAX_N_SPOT_LIGHTS + sizeof(glm::vec4)*3*MAX_N_DIRECTIONAL_LIGHTS;
+    static inline constexpr size_t pointLightOffset = 48*MAX_N_POINT_LIGHTS + 64*MAX_N_SPOT_LIGHTS + 112*MAX_N_DIRECTIONAL_LIGHTS;
 };

@@ -23,6 +23,10 @@ public:
 
     const Material &getMaterial() const override;
 
+    inline static int getLightCount(){
+        return lightCount;
+    }
+
 private:
     inline static int lightCount{0};
     inline static int assignPosition(){
@@ -51,7 +55,7 @@ private:
 
     inline static std::vector<DirectionalLight*> lights{};
 
-    static inline constexpr size_t directionalLightOffset = sizeof(glm::vec4)*3*MAX_N_POINT_LIGHTS + sizeof(glm::vec4)*4*MAX_N_SPOT_LIGHTS + sizeof(glm::vec4)*3*MAX_N_DIRECTIONAL_LIGHTS + sizeof(int)*2;
+    static inline constexpr size_t directionalLightOffset = 48*MAX_N_POINT_LIGHTS + 64*MAX_N_SPOT_LIGHTS + 112*MAX_N_DIRECTIONAL_LIGHTS + sizeof(int)*2;
 };
 
 

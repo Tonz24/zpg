@@ -42,6 +42,18 @@ public:
 
     void applyTransform();
 
+    [[nodiscard]] const glm::mat4& getModelMat() const override{
+        return this->modelMat;
+    }
+
+    [[nodiscard]] const bool& canCastRays() const override{
+        return this->castRays;
+    }
+
+    void setCanCastRays(bool value) override{
+        this->castRays = value;
+    }
+
 protected:
     std::shared_ptr<Model> model;
     std::shared_ptr<Material> material;
@@ -55,5 +67,8 @@ protected:
 
     void applyTransform(const glm::mat4& modelMat);
     std::vector<std::unique_ptr<SceneObject>> children{};
+
     void uploadModelMatrix();
+
+    bool castRays{false};
 };

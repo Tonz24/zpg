@@ -5,10 +5,6 @@
 #include "Application.h"
 #include "PostProcessing/PostFX.h"
 
-void Scene::addModel(const std::shared_ptr<IDrawable>& drawable) {
-    this->models.push_back(drawable);
-}
-
 void Scene::draw() {
     /*Application::getInstance().bindShadowMapShader();
     for (const auto &light : lights){
@@ -23,6 +19,20 @@ void Scene::draw() {
     PostFX::getInstance().bindPing();
     this->activeCamera->uploadMatrices();*/
 
+    PostFX::getInstance().occlusionMapShader->bind();
+    PostFX::getInstance().occlusionMap->bind();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    for (const auto &model : this->models) {
+        model->drawForShadowMapping();
+    }
+    glDepthFunc(GL_LEQUAL);
+    PostFX::getInstance().occlusionMapShader->unbind();
+    for (const auto& light : this->rayCasters){
+        light->draw();
+    }
+    glDepthFunc(GL_LESS);
+
+    PostFX::getInstance().bindPing();
     for (const auto &tickable : this->tickables){
         tickable->tick();
     }
@@ -59,6 +69,13 @@ void Scene::addModel(const std::shared_ptr<Light> &light) {
     this->lights.push_back(light);
     std::shared_ptr<IDrawable> lightAsDrawable = light;
     this->addModel(lightAsDrawable);
+}
+
+void Scene::addModel(const std::shared_ptr<IDrawable>& drawable) {
+    this->models.push_back(drawable);
+
+    if (drawable->canCastRays())
+        this->rayCasters.push_back(drawable);
 }
 
 void Scene::setActiveCamera(const std::shared_ptr<Camera> &activeCamera) {

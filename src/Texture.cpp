@@ -135,3 +135,7 @@ void Texture::bindCubemap(const uint32_t &textureUnit) const {
     glActiveTexture(GL_TEXTURE0 + textureUnit);
     glBindTexture(GL_TEXTURE_CUBE_MAP, this->id);
 }
+
+const uint8_t * Texture::getData() const {
+    return this->rawData;
+}

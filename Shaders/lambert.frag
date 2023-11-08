@@ -16,6 +16,8 @@ uniform int hasDiffuse;
 
 layout (binding = 0) uniform sampler2D diffuseMap;
 
+layout(binding = 3) uniform sampler2DArray depthMaps;
+
 out vec4 frag_color;
 
 float getAttenuation(PointLight light, float dist){

@@ -27,6 +27,8 @@ void PostFX::initialize() {
 
     this->pingPongBuffers[0] = new Framebuffer(10);
     this->pingPongBuffers[1] = new Framebuffer(10);
+    this->occlusionMap = std::make_unique<Framebuffer>();
+    this->occlusionMapShader = ShaderProgram::getShaderProgram("shader_occlusion");
 
     glGenVertexArrays(1, &quadVAO);
     glGenBuffers(1, &quadVBO);
@@ -51,6 +53,13 @@ void PostFX::drawToTarget(int mipLevel) {
     glBindVertexArray(quadVAO);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, this->getPing().getTargetId(mipLevel));
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+}
+
+void PostFX::drawToTargetFromOcclusionFBO() {
+    glBindVertexArray(quadVAO);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, this->occlusionMap->getTargetId(0));
     glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 

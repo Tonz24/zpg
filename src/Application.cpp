@@ -9,7 +9,7 @@
 #include "PostProcessing/Tonemap.h"
 #include "PostProcessing/PostFX.h"
 #include "PostProcessing/BloomEffect.h"
-
+#include "PostProcessing/LightShaft.h"
 
 void Application::initialize() {
     //glfwSetErrorCallback(error_callback);
@@ -52,10 +52,11 @@ void Application::initialize() {
     ShaderProgram::compileShaders();
 
     this->transformBuffer = std::make_unique<UBO>(sizeof(glm::mat4x4)*4 + sizeof(glm::vec4),5,nullptr);
-    this->lightBuffer = std::make_unique<UBO>(sizeof(glm::vec4)*3*30*2 + sizeof(glm::vec4)*4*30 +sizeof(glm::vec4),6,nullptr);
+    this->lightBuffer = std::make_unique<UBO>(48*30 + 64*30 + 112*30 + 16,6,nullptr);
 
 
     PostFX::getInstance().addEffect(new BloomEffect(5));
+    PostFX::getInstance().addEffect(new LightShaft());
     PostFX::getInstance().addEffect(new TonemapACES());
 
 

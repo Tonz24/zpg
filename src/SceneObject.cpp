@@ -65,7 +65,6 @@ void SceneObject::rotate(const float &angle) {
 }
 
 
-
 const Material &SceneObject::getMaterial()const {
     return *this->material;
 }
@@ -104,3 +103,5 @@ void SceneObject::applyTransform(const glm::mat4 &modelMat) {
         child->applyTransform(this->modelMat);
     }
 }
+
+

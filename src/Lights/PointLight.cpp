@@ -9,8 +9,8 @@ PointLight::PointLight(const glm::vec3 &color,Model *model): Light(color, model)
 
     /*this->uboPosition = assignPosition();
     this->setColor(this->color);
-    uploadLightCount();
-    this->pushToVector();*/
+    this->uploadLightCount();*/
+    this->pushToVector();
 }
 
 void PointLight::uploadToGpu() {
