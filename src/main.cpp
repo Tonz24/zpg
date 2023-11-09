@@ -85,20 +85,21 @@ std::unique_ptr<Scene> setupScene2(){
     auto* v = new PhongMaterial(glm::vec3{0.89020, 0.73333, 0.46275});
     auto* e = new PhongMaterial(glm::vec3{0.41961,  0.57647,  0.83922});
     auto* mo = new PhongMaterial(glm::vec3{0.90588,  0.90980,  0.92549});
-    auto* ma = new PhongMaterial(glm::vec3{0.75686,  0.26667,  0.05490});
+    auto* ma = new PhongMaterial(glm::vec3{1.3,  0.9,  1.2});
 
     auto* sphere = new Sphere();
 
     auto light = new PointLight(glm::vec3{2,2,2}*0.5f,sphere);
+    //light->setCanCastRays(false);
     light->setScale({2,2,2});
     light->setAttenuation({1,0.01,0.01});
     scene->addModel(std::shared_ptr<Light>(light));
 
     auto mercury = new SceneObject(sphere, m);
     auto venus = new SceneObject(sphere, v);
-    venus->setCanCastRays(true);
+    //venus->setCanCastRays(true);
     auto earth = new SceneObject(sphere, e);
-    earth->setCanCastRays(true);
+    //earth->setCanCastRays(true);
     auto moon = new SceneObject(sphere, mo);
 
     auto mars = new SceneObject(sphere, ma);

@@ -28,8 +28,8 @@ vec4 applyRadialBlur(vec2 center){
     vec2 texCoord = uv;
     float thisDecay = 1.0;
     for (int i = 0; i < sampleCount; i++) {
-        texCoord -= delta;
         vec4 currentSample = texture(screenTexture,texCoord);
+        texCoord -= delta;
         currentSample *= decay * weight;
         colorSum += currentSample;
 
@@ -39,9 +39,10 @@ vec4 applyRadialBlur(vec2 center){
 }
 
 void main() {
-    vec4 colorSum = texture(screenTexture,uv);
+    vec4 colorSum = vec4(0,0,0,1);
     for (int i = 0; i < centerCount; i++) {
-       colorSum += applyRadialBlur(centers[i].xy);
+        //vec2 thisCenter = mix(centers[i].xy, vec2(99999), float(int(centers[i].x > 1.0)));
+        colorSum += applyRadialBlur(centers[i].xy);
     }
-    fragColor = colorSum * rcpCenterCount;
+    fragColor = colorSum ;
 }

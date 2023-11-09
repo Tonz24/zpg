@@ -105,7 +105,7 @@ private:
         const Texture* tex2;
     };
 
-    RadialBlur radialBlur{256};
+    RadialBlur radialBlur{32};
     Add add;
 };
 
