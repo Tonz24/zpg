@@ -26,7 +26,7 @@ public:
             glm::vec4 ndcPos = clipPos / clipPos.w;
             glm::vec4 screenSpacePos = ndcPos * 0.5f + 0.5f;
             //if ((screenSpacePos.x >= 0.0 && screenSpacePos.x <= 1.0) && (screenSpacePos.y >= 0.0 && screenSpacePos.y <= 1.0))
-                radialBlur.centers.push_back(glm::vec2{screenSpacePos.x,screenSpacePos.y});
+                radialBlur.centers.push_back(screenSpacePos);
         }
         this->radialBlur.apply();
         this->add.apply();
@@ -73,12 +73,12 @@ private:
         }
 
     public:
-        int sampleCount{10};
+        int sampleCount{512};
         float decay{1.0};
         float weight{1.0};
         float density{1.0};
         float exposure{1.0};
-        std::vector<glm::vec2> centers{};
+        std::vector<glm::vec4> centers{};
     };
 
     class Add : public ImageEffect{
@@ -105,8 +105,6 @@ private:
         const Texture* tex2;
     };
 
-    RadialBlur radialBlur{32};
+    RadialBlur radialBlur{128};
     Add add;
 };
-
-

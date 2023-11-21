@@ -26,7 +26,11 @@ struct InputMap{
     std::unordered_map<int,std::vector<std::function<void(int key)>>> map{};
 };
 
-class InputManager : public Subject<uint32_t,uint32_t>, public Subject<double,double,double,double> {
+class InputManager :
+        public Subject<uint32_t,uint32_t>, //key
+        public Subject<double,double,double,double>, //mouse movement
+        public Subject<uint32_t> //mouse button click
+        {
 public:
     static inline InputManager& getInstance(){
         if(instance == nullptr)

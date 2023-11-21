@@ -50,11 +50,9 @@ std::string ShaderProgram::loadShader(const std::string& path) {
     std::string token;
     while ((pos = pathPath.find(delimiter)) != std::string::npos) {
         token = pathPath.substr(0, pos);
-        std::cout << token << std::endl;
         pathPathPath += pathPath.substr(0,pos + delimiter.length());
         pathPath.erase(0, pos + delimiter.length());
     }
-    std::cout << pathPath << std::endl;
     std::string code;
     std::ifstream shaderFile;
 
@@ -170,6 +168,7 @@ void ShaderProgram::compileShaders() {
     shaderCache["shader_shadowMap"] = std::unique_ptr<ShaderProgram>(new ShaderProgram(R"(..\Shaders\shadowMap.vert)", R"(..\Shaders\shadowMap.frag)"));
     shaderCache["shader_skybox"] = std::unique_ptr<ShaderProgram>(new ShaderProgram(R"(..\Shaders\skybox.vert)", R"(..\Shaders\skybox.frag)"));
     shaderCache["shader_occlusion"] = std::unique_ptr<ShaderProgram>(new ShaderProgram(R"(..\Shaders\default.vert)", R"(..\Shaders\occlusion.frag)"));
+    shaderCache["shader_pbr"] = std::unique_ptr<ShaderProgram>(new ShaderProgram(R"(..\Shaders\default.vert)", R"(..\Shaders\pbr.frag)"));
 
     shaderCache["effect_empty"] = std::unique_ptr<ShaderProgram>(new ShaderProgram(R"(..\Shaders\ImageEffects\default.vert)", R"(..\Shaders\ImageEffects\empty.frag)"));
     shaderCache["effect_filter"] = std::unique_ptr<ShaderProgram>(new ShaderProgram(R"(..\Shaders\ImageEffects\default.vert)", R"(..\Shaders\ImageEffects\colorFilter.frag)"));

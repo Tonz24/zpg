@@ -6,6 +6,7 @@
 
 #include <vector>
 #include <memory>
+#include <string>
 
 #include "Vertex.h"
 #include "VertexType.h"
@@ -15,8 +16,10 @@ public:
     ~Model();
     virtual void draw();
 
+    explicit Model(const std::string& path);
+
 protected:
-    Model(std::vector<VertexElement*> types);
+    explicit Model(std::vector<VertexElement*> types);
     Model();
 
     std::vector<VertexElement*> vertexDescription;

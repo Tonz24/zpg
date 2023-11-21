@@ -55,12 +55,16 @@ void Application::initialize() {
     this->lightBuffer = std::make_unique<UBO>(48*30 + 64*30 + 112*30 + 16,6,nullptr);
 
 
-    PostFX::getInstance().addEffect(new BloomEffect(5));
+    PostFX::getInstance().addEffect(new BloomEffect(10));
     PostFX::getInstance().addEffect(new LightShaft());
     PostFX::getInstance().addEffect(new TonemapACES());
 
 
     this->shadowMapShader = ShaderProgram::getShaderProgram("shader_shadowMap");
+
+
+    glEnable(GL_STENCIL_TEST);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
     this->initialized = true;
 }
@@ -83,7 +87,7 @@ void Application::run() {
         if(this->usePostFX) {
             PostFX::getInstance().bindPing();
             glEnable(GL_DEPTH_TEST);
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
             scene->draw();
             glDisable(GL_DEPTH_TEST);
@@ -91,8 +95,8 @@ void Application::run() {
         }
         else{
             glEnable(GL_DEPTH_TEST);
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            scene->draw();
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+            scene->drawNoFX();
         }
 
         glfwPollEvents();
@@ -142,4 +146,8 @@ void Application::setScene(std::unique_ptr<Scene> &scene) {
 
 const void Application::bindShadowMapShader() {
     this->shadowMapShader->bind();
+}
+
+bool Application::getUsePostFx() const {
+    return usePostFX;
 }

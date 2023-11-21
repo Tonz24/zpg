@@ -30,12 +30,6 @@ SET(SRC ${CMAKE_SOURCE_DIR}/src)
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
-file(GLOB_RECURSE tinyEXR
-        "${CMAKE_SOURCE_DIR}/include/tinyexr/*.h"
-        "${CMAKE_SOURCE_DIR}/include/tinyexr/*.cpp"
-        "${CMAKE_SOURCE_DIR}/include/tinyexr/*.c"
-        )
-
 file (GLOB_RECURSE fileSRC
         "${CMAKE_SOURCE_DIR}/src/*.h"
         "${CMAKE_SOURCE_DIR}/src/*.cpp"

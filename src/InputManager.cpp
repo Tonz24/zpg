@@ -33,6 +33,8 @@ void InputManager::mouseButtonCallback(GLFWwindow *window, int button, int actio
 void InputManager::mouseButtonCallbackInternal(GLFWwindow *window, int button, int action, int mode) {
     if (action == GLFW_PRESS)
         printf("button_callback [%d,%d,%d]\n", button, action, mode);
+
+    dynamic_cast<Subject<uint32_t>*>(this)->notify(button);
 }
 
 InputMap &InputManager::getInputMap() {

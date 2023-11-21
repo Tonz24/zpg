@@ -20,13 +20,6 @@ layout(binding = 3) uniform sampler2DArray depthMaps;
 
 out vec4 frag_color;
 
-float getAttenuation(PointLight light, float dist){
-    return 1.0 / (light.kConstant + light.kLinear * dist + light.kQuadratic * pow(dist,2.0));
-}
-float getAttenuationSpotLight(SpotLight light, float dist){
-    return 1.0 / (light.kConstant + light.kLinear * dist + light.kQuadratic * pow(dist,2.0));
-}
-
 void main() {
     vec3 diffuse = vec3(0);
     vec3 ambient = vec3(0);

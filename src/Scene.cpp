@@ -5,6 +5,23 @@
 #include "Application.h"
 #include "PostProcessing/PostFX.h"
 
+
+void Scene::drawOcclusionMap() {
+    PostFX::getInstance().occlusionMapShader->bind();
+    PostFX::getInstance().occlusionMap->bind();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    for (const auto &model : this->models) {
+        glStencilFunc(GL_ALWAYS,0x00, 0xFF);
+        model->drawForShadowMapping();
+    }
+    glDepthFunc(GL_LEQUAL);
+    PostFX::getInstance().occlusionMapShader->unbind();
+    for (const auto& obj : this->rayCasters){
+        glStencilFunc(GL_ALWAYS,obj->getStencilId(), 0xFF);
+        obj->draw();
+    }
+}
+
 void Scene::draw() {
     /*Application::getInstance().bindShadowMapShader();
     for (const auto &light : lights){
@@ -19,34 +36,42 @@ void Scene::draw() {
     PostFX::getInstance().bindPing();
     this->activeCamera->uploadMatrices();*/
 
-    PostFX::getInstance().occlusionMapShader->bind();
-    PostFX::getInstance().occlusionMap->bind();
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    for (const auto &model : this->models) {
-        model->drawForShadowMapping();
-    }
-    glDepthFunc(GL_LEQUAL);
-    PostFX::getInstance().occlusionMapShader->unbind();
-    for (const auto& light : this->rayCasters){
-        light->draw();
-    }
-    glDepthFunc(GL_LESS);
+    this->drawOcclusionMap();
 
     PostFX::getInstance().bindPing();
+    if (this->skybox != nullptr)
+        this->skybox->draw();
+
     for (const auto &tickable : this->tickables){
         tickable->tick();
     }
 
-    glDepthFunc(GL_LEQUAL);
+    glDepthFunc(GL_LESS);
     for (const auto &model : this->models){
         /*model->getMaterial().getShader().use();
         glm::mat4 lightSpaceMat = lights[0]->getLightSpaceMatrix();
         uint32_t texId = lights[0]->getShadowFbo().getTargetId(0);
         glBindTexture(GL_TEXTURE_2D,texId);
         model->getMaterial().getShader().setVar("lightspaceMat",lightSpaceMat);*/
+        glStencilFunc(GL_ALWAYS,model->getStencilId(), 0xFF);
         model->draw();
     }
     glDepthFunc(GL_LESS);
+}
+
+void Scene::drawNoFX() {
+    glDepthFunc(GL_LEQUAL);
+    if (this->skybox != nullptr)
+        this->skybox->draw();
+
+    glDepthFunc(GL_LESS);
+    for (const auto &tickable : this->tickables){
+        tickable->tick();
+    }
+    for (const auto &model : this->models){
+        glStencilFunc(GL_ALWAYS,model->getStencilId(), 0xFF);
+        model->draw();
+    }
 }
 
 void Scene::addTickable(const std::shared_ptr<ITickable> &tickable) {
@@ -80,4 +105,12 @@ void Scene::addModel(const std::shared_ptr<IDrawable>& drawable) {
 
 void Scene::setActiveCamera(const std::shared_ptr<Camera> &activeCamera) {
     Scene::activeCamera = activeCamera;
+}
+
+void Scene::setSkybox(std::shared_ptr<Skybox> skybox) {
+    this->skybox = std::move(skybox);
+}
+
+void Scene::update(uint32_t button) {
+
 }

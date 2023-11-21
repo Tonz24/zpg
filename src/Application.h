@@ -41,7 +41,10 @@ public:
     float getDeltaTime();
     void setUsePostFX(bool value);
 
+    bool getUsePostFx() const;
+
     const void bindShadowMapShader();
+
 
 private:
     Application();

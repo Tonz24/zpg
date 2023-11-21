@@ -24,7 +24,7 @@ void SceneObject::uploadModelMatrix(){
     Application::getInstance().getTransformBuffer().setData(sizeof(glm::mat4x4)*3,sizeof(glm::mat4x4),glm::value_ptr(normalMatrix));
 }
 
-SceneObject::SceneObject(Model *model, Material *material): model(std::shared_ptr<Model>(model)), material(std::shared_ptr<Material>(material)){
+SceneObject::SceneObject(Model *model, Material *material): model(std::shared_ptr<Model>(model)), material(std::shared_ptr<Material>(material)), IDrawable(){
 
     this->translation = new Translation();
     this->rotation = new Rotation();
@@ -102,6 +102,10 @@ void SceneObject::applyTransform(const glm::mat4 &modelMat) {
     for (auto &child : this->children){
         child->applyTransform(this->modelMat);
     }
+}
+
+SceneObject::SceneObject(const std::string &path) : IDrawable() {
+    this->model = std::make_shared<Model>(path);
 }
 
 

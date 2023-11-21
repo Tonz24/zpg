@@ -22,7 +22,8 @@
 #include "Models/Quad.h"
 #include "Materials/FurMaterial.h"
 #include "Lights/DirectionalLight.h"
-#include "Materials/Skybox.h"
+#include "Materials/SkyboxMaterial.h"
+#include "Materials/PBMaterial.h"
 
 
 static void error_callback(int error, const char* description){ fputs(description, stderr); }
@@ -35,7 +36,6 @@ static void window_size_callback(GLFWwindow* window, int width, int height){
 	printf("resize %d, %d \n", width, height);
 	glViewport(0, 0, width, height);
 }
-
 
 std::unique_ptr<Scene> setupScene1(){
     auto scene = std::make_unique<Scene>();
@@ -89,7 +89,7 @@ std::unique_ptr<Scene> setupScene2(){
 
     auto* sphere = new Sphere();
 
-    auto light = new PointLight(glm::vec3{2,2,2}*0.5f,sphere);
+    auto light = new PointLight(glm::vec3{2,2,2},sphere);
     //light->setCanCastRays(false);
     light->setScale({2,2,2});
     light->setAttenuation({1,0.01,0.01});
@@ -103,7 +103,7 @@ std::unique_ptr<Scene> setupScene2(){
     auto moon = new SceneObject(sphere, mo);
 
     auto mars = new SceneObject(sphere, ma);
-    mars->setCanCastRays(true);
+    //mars->setCanCastRays(true);
     auto phobos = new SceneObject(sphere, mo);
     auto deimos = new SceneObject(sphere, mo);
 
@@ -260,47 +260,68 @@ std::unique_ptr<Scene> setupScene5(){
     LambertMaterial* lambert = new LambertMaterial(glm::vec3{1, 1, 0.3});
     PhongMaterial* phong = new PhongMaterial(glm::vec3{0.159, 0.553, 1.0});
     BlinnMaterial* blinn = new BlinnMaterial(glm::vec3{0.7, 0.2f, 1});
+    PBMaterial* pbr = new PBMaterial(glm::vec3{0.7, 0.2f, 1}, 0.5, 0.4f);
 
     std::vector<ConstantMaterial*> materials = {lambert,phong};
 
-    auto tex = std::make_shared<Texture>("container.png");
+    auto tex = std::make_shared<Texture>(R"(container.png)");
     auto spec = std::make_shared<Texture>("container_specular.png");
-
     lambert->setDiffuseMap(tex);
     phong->setDiffuseMap(tex);
     phong->setSpecularMap(spec);
 
 
+    auto albedo = std::make_shared<Texture>(R"(rusted\rustediron2_basecolor.png)");
+    auto metallic = std::make_shared<Texture>(R"(rusted\rustediron2_metallic.png)");
+    auto roughness = std::make_shared<Texture>(R"(rusted\rustediron2_roughness.png)");
+    pbr->setTextures(albedo,roughness,metallic,nullptr);
+
+
+
     Sphere* sphere = new Sphere();
     Monkey* monkey = new Monkey();
-    Cube* cube = new Cube();
+    Model* z = new Model("zombie.obj");
+    Model* h = new Model("model.obj");
     Tree* tree = new Tree();
     Bush* bush = new Bush();
     Quad* quad = new Quad();
 
-    std::vector<Model*> models = {tree,sphere,monkey,cube,bush};
+    std::vector<Model*> models = {tree,sphere,monkey,z,h,bush};
 
+    LambertMaterial* lambertGround = new LambertMaterial(glm::vec3{1, 1, 0.3});
+    auto texGr = std::make_shared<Texture>("grass.png");
+    auto texZ = std::make_shared<Texture>("zombie.png");
+    auto texHouse = std::make_shared<Texture>("house.png");
+
+    auto* zMat = new PhongMaterial(glm::vec3{5,5,5}*50.0f);
+    auto* houseMat = new PhongMaterial(glm::vec3{5,5,5}*50.0f);
+    houseMat->setDiffuseMap(texHouse);
+    zMat->setDiffuseMap(texZ);
+
+    lambertGround->setDiffuseMap(texGr);
     for (int i = 0; i < 10; ++i) {
         for (int j = 0; j < 10; ++j) {
-            int m =  rand() % models.size();
-            auto model = new SceneObject(models[m],materials[ rand() % materials.size()]);
-            //auto model = new SceneObject(quad,lambert);
-
-            if (m == 0){
-                model->setTranslation({i*10,0,j*10});
-                //model->setCanCastRays(true);
-            }
-            else
-                model->setTranslation({i*10,3,j*10});
-            model->translate({rand() % 100 / 5.0f,0,rand() % 100 / 5.0f });
-            model->setScale(glm::vec3{rand() % 100 / 50.0f});
+            auto model = new SceneObject(tree,phong);
+            model->translate({i * 10 + rand() % 5, 0, j * 10 + rand() % 5});
+            model->rotate(rand() % 1000 * 0.01);
             model->applyTransform();
             scene->addModel(std::shared_ptr<SceneObject>(model));
         }
     }
-    LambertMaterial* lambertGround = new LambertMaterial(glm::vec3{1, 1, 0.3});
-    auto texGr = std::make_shared<Texture>("grass.png");
-    lambertGround->setDiffuseMap(texGr);
+
+
+    auto zomb = new SceneObject(z,zMat);
+    zomb->translate({10,0,35});
+    zomb->setRotation(90,{0,1,0});
+    zomb->applyTransform();
+    scene->addModel(std::shared_ptr<SceneObject>(zomb));
+
+    auto model = new SceneObject(h,houseMat);
+    model->translate({10, 0,50});
+    model->rotate(rand() % 1000 * 0.01);
+    model->applyTransform();
+    scene->addModel(std::shared_ptr<SceneObject>(model));
+
 
     auto ground = new SceneObject(quad, lambertGround);
 
@@ -309,22 +330,27 @@ std::unique_ptr<Scene> setupScene5(){
     ground->applyTransform();
     scene->addModel(std::shared_ptr<SceneObject>(ground));
 
-    auto light = new PointLight(glm::vec3{2,2.6,0.8},sphere);
-    light->setTranslation(glm::vec3{50,3,50});
+    auto light = new PointLight(glm::vec3{1.5,1,0.7},sphere);
+    //light->setAttenuation({1,0.1,0});
+    light->translate({7, 1.5, 40});
+    light->setScale({0.5,0.5,0.5});
     light->applyTransform();
 
-    light->setTickFunction([light](){
-        light->setTranslation(glm::mix(glm::vec3{0,2,0},glm::vec3{100,2,100},glm::sin(glfwGetTime()*0.3) * 0.5f + 0.5f));
-        light->applyTransform();
-    });
+    auto light2 = new PointLight(glm::vec3{0.3,1.5,0.7},sphere);
+    //light->setAttenuation({1,0.1,0});
+    //light2->setCanCastRays(false);
+    light2->translate({10, 1.5, 40});
+    light2->setScale({0.5,0.5,0.5});
+    light2->applyTransform();
 
-    std::shared_ptr<Light> dirLight = std::make_shared<DirectionalLight>(glm::vec3{0.3,0.1,3.1});
-    dirLight->setTranslation(glm::vec3{50,5,50});
+    std::shared_ptr<Light> dirLight = std::make_shared<DirectionalLight>(glm::vec3{0.05});
+    dirLight->setTranslation(glm::vec3{50,-5,40});
     dirLight->applyTransform();
+    dirLight->setCanCastRays(false);
     //scene->addModel(dirLight);
 
     scene->addModel(std::shared_ptr<Light>(light));
-    //scene->addTickable(std::shared_ptr<ITickable>(light));
+    scene->addModel(std::shared_ptr<Light>(light2));
 
     return std::move(scene);
 }
@@ -356,6 +382,33 @@ std::unique_ptr<Scene> setupScene6(){
     return std::move(scene);
 }
 
+std::unique_ptr<Scene> setupScene7(){
+    auto scene = std::make_unique<Scene>();
+
+    Cube* cube = new Cube();
+
+    int x{6}, y{4};
+    for (int i = 0; i < x; ++i) {
+        for (int j = 0; j < y; ++j) {
+            float metallic = x / (float)(i - 1);
+            float roughness = y / (float)(j - 1);
+            PBMaterial* pbr = new PBMaterial(glm::vec3{1}, roughness, metallic);
+            auto model = new SceneObject(cube,pbr);
+
+            model->setTranslation({i*2,j*2,0});
+            model->applyTransform();
+            scene->addModel(std::shared_ptr<SceneObject>(model));
+        }
+    }
+    auto light = new PointLight(glm::vec3{20,20,20},cube);
+    light->setTranslation(glm::vec3{50,3,50});
+    light->applyTransform();
+
+    scene->addModel(std::shared_ptr<Light>(light));
+
+    return std::move(scene);
+}
+
 int main(){
     srand(time(NULL));
     Application::getInstance().initialize();
@@ -369,6 +422,7 @@ int main(){
     auto scene4 = setupScene4();
     auto scene5 = setupScene5();
     auto scene6 = setupScene6();
+    auto scene7 = setupScene7();
 
     auto flashLight = new SpotLight(glm::vec3{2,2,2});
     flashLight->setOuterCutoffAngle(25);
@@ -389,6 +443,7 @@ int main(){
     scene4->addTickable(cam);
     scene5->addTickable(cam);
     scene6->addTickable(cam);
+    scene7->addTickable(cam);
 
     scene->setActiveCamera(cam);
     scene2->setActiveCamera(cam);
@@ -396,16 +451,14 @@ int main(){
     scene4->setActiveCamera(cam);
     scene5->setActiveCamera(cam);
     scene6->setActiveCamera(cam);
+    scene7->setActiveCamera(cam);
 
-    auto cube = new Cube();
+    auto skybox = std::make_shared<Skybox>("skybox_water");
 
-    Skybox* skybox = new Skybox("skybox_water");
+    scene5->setSkybox(skybox);
+    scene7->setSkybox(skybox);
 
-    auto h = std::make_shared<SceneObject>(cube,skybox);
-
-    scene5->addModel(h);
-
-    Application::getInstance().setScene(scene2); //2 //5
+    Application::getInstance().setScene(scene5); //2 //5
 
     Application::getInstance().setUsePostFX(true);
     Application::getInstance().run();

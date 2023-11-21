@@ -47,3 +47,10 @@ layout (std140, binding = 6) uniform Lights{
     int spotLightCount; // 30*48  + 30*64 + 30*112  + 4 B offset
     int directionalLightCount; // 30*48  + 30*64 + 30*112  + 8 B offset
 };
+
+float getAttenuation(PointLight light, float dist){
+    return 1.0 / (light.kConstant + light.kLinear * dist + light.kQuadratic * pow(dist,2.0));
+}
+float getAttenuationSpotLight(SpotLight light, float dist){
+    return 1.0 / (light.kConstant + light.kLinear * dist + light.kQuadratic * pow(dist,2.0));
+}

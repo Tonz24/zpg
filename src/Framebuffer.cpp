@@ -104,7 +104,6 @@ Framebuffer::Framebuffer(float h) : mipLevels(0) {
     if(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE)
         std::cout << "depth FBO created successfully" << std::endl;
 
-
     this->unbind();
 
     Application::getInstance().getWindow().attach(this);

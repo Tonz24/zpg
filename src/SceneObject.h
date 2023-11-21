@@ -17,6 +17,7 @@
 class SceneObject : public ITickable, public IDrawable {
 public:
     explicit SceneObject(Model* model = nullptr, Material* m = new ConstantMaterial());
+    explicit SceneObject(const std::string& path);
 
     virtual void draw() override;
     virtual void drawForShadowMapping() override;

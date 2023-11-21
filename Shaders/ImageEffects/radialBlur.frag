@@ -14,7 +14,7 @@ uniform float weight;
 uniform float radius;
 uniform float strength;
 
-uniform vec2 centers[15];
+uniform vec4 centers[15];
 
 uniform int centerCount;
 uniform float rcpCenterCount;
@@ -30,7 +30,7 @@ vec4 applyRadialBlur(vec2 center){
     for (int i = 0; i < sampleCount; i++) {
         vec4 currentSample = texture(screenTexture,texCoord);
         texCoord -= delta;
-        currentSample *= decay * weight;
+        currentSample *= thisDecay * weight;
         colorSum += currentSample;
 
         thisDecay *= decay;
