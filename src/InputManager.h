@@ -29,7 +29,7 @@ struct InputMap{
 class InputManager :
         public Subject<uint32_t,uint32_t>, //key
         public Subject<double,double,double,double>, //mouse movement
-        public Subject<uint32_t> //mouse button click
+        public Subject<uint32_t,uint32_t,glm::vec2> //mouse button click [button, action, position]
         {
 public:
     static inline InputManager& getInstance(){
@@ -48,6 +48,7 @@ public:
     void registerMouseCallback(std::function<void(double, double, double, double)> f);
 
 private:
+
     InputManager() = default;
 
     inline static InputManager* instance{nullptr};

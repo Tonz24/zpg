@@ -12,9 +12,7 @@
 #include "Lights/Light.h"
 #include "Skybox.h"
 
-class Scene :
-        public Observer<uint32_t> //mouse button click
-        {
+class Scene{
 public:
     void addModel(const std::shared_ptr<IDrawable>& drawable);
     void addModel(const std::shared_ptr<Light>& light);
@@ -36,7 +34,7 @@ public:
         return this->rayCasters;
     }
 
-    void update(uint32_t button) override;
+
 
 private:
     std::vector<std::shared_ptr<IDrawable>> models{};

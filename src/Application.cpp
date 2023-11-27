@@ -10,6 +10,7 @@
 #include "PostProcessing/PostFX.h"
 #include "PostProcessing/BloomEffect.h"
 #include "PostProcessing/LightShaft.h"
+#include "Materials/FurMaterial.h"
 
 void Application::initialize() {
     //glfwSetErrorCallback(error_callback);
@@ -67,6 +68,8 @@ void Application::initialize() {
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
     this->initialized = true;
+
+    dynamic_cast<Subject<uint32_t,uint32_t,glm::vec2>*>(&InputManager::getInstance())->attach(this);
 }
 
 Application::Application() {
@@ -150,4 +153,41 @@ const void Application::bindShadowMapShader() {
 
 bool Application::getUsePostFx() const {
     return usePostFX;
+}
+
+void Application::update(uint32_t button, uint32_t action, glm::vec2 pos) {
+    if (action == GLFW_PRESS){
+        Application& instance = Application::getInstance();
+
+        pos.y = instance.getWindow().getHeight() - pos.y;
+
+        uint32_t id{300};
+        float depth{0};
+
+        glReadPixels(pos.x, pos.y, 1, 1, GL_STENCIL_INDEX, GL_UNSIGNED_INT, &id);
+        glReadPixels(pos.x, pos.y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &depth);
+
+        glm::vec3 screenX{pos.x,pos.y,depth};
+
+        glm::mat4 view{instance.getScene().getActiveCamera().getViewMatrix()};
+        glm::mat4 proj{instance.getScene().getActiveCamera().getProjMatrix()};
+
+        glm::vec4 viewPort{0,0,instance.getWindow().getWidth(),instance.getWindow().getHeight()};
+
+        glm::vec3 globalPos = glm::unProject(screenX,view,proj,viewPort);
+
+        Scene& scene = instance.getScene();
+
+        FurMaterial* fur = new FurMaterial(50,0.035f,{1000,1000});
+
+        Model* h = new Model("zombie.obj");
+
+        auto model = new SceneObject(h,fur);
+
+        model->setTranslation(globalPos);
+        model->applyTransform();
+
+        scene.addModel(std::shared_ptr<SceneObject>(model));
+
+    }
 }

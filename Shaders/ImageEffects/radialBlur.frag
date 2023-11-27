@@ -2,7 +2,9 @@
 
 in vec2 uv;
 
-uniform sampler2D screenTexture;
+layout (binding = 0) uniform sampler2D screenTexture;
+layout (binding = 1) uniform sampler2D stencil;
+
 uniform int sampleCount;
 uniform float rcpSampleCount;
 
@@ -45,4 +47,5 @@ void main() {
         colorSum += applyRadialBlur(centers[i].xy);
     }
     fragColor = colorSum ;
+    //fragColor = texture(stencil,uv) + texture(screenTexture,uv);
 }

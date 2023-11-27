@@ -13,7 +13,7 @@
 #include "Framebuffer.h"
 #include "PostProcessing/ImageEffect.h"
 
-class Application {
+class Application : public Observer<uint32_t,uint32_t,glm::vec2> {
 public:
     inline static Application& getInstance() {
         if(appInstance == nullptr)
@@ -45,6 +45,7 @@ public:
 
     const void bindShadowMapShader();
 
+    void update(uint32_t event,uint32_t action, glm::vec2 pos) override;
 
 private:
     Application();

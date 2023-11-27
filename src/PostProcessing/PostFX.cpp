@@ -60,6 +60,9 @@ void PostFX::drawToTargetFromOcclusionFBO() {
     glBindVertexArray(quadVAO);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, this->occlusionMap->getTargetId(0));
+
+    /*glActiveTexture(GL_TEXTURE0 + 1);
+    glBindTexture(GL_TEXTURE_2D, this->occlusionMap->getDepthStencil(0)->getId());*/
     glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 

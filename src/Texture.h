@@ -22,6 +22,9 @@ public:
 
     //don't use
     explicit Texture(const glm::vec<2,glm::i32,glm::packed_highp>& dimensions, int h);
+
+    //depth buffer
+    explicit Texture(const glm::vec2& dimensions, float h, float g);
     ~Texture();
 
     void bind(const uint32_t& textureUnit) const;

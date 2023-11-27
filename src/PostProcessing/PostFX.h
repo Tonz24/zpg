@@ -19,7 +19,6 @@ public:
     void drawToTarget(int mipLevel = 0);
     void drawToTargetFromOcclusionFBO();
 
-
     void bindPing(int mipLevel = 0);
     void bindPong(int mipLevel = 0);
     const Framebuffer& getPing();

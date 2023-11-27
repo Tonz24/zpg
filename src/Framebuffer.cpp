@@ -13,7 +13,10 @@ Framebuffer::Framebuffer(int mipLevels) : mipLevels(mipLevels) {
 
     //generate mip 0
     this->target.push_back(std::make_unique<Texture>(screenDimensions));
+    this->depthStencilBuffers.push_back(std::make_unique<Texture>(screenDimensions,1.0f, 1.0f));
+
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this->target[0]->getId(), 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, this->depthStencilBuffers[0]->getId(), 0);
 
     glGenRenderbuffers(1, &this->rboId);
     glBindRenderbuffer(GL_RENDERBUFFER, this->rboId);
@@ -25,6 +28,7 @@ Framebuffer::Framebuffer(int mipLevels) : mipLevels(mipLevels) {
     for (int i = 1; i < mipLevels + 1; i++) {
         glm::vec<2,int> bufferDimensions = screenDimensions / static_cast<int>(pow(2,i));
         this->target.push_back(std::make_unique<Texture>(bufferDimensions));
+        this->depthStencilBuffers.push_back(std::make_unique<Texture>(bufferDimensions,1.0f, 1.0f));
     }
 
     if(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE)
@@ -111,4 +115,8 @@ Framebuffer::Framebuffer(float h) : mipLevels(0) {
 
 const Texture* Framebuffer::getTarget(int mipLevel) const {
     return this->target[mipLevel].get();
+}
+
+const Texture *Framebuffer::getDepthStencil(int mipLevel) const {
+    return this->depthStencilBuffers[mipLevel].get();
 }

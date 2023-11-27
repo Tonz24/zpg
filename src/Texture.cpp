@@ -139,3 +139,19 @@ void Texture::bindCubemap(const uint32_t &textureUnit) const {
 const uint8_t * Texture::getData() const {
     return this->rawData;
 }
+
+Texture::Texture(const glm::vec2 &dimensions, float h, float g) : dimensions(dimensions), id(0), components(2) {
+    glGenTextures(1, &this->id);
+    glBindTexture(GL_TEXTURE_2D, this->id);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, dimensions.x, dimensions.y, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL);
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    this->valid = true;
+}

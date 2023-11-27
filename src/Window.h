@@ -31,6 +31,14 @@ public:
 
     [[nodiscard]] glm::vec<2,int> getDimensions() const;
 
+    uint32_t getWidth() const {
+        return width;
+    }
+
+    uint32_t getHeight() const {
+        return height;
+    }
+
 private:
     GLFWwindow* glfwWindow;
 

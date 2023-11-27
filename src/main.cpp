@@ -261,6 +261,7 @@ std::unique_ptr<Scene> setupScene5(){
     PhongMaterial* phong = new PhongMaterial(glm::vec3{0.159, 0.553, 1.0});
     BlinnMaterial* blinn = new BlinnMaterial(glm::vec3{0.7, 0.2f, 1});
     PBMaterial* pbr = new PBMaterial(glm::vec3{0.7, 0.2f, 1}, 0.5, 0.4f);
+    FurMaterial* fur = new FurMaterial(50,0.05f,{1000,1000});
 
     std::vector<ConstantMaterial*> materials = {lambert,phong};
 
@@ -275,8 +276,6 @@ std::unique_ptr<Scene> setupScene5(){
     auto metallic = std::make_shared<Texture>(R"(rusted\rustediron2_metallic.png)");
     auto roughness = std::make_shared<Texture>(R"(rusted\rustediron2_roughness.png)");
     pbr->setTextures(albedo,roughness,metallic,nullptr);
-
-
 
     Sphere* sphere = new Sphere();
     Monkey* monkey = new Monkey();
@@ -309,8 +308,7 @@ std::unique_ptr<Scene> setupScene5(){
         }
     }
 
-
-    auto zomb = new SceneObject(z,zMat);
+    auto zomb = new SceneObject(z,fur);
     zomb->translate({10,0,35});
     zomb->setRotation(90,{0,1,0});
     zomb->applyTransform();
@@ -321,7 +319,6 @@ std::unique_ptr<Scene> setupScene5(){
     model->rotate(rand() % 1000 * 0.01);
     model->applyTransform();
     scene->addModel(std::shared_ptr<SceneObject>(model));
-
 
     auto ground = new SceneObject(quad, lambertGround);
 
@@ -338,7 +335,7 @@ std::unique_ptr<Scene> setupScene5(){
 
     auto light2 = new PointLight(glm::vec3{0.3,1.5,0.7},sphere);
     //light->setAttenuation({1,0.1,0});
-    //light2->setCanCastRays(false);
+    light2->setCanCastRays(false);
     light2->translate({10, 1.5, 40});
     light2->setScale({0.5,0.5,0.5});
     light2->applyTransform();
@@ -347,7 +344,7 @@ std::unique_ptr<Scene> setupScene5(){
     dirLight->setTranslation(glm::vec3{50,-5,40});
     dirLight->applyTransform();
     dirLight->setCanCastRays(false);
-    //scene->addModel(dirLight);
+    scene->addModel(dirLight);
 
     scene->addModel(std::shared_ptr<Light>(light));
     scene->addModel(std::shared_ptr<Light>(light2));
@@ -460,7 +457,7 @@ int main(){
 
     Application::getInstance().setScene(scene5); //2 //5
 
-    Application::getInstance().setUsePostFX(true);
+    Application::getInstance().setUsePostFX(false);
     Application::getInstance().run();
 }
 //RADEK MELČÁK MEL0094

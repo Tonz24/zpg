@@ -110,7 +110,3 @@ void Scene::setActiveCamera(const std::shared_ptr<Camera> &activeCamera) {
 void Scene::setSkybox(std::shared_ptr<Skybox> skybox) {
     this->skybox = std::move(skybox);
 }
-
-void Scene::update(uint32_t button) {
-
-}
